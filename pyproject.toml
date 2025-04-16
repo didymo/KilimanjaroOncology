@@ -1,0 +1,46 @@
+[tool.poetry]
+name = "africaoncologydatacollectiondemo"
+version = "0.1.0"
+description = "Data collection demonstration application for African Oncology Unit."
+authors = ["Ashley Maher <ashley.maher@didymodesigns.com.au>"]
+license = "GPL V3"
+readme = "README.md"
+packages = [
+    { include = "app", from = "src" }
+]
+
+[tool.poetry.dependencies]
+python = "^3.12"
+SQLAlchemy = "^2.0.36"
+python-dotenv = "^1.0.0"
+cryptography = "^44.0.1"
+
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^8.3.4"
+black = "^24.10.0"
+isort = "^5.13.2"
+flake8 = "^7.1.1"
+pytest-cov = "^6.0.0"
+sqlalchemy2-stubs = "^0.0.2a38"
+tox = "^4.23.2"
+pre-commit = "^4.0.1"
+mypy = "^1.14.0"
+pytest-mock = "^3.14.0"
+safety = "^3.2.14"
+pip-audit = "^2.7.3"
+cyclonedx-python-lib = "<8"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 88
+target-version = ["py312"]
+
+[tool.isort]
+profile = "black"
+
+[tool.pytest]
+pythonpath = "."

@@ -1,0 +1,1165 @@
+C00.0 01,"Lip, external upper"
+C00.0 02,"Lip, vermilion border of upper"
+C00.0 03,"Lip, upper, NOS"
+C00.1 01,"Lip, external lower"
+C00.1 02,"Lip, vermilion border of lower"
+C00.1 03,"Lip, lower, NOS"
+C00.2 01,"Lip, external, NOS"
+C00.2 02,"Lip, vermilion border, NOS"
+C00.3 01,"Lip, mucosa of upper"
+C00.3 02,"Lip, inner aspect of upper"
+C00.3 03,"Lip, frenulum of upper"
+C00.4 01,"Lip, mucosa of lower"
+C00.4 02,"Lip, inner aspect of lower"
+C00.4 03,"Lip, frenulum of lower"
+C00.5 01,"Lip, mucosa of, NOS"
+C00.5 02,"Lip, inner aspect of, NOS"
+C00.5 03,"Lip, internal, NOS"
+C00.5 04,"Lip, frenulum of, NOS"
+C00.5 05,"Frenulum labii, NOS"
+C00.6 01,"Lip, commissure"
+C00.6 02,Labial commissure
+C00.8, Overlapping lesion of lip
+C00.9,Malignant neoplasm of  Lip - unspecified
+C01.9 01,"Tongue, base of, NOS"
+C01.9 02,"Tongue, dorsal surface of base"
+C01.9 03,"Tongue, posterior third"
+C01.9 04,"Tongue, posterior, NOS"
+C01.9 05,"Tongue, root of"
+C02.0 01,"Tongue, dorsal surface, NOS"
+C02.0 02,"Tongue, anterior 2/3, dorsal surface"
+C02.0 03,"Tongue, midline"
+C02.0 04,"Tongue, dorsal surface, anterior"
+C02.1 01,"Tongue, border"
+C02.1 02,"Tongue, tip of"
+C02.2 01,"Tongue, ventral surface, NOS"
+C02.2 02,"Tongue, anterior 2/3, ventral surface"
+C02.2 03,Frenulum linguae
+C02.2 04,"Tongue, ventral surface, anterior, NOS"
+C02.3 01,"Tongue, anterior 2/3, NOS"
+C02.3 02,"Tongue, anterior, NOS"
+C02.4 00,Lingual tonsil
+C02.8 01,"Tongue, overlapping lesion"
+C02.8 02,"Tongue, junctional zone"
+C02.9 01,"Tongue, NOS"
+C02.9 02,"Lingual, NOS"
+C03.0 01,"Gum, upper"
+C03.0 02,"Gingiva, maxillary"
+C03.0 03,"Alveolar mucosa, upper"
+C03.0 04,"Alveolar ridge mucosa, upper"
+C03.0 05,"Alveolus, upper"
+C03.0 06,"Gingiva, upper"
+C03.1 01,"Gum, lower"
+C03.1 02,"Gingiva, mandibular"
+C03.1 03,"Alveolar mucosa, lower"
+C03.1 04,"Alveolar ridge mucosa, lower"
+C03.1 05,"Alveolus, lower"
+C03.1 06,"Gingiva, lower"
+C03.9 01,"Gum, NOS"
+C03.9 02,"Gingiva, NOS"
+C03.9 03,"Alveolar mucosa, NOS"
+C03.9 04,"Alveolar ridge mucosa, NOS"
+C03.9 05,"Alveolus, NOS"
+C03.9 06,Periodontal tissue
+C03.9 07,Tooth socket
+C04.0, Anterior floor of mouth
+C04.1, Lateral floor of mouth
+C04.8, Overlapping lesion of floor of mouth
+C04.9, Malignant neoplasm of Floor of mouth - unspecified
+C05.0, Hard palate
+C05.1, Soft palate
+C05.2, Uvula
+C05.8 01,"Palate, overlapping lesion"
+C05.8 02,"Palate, junction of hard and soft palate"
+C05.9 01,"Palate, NOS"
+C05.9 02,Roof of mouth
+C06.0 01,Cheek mucosa
+C06.0 02,Buccal mucosa
+C06.0 03,Internal cheek
+C06.1 01,Vestibule of mouth
+C06.1 02,Alveolar sulcus
+C06.1 03,Buccal sulcus
+C06.1 04,Labial sulcus
+C06.2 01,Retromolar area
+C06.2 02,Retromolar triangle
+C06.2 03,Retromolar trigone
+C06.8, Overlapping lesion of other and unspecified parts of mouth
+C06.9 01,"Mouth, NOS"
+C06.9 02,Buccal cavity
+C06.9 03,Oral cavity
+C06.9 04,Oral mucosa
+C06.9 05,"Minor salivary gland, NOS"
+C07.9 01,Parotid gland
+C07.9 03,Parotid gland duct
+C07.9 04,Stensen duct
+C08.0, Submandibular gland
+C08.0 01,Submandibular gland
+C08.0 04,Wharton duct
+C08.1 01,Sublingual gland
+C08.1 02,Sublingual gland duct
+C08.8, Overlapping lesion of major salivary glands
+C08.9, Malignant neoplasm of Major salivary gland - unspecified
+C09.0, Tonsillar fossa
+C09.1 01,Tonsillar pillar
+C09.1 02,Faucial pillar
+C09.1 03,Glossopalatine fold
+C09.8, Overlapping lesion of tonsil
+C09.9 01,"Tonsil, NOS"
+C09.9 02,Faucial tonsil
+C09.9 03,Palatine tonsil
+C10.0, Vallecula
+C10.1, Anterior surface of epiglottis
+C10.2, Lateral wall of oropharynx
+C10.3, Posterior wall of oropharynx
+C10.4, Branchial cleft
+C10.8, Overlapping lesion of oropharynx
+C10.9, Malignant neoplasm of Oropharynx - unspecified
+C11.0 01,"Nasopharynx, superior wall"
+C11.0 02,"Nasopharynx, roof"
+C11.1 01,"Nasopharynx, posterior wall"
+C11.1 02,Adenoid
+C11.1 03,Pharyngeal tonsil
+C11.2 01,"Nasopharynx, lateral wall"
+C11.2 02,Fossa of Rosenmuller
+C11.3 01,"Nasopharynx, anterior wall"
+C11.3 02,Nasopharyngeal surface of soft palate
+C11.3 03,Pharyngeal fornix
+C11.3 04,Choana
+C11.3 05,"Nasal septum, posterior margin"
+C11.8, Overlapping lesion of nasopharynx
+C11.9, Malignant neoplasm of Nasopharynx - unspecified
+C12, Malignant neoplasm of pyriform sinus
+C13.0, Postcricoid region
+C13.1, Aryepiglottic fold - hypopharyngeal aspect
+C13.2, Posterior wall of hypopharynx
+C13.8, Overlapping lesion of hypopharynx
+C13.9, Malignant neoplasm of Hypopharynx - unspecified
+C14.0, Malignant neoplasm of Pharynx - unspecified
+C14.0 04,"Pharynx, lateral wall, NOS"
+C14.0 05,"Pharynx, posterior wall, NOS"
+C14.2, Waldeyer's ring
+C14.8,  Malignant neoplasm of lip - oral cavity and pharynx - Overlapping lesion
+C15.0, Cervical part of oesophagus
+C15.1, Thoracic part of oesophagus
+C15.2, Abdominal part of oesophagus
+C15.3, Upper third of oesophagus
+C15.4, Middle third of oesophagus
+C15.5, Lower third of oesophagus
+C15.8, Overlapping lesion of oesophagus
+C15.9,  Malignant neoplasm of Oesophagus - unspecified
+C16.0, Cardia
+C16.1, Fundus of stomach
+C16.2, Body of stomach
+C16.3, Pyloric antrum
+C16.4, Pylorus
+C16.5, Lesser curvature of stomach - unspecified
+C16.6, Greater curvature of stomach - unspecified
+C16.8 01,"Stomach, overlapping lesion"
+C16.8 02,"Stomach, anterior wall"
+C16.8 03,"Stomach, posterior wall"
+C16.9,  Malignant neoplasm of Stomach - unspecified
+C17.0, Duodenum
+C17.1, Jejunum
+C17.2, Ileum
+C17.3, Meckel's diverticulum
+C17.8, Overlapping lesion of small intestine
+C17.9,  Malignant neoplasm of Small intestine - unspecified
+C18.0, Caecum
+C18.0 02,Ileocecal valve
+C18.1, Appendix
+C18.2, Ascending colon
+C18.3, Hepatic flexure
+C18.4, Transverse colon
+C18.5, Splenic flexure
+C18.6, Descending colon
+C18.7, Sigmoid colon
+C18.8, Overlapping lesion of colon
+C18.9,  Malignant neoplasm of Colon - unspecified
+C19, Malignant neoplasm of rectosigmoid junction
+C20, Malignant neoplasm of rectum
+C21.0, Anus - unspecified
+C21.1, Anal canal
+C21.2, Cloacogenic zone
+C21.8, Malignant neoplasm of rectum anus and anal canal - Overlapping lesion
+C22.0, Liver cell carcinoma
+C22.1, Intrahepatic bile duct carcinoma
+C22.2, Hepatoblastoma
+C22.3, Angiosarcoma of liver
+C22.4, Other sarcomas of liver
+C22.7, Other specified carcinomas of liver
+C22.9, Malignant neoplasm of Liver - unspecified
+C23, Malignant neoplasm of gallbladder
+C24.0, Extrahepatic bile duct
+C24.0 05,Common bile duct
+C24.0 07,Cystic bile duct
+C24.0 11,Sphincter of Oddi
+C24.1, Ampulla of Vater
+C24.8, Overlapping lesion of biliary tract
+C24.9, Malignant neoplasm of Biliary tract - unspecified
+C25.0, Head of pancreas
+C25.1, Body of pancreas
+C25.2, Tail of pancreas
+C25.3, Pancreatic duct
+C25.4, Endocrine pancreas
+C25.7, Other parts of pancreas
+C25.8, Overlapping lesion of pancreas
+C25.9, Malignant neoplasm of Pancreas - unspecified
+C26.0, Intestinal tract - part unspecified
+C26.1, Spleen
+C26.8, Overlapping lesion of digestive system
+C26.9,Malignant neoplasm of  Ill-defined sites within the digestive system
+C30.0, Nasal cavity
+C30.0 03,Naris
+C30.0 04,Nasal cartilage
+C30.0 05,Nasal mucosa
+C30.0 06,"Nasal septum, NOS"
+C30.0 07,Nasal turbinate
+C30.1 01,"Ear, middle"
+C30.1 02,"Ear, inner"
+C30.1 03,Auditory tube
+C30.1 04,Eustachian tube
+C30.1 05,Mastoid antrum
+C30.1 06,Tympanic cavity
+C31.0, Maxillary sinus
+C31.0 02,Maxillary antrum
+C31.1, Ethmoidal sinus
+C31.2, Frontal sinus
+C31.3, Sphenoidal sinus
+C31.8, Overlapping lesion of accessory sinuses
+C31.9,Malignant neoplasm of  Accessory sinus - unspecified
+C32.0, Glottis
+C32.0 03,Laryngeal commissure
+C32.0 05,True vocal cord
+C32.1, Supraglottis
+C32.1 01,Supraglottis
+C32.1 02,"Epiglottis, NOS"
+C32.1 04,Laryngeal aspect of aryepiglottic fold
+C32.1 05,"Epiglottis, posterior surface"
+C32.1 08,False cord
+C32.2, Subglottis
+C32.3, Laryngeal cartilage
+C32.3 01,Laryngeal cartilage
+C32.3 02,Arytenoid cartilage
+C32.3 03,Cricoid cartilage
+C32.3 04,Cuneiform cartilage
+C32.3 05,Thyroid cartilage
+C32.8, Overlapping lesion of larynx
+C32.9, Malignant neoplasm of Larynx - unspecified
+C33, Malignant neoplasm of trachea
+C34.0, Main bronchus
+C34.0 02,Carina
+C34.1, Upper lobe - bronchus or lung
+C34.1 03,"Bronchus, upper lobe"
+C34.2, Middle lobe - bronchus or lung
+C34.2 02,"Bronchus, middle lobe"
+C34.3, Lower lobe - bronchus or lung
+C34.3 02,"Bronchus, lower lobe"
+C34.8, Overlapping lesion of bronchus and lung
+C34.9, Malignant neoplasm of Bronchus or lung - unspecified
+C37, Malignant neoplasm of thymus
+C38.0, Heart
+C38.0 02,Endocardium
+C38.0 03,Epicardium
+C38.0 04,Myocardium
+C38.0 05,Pericardium
+C38.0 06,Cardiac ventricle
+C38.0 07,Cardiac atrium
+C38.1, Anterior mediastinum
+C38.2, Posterior mediastinum
+C38.3, Mediastinum - part unspecified
+C38.4, Pleura
+C38.4 02,"Pleura, parietal"
+C38.4 03,"Pleura, visceral"
+C38.8, Malignant neoplasm of mediastinum or pleura - Overlapping lesion
+C39.0, Upper respiratory tract - part unspecified
+C39.8, Overlapping lesion of respiratory and intrathoracic organs
+C39.9, Malignant neoplasm of Ill-defined sites within the respiratory system
+C40.0, Scapula and long bones of upper limb
+C40.0 02,Acromioclavicular joint
+C40.0 03,Bone of arm
+C40.0 04,Bone of forearm
+C40.0 05,Bone of shoulder
+C40.0 06,Elbow joint
+C40.0 07,Humerus
+C40.0 08,Radius
+C40.0 09,Scapula
+C40.0 10,Shoulder girdle
+C40.0 11,Shoulder joint
+C40.0 12,Ulna
+C40.1, Short bones of upper limb
+C40.1 02,Bone of finger
+C40.1 03,Bone of hand
+C40.1 04,Bone of thumb
+C40.1 05,Bone of wrist
+C40.1 06,Carpal bone
+C40.1 07,Hand joint
+C40.1 08,Metacarpal bone
+C40.1 09,Phalanx of hand
+C40.1 10,Wrist joint
+C40.2, Long bones of lower limb
+C40.2 03,Femur
+C40.2 04,Fibula
+C40.2 05,"Knee joint, NOS"
+C40.2 06,Semilunar cartilage
+C40.2 07,Lateral meniscus of knee joint
+C40.2 08,Medial meniscus of knee joint
+C40.2 09,Tibia
+C40.3, Short bones of lower limb
+C40.3 03,Bone of ankle
+C40.3 04,Bone of foot
+C40.3 05,Bone of heel
+C40.3 06,Bone of toe
+C40.3 08,Metatarsal bone
+C40.3 09,Patella
+C40.3 10,Phalanx of foot
+C40.3 11,Tarsal bone
+C40.8, Overlapping lesion of bone and articular cartilage of limbs
+C40.9, Malignant neoplasm of Bone and articular cartilage of limb - unspecified
+C40.9 01,"Bone of limb, NOS"
+C40.9 02,"Cartilage of limb, NOS"
+C40.9 03,"Joint of limb, NOS"
+C40.9 04,"Articular cartilage of limb, NOS"
+C41.0, Bones of skull and face
+C41.0 02,Calvarium
+C41.0 03,Cranial bone
+C41.0 04,Ethmoid bone
+C41.0 05,Facial bone
+C41.0 06,Frontal bone
+C41.0 07,Hyoid bone
+C41.0 08,Maxilla
+C41.0 09,Upper jaw bone
+C41.0 10,Nasal bone
+C41.0 11,Occipital bone
+C41.0 12,Orbital bone
+C41.0 13,Parietal bone
+C41.0 15,Sphenoid bone
+C41.0 16,Temporal bone
+C41.0 17,Zygomatic bone
+C41.1, Mandible
+C41.1 04,Temporomandibular joint
+C41.2, Vertebral column
+C41.2 02,Atlas
+C41.2 03,Axis
+C41.2 05,Intervertebral disc
+C41.2 09,Vertebra
+C41.3, Ribs - sternum and clavicle
+C41.3 02,Costal cartilage
+C41.3 03,Costovertebral joint
+C41.3 04,Sternocostal joint
+C41.4, Pelvic bones - sacrum and coccyx
+C41.4 02,Acetabulum
+C41.4 03,Bone of hip
+C41.4 04,Coccyx
+C41.4 05,Hip joint
+C41.4 06,Ilium
+C41.4 07,Innominate bone
+C41.4 08,Ischium
+C41.4 09,Pelvic bone
+C41.4 10,Pubic bone
+C41.4 11,Sacrum
+C41.4 12,Symphysis pubis
+C41.8, Overlapping lesion of bone and articular cartilage
+C41.9, Malignant neoplasm of Bone and articular cartilage - unspecified
+C41.9 02,"Cartilage, NOS"
+C41.9 03,"Joint, NOS"
+C41.9 04,Skeletal bone
+C41.9 05,"Articular cartilage, NOS"
+C43.0, Malignant melanoma of lip
+C43.1, Malignant melanoma of eyelid - including canthus
+C43.2, Malignant melanoma of ear and external auricular canal
+C43.3, Malignant melanoma of other and unspecified parts of face
+C43.4, Malignant melanoma of scalp and neck
+C43.5, Malignant melanoma of trunk
+C43.6, Malignant melanoma of upper limb - including shoulder
+C43.7, Malignant melanoma of lower limb - including hip
+C43.8, Overlapping malignant melanoma of skin
+C43.9, Malignant melanoma of skin - unspecified
+C44.0, Skin of lip
+C44.0 02,Skin of lower lip
+C44.0 03,Skin of upper lip
+C44.1, Skin of eyelid - including canthus
+C44.1 03,Palpebra
+C44.1 05,"Canthus, inner"
+C44.1 06,"Lid, lower"
+C44.1 07,Meibomian gland
+C44.1 08,"Canthus, outer"
+C44.1 09,"Lid, upper"
+C44.2, Skin of ear and external auricular canal
+C44.2 03,Pinna
+C44.2 04,Ceruminal gland
+C44.2 05,Concha
+C44.2 08,Earlobe
+C44.2 09,External auditory canal
+C44.2 14,External auditory meatus
+C44.2 15,Helix
+C44.2 16,Skin of auricle
+C44.2 18,Tragus
+C44.3, Skin of other and unspecified parts of face
+C44.3 02,Skin of cheek
+C44.3 03,Skin of chin
+C44.3 04,Skin of face
+C44.3 05,Skin of forehead
+C44.3 06,Skin of jaw
+C44.3 07,Skin of nose
+C44.3 08,Skin of temple
+C44.3 09,Ala nasi
+C44.3 11,Columnella
+C44.3 12,Eyebrow
+C44.4, Skin of scalp and neck
+C44.4 02,"Skin of head, NOS"
+C44.4 03,Skin of neck
+C44.4 04,Skin of scalp
+C44.4 07,Skin of supraclavicular region
+C44.5, Skin of trunk
+C44.5 02,Skin of abdomen
+C44.5 03,Skin of abdominal wall
+C44.5 05,Skin of axilla
+C44.5 06,Skin of back
+C44.5 07,Skin of breast
+C44.5 09,Skin of chest
+C44.5 11,Skin of flank
+C44.5 12,Skin of groin
+C44.5 13,Skin of perineum
+C44.5 14,Skin of thoracic wall
+C44.5 16,Skin of umbilicus
+C44.5 17,Skin of gluteal region
+C44.5 18,Skin of infraclavicular region
+C44.5 19,Skin of inguinal region
+C44.5 20,Skin of sacrococcygeal region
+C44.5 21,Skin of scapular region
+C44.5 22,Perianal skin
+C44.5 23,"Umbilicus, NOS"
+C44.6, Skin of upper limb - including shoulder
+C44.6 02,Skin of antecubital space
+C44.6 03,Skin of arm
+C44.6 04,Skin of elbow
+C44.6 05,Skin of finger
+C44.6 06,Skin of forearm
+C44.6 07,Skin of hand
+C44.6 08,Skin of palm
+C44.6 09,Skin of shoulder
+C44.6 10,Skin of thumb
+C44.6 12,Skin of wrist
+C44.6 13,Finger nail
+C44.6 14,Palmar skin
+C44.7, Skin of lower limb - including hip
+C44.7 02,Skin of ankle
+C44.7 03,Skin of calf
+C44.7 04,Skin of foot
+C44.7 05,Skin of heel
+C44.7 06,Skin of hip
+C44.7 07,Skin of knee
+C44.7 08,Skin of leg
+C44.7 10,Skin of popliteal space
+C44.7 11,Skin of thigh
+C44.7 12,Skin of toe
+C44.7 13,Plantar skin
+C44.7 15,Toe nail
+C44.8, Overlapping lesion of skin
+C44.9, Malignant neoplasm of skin - unspecified
+C45.0, Mesothelioma of pleura
+C45.1, Mesothelioma of peritoneum
+C45.2, Mesothelioma of pericardium
+C45.7, Mesothelioma of other sites
+C45.9, Mesothelioma - unspecified
+C46.0, Kaposi's sarcoma of skin
+C46.1, Kaposi's sarcoma of soft tissue
+C46.2, Kaposi's sarcoma of palate
+C46.3, Kaposi's sarcoma of lymph nodes
+C46.7, Kaposi's sarcoma of other sites
+C46.8, Kaposi's sarcoma of multiple organs
+C46.9, Kaposi's sarcoma - unspecified
+C47.0, Peripheral nerves of head - face and neck
+C47.0 02,Peripheral nerves/ANS of cheek
+C47.0 03,Peripheral nerves/ANS of chin
+C47.0 04,Peripheral nerves/ANS of face
+C47.0 05,Peripheral nerves/ANS of forehead
+C47.0 06,Peripheral nerves/ANS of head
+C47.0 07,Peripheral nerves/ANS of neck
+C47.0 08,Peripheral nerves/ANS of scalp
+C47.0 09,Peripheral nerves/ANS of temple
+C47.0 10,Peripheral nerves/ANS of cervical region
+C47.0 11,Peripheral nerves/ANS of pterygoid fossa
+C47.0 12,Peripheral nerves/ANS of supraclavicular region
+C47.0 13,Cervical plexus
+C47.1, Peripheral nerves of upper limb - including shoulder
+C47.1 02,Peripheral nerves/ANS of antecubital space
+C47.1 03,Peripheral nerves/ANS of arm
+C47.1 04,Peripheral nerves/ANS of elbow
+C47.1 05,Peripheral nerves/ANS of finger
+C47.1 06,Peripheral nerves/ANS of forearm
+C47.1 07,Peripheral nerves/ANS of hand
+C47.1 08,Peripheral nerves/ANS of shoulder
+C47.1 09,Peripheral nerves/ANS of thumb
+C47.1 10,Peripheral nerves/ANS of wrist
+C47.1 11,Brachial nerve
+C47.1 12,Brachial plexus
+C47.1 13,Median nerve
+C47.1 14,Radial nerve
+C47.1 15,Ulnar nerve
+C47.2, Peripheral nerves of lower limb - including hip
+C47.2 02,Peripheral nerves/ANS of ankle
+C47.2 03,Peripheral nerves/ANS of calf
+C47.2 04,Peripheral nerves/ANS of foot
+C47.2 05,Peripheral nerves/ANS of heel
+C47.2 06,Peripheral nerves/ANS of hip
+C47.2 07,Peripheral nerves/ANS of knee
+C47.2 08,Peripheral nerves/ANS of leg
+C47.2 09,Peripheral nerves/ANS of popliteal space
+C47.2 10,Peripheral nerves/ANS of thigh
+C47.2 11,Peripheral nerves/ANS of toe
+C47.2 12,Femoral nerve
+C47.2 13,Obturator nerve
+C47.2 14,Sciatic nerve
+C47.3, Peripheral nerves of thorax
+C47.3 02,Peripheral nerves/ANS of axilla
+C47.3 03,Peripheral nerves/ANS of chest
+C47.3 04,Peripheral nerves/ANS of chest wall
+C47.3 05,Peripheral nerves/ANS of thoracic wall
+C47.3 06,Peripheral nerves/ANS of infraclavicular region
+C47.3 07,Peripheral nerves/ANS of scapular region
+C47.3 08,Intercostal nerve
+C47.4, Peripheral nerves of abdomen
+C47.5, Peripheral nerves of pelvis
+C47.5 02,Peripheral nerves/ANS of buttock
+C47.5 03,Peripheral nerves/ANS of groin
+C47.5 04,Peripheral nerves/ANS of perineum
+C47.5 05,Peripheral nerves/ANS of gluteal region
+C47.5 06,Peripheral nerves/ANS of inguinal region
+C47.5 07,Peripheral nerves/ANS of sacrococcygeal region
+C47.5 08,Lumbosacral plexus
+C47.5 09,Sacral nerve
+C47.5 10,Sacral plexus
+C47.6, Peripheral nerves of trunk - unspecified
+C47.6 02,Peripheral nerves/ANS of back
+C47.6 03,Peripheral nerves/ANS of flank
+C47.6 05,Lumbar nerve
+C47.8, Overlapping lesion of peripheral nerves and autonomic nervous system
+C47.9, Malignant neoplasm of Peripheral nerves and autonomic nervous system - unspecified
+C47.9 02,"Ganglia, NOS"
+C47.9 04,"Parasympathetic nervous system, NOS"
+C47.9 05,"Peripheral nerve, NOS"
+C47.9 06,"Spinal nerve, NOS"
+C47.9 07,"Sympathetic nervous system, NOS"
+C48.0, Retroperitoneum
+C48.0 02,Periadrenal tissue
+C48.0 03,Perinephric tissue
+C48.0 04,Peripancreatic tissue
+C48.0 05,Perirenal tissue
+C48.0 06,Retrocecal tissue
+C48.1, Specified parts of peritoneum
+C48.1 02,Mesentery
+C48.1 03,Mesoappendix
+C48.1 04,Mesocolon
+C48.1 05,Omentum
+C48.1 06,Pelvic peritoneum
+C48.1 07,Rectouterine pouch
+C48.1 08,Cul de sac
+C48.1 09,Pouch of Douglas
+C48.2, Peritoneum - unspecified
+C48.8, Malignant neoplasm of retroperitoneum and peritoneum - Overlapping lesion
+C49.0, Connective and soft tissue of head - face and neck
+C49.0 02,Soft tissues of cheek
+C49.0 03,Soft tissues of chin
+C49.0 04,Soft tissues of face
+C49.0 05,Soft tissues of forehead
+C49.0 06,Soft tissues of head
+C49.0 07,Soft tissues of neck
+C49.0 08,Soft tissues of scalp
+C49.0 09,Soft tissues of temple
+C49.0 10,Soft tissues of cervical region
+C49.0 11,Soft tissues of pterygoid fossa
+C49.0 12,Soft tissues of supraclavicular region
+C49.0 13,Auricular cartilage
+C49.0 14,Cartilage of ear
+C49.0 15,Carotid artery
+C49.0 16,Masseter muscle
+C49.0 17,Sternocleidomastoid muscle
+C49.1, Connective and soft tissue of upper limb - including shoulder
+C49.1 02,Soft tissues of antecubital space
+C49.1 03,Soft tissues of arm
+C49.1 04,Soft tissues of elbow
+C49.1 05,Soft tissues of finger
+C49.1 06,Soft tissues of forearm
+C49.1 07,Soft tissues of hand
+C49.1 08,Soft tissues of shoulder
+C49.1 09,Soft tissues of thumb
+C49.1 10,Soft tissues of wrist
+C49.1 11,Biceps brachii muscle
+C49.1 12,Brachialis muscle
+C49.1 13,Coracobrachialis muscle
+C49.1 14,Deltoideus muscle
+C49.1 15,Palmar aponeurosis
+C49.1 16,Palmar fascia
+C49.1 17,Radial artery
+C49.1 18,Triceps brachii muscle
+C49.1 19,Ulnar artery
+C49.2, Connective and soft tissue of lower limb - including hip
+C49.2 02,Soft tissues of ankle
+C49.2 03,Soft tissues of calf
+C49.2 04,Soft tissues of foot
+C49.2 05,Soft tissues of heel
+C49.2 06,Soft tissues of hip
+C49.2 07,Soft tissues of knee
+C49.2 08,Soft tissues of leg
+C49.2 09,Soft tissues of popliteal space
+C49.2 10,Soft tissues of thigh
+C49.2 11,Soft tissues of toe
+C49.2 12,Biceps femoris muscle
+C49.2 13,Femoral artery
+C49.2 14,Gastrocnemius muscle
+C49.2 15,Plantar aponeurosis
+C49.2 16,Plantar fascia
+C49.2 17,Quadriceps femoris muscle
+C49.3, Connective and soft tissue of thorax
+C49.3 02,Soft tissues of axilla
+C49.3 03,Soft tissues of chest
+C49.3 04,Soft tissues of chest wall
+C49.3 05,Soft tissues of thoracic wall
+C49.3 06,Soft tissues of infraclavicular region
+C49.3 07,Soft tissues of scapular region
+C49.3 08,"Aorta, NOS"
+C49.3 09,Axillary artery
+C49.3 10,Diaphragm
+C49.3 11,Intercostal muscle
+C49.3 12,Internal mammary artery
+C49.3 13,Latissimus dorsi muscle
+C49.3 14,Pectoralis major muscle
+C49.3 15,Subclavian artery
+C49.3 16,Superior vena cava
+C49.3 17,Thoracic duct
+C49.3 18,Trapezius muscle
+C49.4, Connective and soft tissue of abdomen
+C49.4 02,Soft tissues of abdominal wall
+C49.4 03,Soft tissues of umbilicus
+C49.4 04,Abdominal aorta
+C49.4 05,Abdominal vena cava
+C49.4 06,Abdominal wall muscle
+C49.4 07,Celiac artery
+C49.4 08,Iliopsoas muscle
+C49.4 09,Inferior vena cava
+C49.4 10,Mesenteric artery
+C49.4 11,Psoas muscle
+C49.4 12,Rectus abdominis muscle
+C49.4 13,Renal artery
+C49.4 14,"Vena cava, NOS"
+C49.5, Connective and soft tissue of pelvis
+C49.5 02,Soft tissues of buttock
+C49.5 03,Soft tissues of groin
+C49.5 04,Soft tissues of perineum
+C49.5 05,Soft tissues of gluteal region
+C49.5 06,Soft tissues of inguinal region
+C49.5 07,Soft tissues of sacrococcygeal region
+C49.5 08,Gluteus maximus muscle
+C49.5 09,Iliac artery
+C49.5 10,Iliac vein
+C49.6, Connective and soft tissue of trunk - unspecified
+C49.6 02,Soft tissues of back
+C49.6 03,Soft tissues of flank
+C49.8, Overlapping lesion of connective and soft tissue
+C49.9, Malignant neoplasm of Connective and soft tissue - unspecified
+C49.9 02,"Adipose tissue, NOS"
+C49.9 03,"Aponeurosis, NOS"
+C49.9 04,"Artery, NOS"
+C49.9 05,"Blood vessel, NOS"
+C49.9 06,"Bursa, NOS"
+C49.9 07,"Connective tissue, NOS"
+C49.9 08,"Fascia, NOS"
+C49.9 10,"Fibrous tissue, NOS"
+C49.9 11,"Ligament, NOS"
+C49.9 12,"Lymphatic, NOS"
+C49.9 13,"Muscle, NOS"
+C49.9 14,"Skeletal muscle, NOS"
+C49.9 15,"Subcutaneous tissue, NOS"
+C49.9 16,"Synovia, NOS"
+C49.9 17,"Tendon, NOS"
+C49.9 18,"Tendon sheath, NOS"
+C49.9 19,"Vein, NOS"
+C50.0, Nipple and areola
+C50.0 01,Nipple
+C50.0 02,Areola
+C50.1, Central portion of breast
+C50.2, Upper-inner quadrant of breast
+C50.3, Lower-inner quadrant of breast
+C50.4, Upper-outer quadrant of breast
+C50.5, Lower-outer quadrant of breast
+C50.6, Axillary tail of breast
+C50.8, Overlapping lesion of breast
+C50.8 02,"Breast, inner"
+C50.8 03,"Breast, lower"
+C50.8 04,"Breast, midline of"
+C50.8 05,"Breast, outer"
+C50.8 06,"Breast, upper"
+C50.9, Malignant neoplasm of Breast - unspecified
+C51.0, Labium majus
+C51.0 02,"Labia majora, NOS"
+C51.0 03,Bartholin gland
+C51.1, Labium minus
+C51.2, Clitoris
+C51.8, Overlapping lesion of vulva
+C51.9, Malignant neoplasm of Vulva - unspecified
+C51.9 03,Fourchette
+C51.9 06,Mons pubis
+C51.9 07,Mons veneris
+C51.9 08,Pudendum
+C52, Malignant neoplasm of vagina
+C52.9 02,Vaginal vault
+C52.9 03,Fornix of vagina
+C52.9 04,Gartner duct
+C52.9 05,Hymen
+C53.0, Endocervix
+C53.0 02,Internal os
+C53.0 03,Cervical canal
+C53.0 04,Endocervical canal
+C53.0 05,Endocervical gland
+C53.0 06,Nabothian gland
+C53.1, Exocervix
+C53.8, Overlapping lesion of cervix uteri
+C53.9, Malignant neoplasm of Cervix uteri - unspecified
+C54.0, Isthmus uteri
+C54.1, Endometrium
+C54.1 02,Endometrial gland
+C54.1 03,Endometrial stroma
+C54.2, Myometrium
+C54.3, Fundus uteri
+C54.8, Overlapping lesion of corpus uteri
+C54.9, Malignant neoplasm of Corpus uteri - unspecified
+C55, Malignant neoplasm of uterus - part unspecified
+C56, Malignant neoplasm of ovary
+C57.0, Fallopian tube
+C57.1, Broad ligament
+C57.2, Round ligament
+C57.3, Parametrium
+C57.4, Uterine adnexa - unspecified
+C57.7, Other specified female genital organs
+C57.7 03,Wolffian duct
+C57.8, Overlapping lesion of female genital organs
+C57.9, Malignant neoplasm of Female genital organs - unspecified
+C57.9 04,Urethrovaginal septum
+C57.9 05,Vesicocervical tissue
+C57.9 06,Vesicovaginal septum
+C58, Malignant neoplasm of placenta
+C60.0, Prepuce
+C60.1, Glans penis
+C60.2, Body of penis
+C60.2 02,Corpus cavernosum
+C60.8, Overlapping lesion of penis
+C60.9, Malignant neoplasm of Penis - unspecified
+C60.9 02,"Penis, skin of"
+C61, Malignant neoplasm of prostate
+C62.0, Undescended testis
+C62.0 03,"Testis, ectopic"
+C62.1, Descended testis
+C62.1 01,"Testis, descended"
+C62.9, Testis - unspecified
+C63.0, Epididymis
+C63.1, Spermatic cord
+C63.2, Scrotum
+C63.7, Other specified male genital organs
+C63.7 02,Seminal vesicle
+C63.7 03,Tunica vaginalis
+C63.8, Overlapping lesion of male genital organs
+C63.9, Malignant neoplasm of Male genital organs - unspecified
+C64, Malignant neoplasm of kidney - except renal pelvis
+C65, Malignant neoplasm of renal pelvis
+C65.9 04,Renal calyx
+C65.9 05,Pelviureteric junction
+C66, Malignant neoplasm of ureter
+C67.0, Trigone of bladder
+C67.1, Dome of bladder
+C67.2, Lateral wall of bladder
+C67.3, Anterior wall of bladder
+C67.4, Posterior wall of bladder
+C67.5, Bladder neck
+C67.6, Ureteric orifice
+C67.7, Urachus
+C67.8, Overlapping lesion of bladder
+C67.9, Malignant neoplasm of Bladder - unspecified
+C68.0, Urethra
+C68.0 02,Cowper gland
+C68.0 03,Prostatic utricle
+C68.0 04,Urethral gland
+C68.1, Paraurethral glands
+C68.8, Overlapping lesion of urinary organs
+C68.9, Malignant neoplasm of Urinary organs - unspecified
+C69.0, Conjunctiva
+C69.1, Cornea
+C69.2, Retina
+C69.3, Choroid
+C69.4, Ciliary body
+C69.4 02,Crystalline lens
+C69.4 03,Iris
+C69.4 04,Sclera
+C69.4 05,Uveal tract
+C69.5, Lachrymal gland and duct
+C69.6, Orbit
+C69.6 02,Autonomic nervous system of orbit
+C69.6 03,Connective tissue of orbit
+C69.6 04,Extraocular muscle
+C69.6 05,Peripheral nerves of orbit
+C69.6 06,Retrobulbar tissue
+C69.8, Overlapping lesion of eye and adnexa
+C69.9, Malignant neoplasm of Eye and Adnexa - unspecified
+C70.0, Cerebral meninges
+C70.0 02,Cranial dura mater
+C70.0 04,Cranial pia mater
+C70.0 05,Falx cerebelli
+C70.0 06,Falx cerebri
+C70.0 08,Intracranial arachnoid
+C70.0 10,Tentorium cerebelli
+C70.1, Spinal meninges
+C70.1 02,Spinal arachnoid
+C70.1 03,Spinal dura mater
+C70.1 04,Spinal pia mater
+C70.9, Malignant neoplasm of Meninges - unspecified
+C70.9 02,"Archnoid, NOS"
+C70.9 03,"Dura, NOS"
+C70.9 05,"Pia mater, NOS"
+C71.0, Cerebrum - except lobes and ventricles -
+C71.0 01,Cerebrum
+C71.0 02,Basal ganglia
+C71.0 05,Cerebral hemisphere
+C71.0 06,Cerebral white matter
+C71.0 07,Corpus striatum
+C71.0 08,Globus pallidus
+C71.0 09,Hypothalamus
+C71.0 10,Insula
+C71.0 11,Internal capsule
+C71.0 12,Island of Reil
+C71.0 13,Operculum
+C71.0 14,Pallium
+C71.0 15,Putamen
+C71.0 16,Rhinencephalon
+C71.0 18,Thalamus
+C71.1, Frontal lobe
+C71.2, Temporal lobe
+C71.2 02,Hippocampus
+C71.2 03,Uncus
+C71.3, Parietal lobe
+C71.3 00,Parietal lobe
+C71.4, Occipital lobe
+C71.5, Cerebral ventricle
+C71.5 03,"Choroid plexus, NOS"
+C71.5 04,Choroid plexus of lateral ventricle
+C71.5 05,Choroid plexus of third ventricle
+C71.5 06,Ependyma
+C71.5 07,"Lateral ventricle, NOS"
+C71.5 08,"Third ventricle, NOS"
+C71.6, Cerebellum
+C71.6 02,Cerebellopontine angle
+C71.6 03,Vermis of cerebellum
+C71.7, Brain stem
+C71.7 02,Cerebral peduncle
+C71.7 04,Choroid plexus of fourth ventricle
+C71.7 05,"Fourth ventricle, NOS"
+C71.7 07,Medulla oblongata
+C71.7 08,Midbrain
+C71.7 09,Olive
+C71.7 10,Pons
+C71.7 11,Pyramid
+C71.8, Overlapping lesion of brain
+C71.8 02,Corpus callosum
+C71.8 03,Tapetum
+C71.9, Malignant neoplasm of Brain - unspecified
+C71.9 04,Anterior cranial fossa
+C71.9 05,Middle cranial fossa
+C71.9 06,Posterior cranial fossa
+C71.9 07,Suprasellar
+C72.0, Spinal cord
+C72.0 02,Cervical cord
+C72.0 03,Conus medullaris
+C72.0 04,Filum terminale
+C72.0 05,Lumbar cord
+C72.0 06,Sacral cord
+C72.0 07,Thoracic cord
+C72.1, Cauda equina
+C72.2, Olfactory nerve
+C72.3, Optic nerve
+C72.3 01,Optic nerve
+C72.3 02,Optic chiasm
+C72.3 03,Optic tract
+C72.4, Acoustic nerve
+C72.5, Other and unspecified cranial nerves
+C72.5 01,"Cranial nerve, NOS"
+C72.5 02,Abducens nerve
+C72.5 03,"Accessory nerve, NOS"
+C72.5 04,Spinal accessory nerve
+C72.5 05,Facial nerve
+C72.5 06,Glossopharyngeal nerve
+C72.5 07,Hypoglossal nerve
+C72.5 08,Oculomotor nerve
+C72.5 09,Trigeminal nerve
+C72.5 10,Trochlear nerve
+C72.5 11,Vagus nerve
+C72.8, Overlapping lesion of brain and other parts of central nervous system
+C72.9, Malignant neoplasm of Central nervous system - unspecified
+C72.9 02,Central nervous system
+C72.9 03,Epidural
+C72.9 04,Extradural
+C72.9 05,Parasellar
+C73, Malignant neoplasm of thyroid gland
+C73.9 03,Thyroglossal duct
+C74.0, Cortex of adrenal gland
+C74.1, Medulla of adrenal gland
+C74.9, Malignant neoplasm of adrenal gland - unspecified
+C75.0, Parathyroid gland
+C75.1, Pituitary gland
+C75.1 03,Hypophysis
+C75.1 04,Rathke pouch
+C75.1 05,Sella turcica
+C75.2, Craniopharyngeal duct
+C75.3, Pineal gland
+C75.4, Carotid body
+C75.5, Aortic body and other paraganglia
+C75.5 02,Coccygeal body
+C75.5 03,Coccygeal glomus
+C75.5 04,Glomus jugulare
+C75.5 05,Para-aortic body
+C75.5 06,Organ of Zuckerkandl
+C75.5 07,Paraganglion
+C75.8, Pluriglandular involvement - unspecified
+C75.9, Malignant neoplasm of other endocrine glands and related structures - unspecified
+C76.0, Malignant neoplasm of other and ill-defined sites - Head Face and Neck
+C76.0 02,"Cheek, NOS"
+C76.0 03,"Jaw, NOS"
+C76.0 04,"Nose, NOS"
+C76.0 05,"Cervical region, NOS"
+C76.0 06,"Supraclavicular region, NOS"
+C76.1, Malignant neoplasm of other and ill-defined sites - Thorax
+C76.1 02,"Axilla, NOS"
+C76.1 03,"Chest, NOS"
+C76.1 04,"Chest wall, NOS"
+C76.1 05,"Intrathoracic site, NOS"
+C76.1 06,"Infraclavicular region, NOS"
+C76.1 07,"Scapular region, NOS"
+C76.1 08,"Thoracic wall, NOS"
+C76.2, Malignant neoplasm of other and ill-defined sites - Abdomen
+C76.2 02,"Abdominal wall, NOS"
+C76.2 03,"Intra-abdominal site, NOS"
+C76.3, Malignant neoplasm of other and ill-defined sites - Pelvis
+C76.3 02,"Buttock, NOS"
+C76.3 03,"Groin, NOS"
+C76.3 04,Ischiorectal fossa
+C76.3 05,"Pelvic wall, NOS"
+C76.3 06,"Perineum, NOS"
+C76.3 07,Rectovaginal septum
+C76.3 08,Rectovesical septum
+C76.3 09,"Gluteal region, NOS"
+C76.3 10,"Inguinal region, NOS"
+C76.3 11,"Perirectal region, NOS"
+C76.3 12,"Presacral region, NOS"
+C76.3 13,"Sacrococcygeal region, NOS"
+C76.4, Malignant neoplasm of other and ill-defined sites - Upper limb
+C76.4 02,"Antecubital space, NOS"
+C76.4 03,"Arm, NOS"
+C76.4 04,"Elbow, NOS"
+C76.4 05,"Finger, NOS"
+C76.4 06,"Forearm, NOS"
+C76.4 07,"Hand, NOS"
+C76.4 08,"Shoulder, NOS"
+C76.4 09,"Thumb, NOS"
+C76.4 10,"Wrist, NOS"
+C76.5, Malignant neoplasm of other and ill-defined sites - Lower limb
+C76.5 02,"Ankle, NOS"
+C76.5 03,"Calf, NOS"
+C76.5 04,"Foot, NOS"
+C76.5 05,"Heel, NOS"
+C76.5 06,"Hip, NOS"
+C76.5 07,"Knee, NOS"
+C76.5 08,"Leg, NOS"
+C76.5 09,"Popliteal space, NOS"
+C76.5 10,"Thigh, NOS"
+C76.5 11,"Toe, NOS"
+C76.7,Malignant neoplasm of other and ill-defined sites - Other ill-defined sites
+C76.7 02,"Back, NOS"
+C76.7 03,"Flank, NOS"
+C76.7 04,"Trunk, NOS"
+C76.8, Malignant neoplasm of other and ill-defined sites - Overlapping lesion of other and ill-defined sites
+C77.0, Lymph nodes of head - face and neck
+C77.0 02,Auricular lymph node
+C77.0 03,Cervical lymph node
+C77.0 04,Facial lymph node
+C77.0 05,Jugular lymph node
+C77.0 06,Mandibular lymph node
+C77.0 07,Occipital lymph node
+C77.0 08,Parotid lymph node
+C77.0 09,Preauricular lymph node
+C77.0 10,Prelaryngeal lymph node
+C77.0 11,Pretracheal lymph node
+C77.0 12,Retropharyngeal lymph nod
+C77.0 13,Scalene lymph node
+C77.0 14,Sublingual lymph node
+C77.0 15,Submandibular lymph node
+C77.0 16,Submaxillary lymph node
+C77.0 17,Submental lymph node
+C77.0 18,Supraclavicular lymph nod
+C77.1, Intrathoracic lymph nodes
+C77.1 02,Bronchial lymph node
+C77.1 03,Bronchopulmonary lymph node
+C77.1 04,Diaphragmatic lymph node
+C77.1 05,Esophageal lymph node
+C77.1 06,"Hilar lymph node, NOS"
+C77.1 07,Innominate lymph node
+C77.1 08,Intercostal lymph node
+C77.1 09,Mediastinal lymph node
+C77.1 10,Parasternal lymph node
+C77.1 11,Pulmonary hilar lymph node
+C77.1 12,"Pulmonary lymph node, NOS"
+C77.1 13,Thoracic lymph node
+C77.1 14,Tracheal lymph node
+C77.1 15,Tracheobronchial lymph node
+C77.2, Intra-abdominal lymph nodes
+C77.2 02,Abdominal lymph node
+C77.2 03,Aortic lymph node
+C77.2 04,Celiac lymph node
+C77.2 05,Colic lymph node
+C77.2 06,Common duct lymph node
+C77.2 07,Gastric lymph node
+C77.2 08,Hepatic lymph node
+C77.2 09,Ileocolic lymph node
+C77.2 10,Inferior mesenteric lymph node
+C77.2 11,Intestinal lymph node
+C77.2 12,Lumbar lymph node
+C77.2 13,"Mesenteric lymph node, NOS"
+C77.2 14,Midcolic lymph node
+C77.2 15,"Pancreatic lymph node, NOS"
+C77.2 16,Para-aortic lymph node
+C77.2 17,Periaortic lymph node
+C77.2 18,Peripancreatic lymph node
+C77.2 19,Porta hepatis lymph node
+C77.2 20,Portal lymph node
+C77.2 21,Pyloric lymph node
+C77.2 22,Retroperitoneal lymph node
+C77.2 23,"Splenic lymph node, NOS"
+C77.2 24,Splenic hilar lymph node
+C77.2 25,Superior mesenteric lymph node
+C77.3, Axillary and upper limb lymph nodes
+C77.3 02,Axillary lymph node
+C77.3 03,Brachial lymph node
+C77.3 04,Cubital lymph node
+C77.3 05,Epitrochlear lymph node
+C77.3 06,Infraclavicular lymph node
+C77.3 07,Lymph node of upper limb
+C77.3 08,Pectoral lymph node
+C77.3 09,Subclavicular lymph node
+C77.3 10,Subscapular lymph node
+C77.4, Inguinal and lower limb lymph nodes
+C77.4 02,Femoral lymph node
+C77.4 03,Inguinal lymph node
+C77.4 04,Lymph node of Cloquet
+C77.4 05,Lymph node of groin
+C77.4 06,Lymph node of lower limb
+C77.4 07,Lymph node of Rosenmuller
+C77.4 08,Popliteal lymph node
+C77.4 09,Subinguinal lymph node
+C77.4 10,Tibial lymph node
+C77.5, Intrapelvic lymph nodes
+C77.5 02,Hypogastric lymph node
+C77.5 03,Iliac lymph node
+C77.5 04,Inferior epigastric lymph node
+C77.5 05,Intrapelvic lymph node
+C77.5 06,Obturator lymph node
+C77.5 07,Paracervical lymph node
+C77.5 08,Parametrial lymph node
+C77.5 09,Presymphysial lymph node
+C77.5 10,Sacral lymph node
+C77.8, Lymph nodes of multiple regions
+C77.9, Lymph node - unspecified
+C78.0, Secondary malignant neoplasm of lung
+C78.1, Secondary malignant neoplasm of mediastinum
+C78.2, Secondary malignant neoplasm of pleura
+C78.3, Secondary malignant neoplasm of other and unspecified respiratory organs
+C78.4, Secondary malignant neoplasm of small intestine
+C78.5, Secondary malignant neoplasm of large intestine and rectum
+C78.6, Secondary malignant neoplasm of retroperitoneum and peritoneum
+C78.7, Secondary malignant neoplasm of liver
+C78.8, Secondary malignant neoplasm of other and unspecified digestive organs
+C79.0, Secondary malignant neoplasm of kidney and renal pelvis
+C79.1, Secondary malignant neoplasm of bladder and other and unspecified urinary organs
+C79.2, Secondary malignant neoplasm of skin
+C79.3, Secondary malignant neoplasm of brain and cerebral meninges
+C79.4, Secondary malignant neoplasm of other and unspecified parts of nervous system
+C79.5, Secondary malignant neoplasm of bone and bone marrow
+C79.6, Secondary malignant neoplasm of ovary
+C79.7, Secondary malignant neoplasm of adrenal gland
+C79.8, Secondary malignant neoplasm of other specified sites
+C80, Malignant neoplasm without specification of site
+C81.0, Lymphocytic predominance
+C81.1, Nodular sclerosis
+C81.2, Mixed cellularity
+C81.3, Lymphocytic depletion
+C81.7, Other Hodgkin's disease
+C81.9, Hodgkin's disease - unspecified
+C82.0, Small cleaved cell - follicular
+C82.1, Mixed small cleaved and large cell - follicular
+C82.2, Large cell - follicular
+C82.7, Other types of follicular non-Hodgkin's lymphoma
+C82.9, Follicular non-Hodgkin's lymphoma - unspecified
+C83.0, Small cell (diffuse)
+C83.1, Small cleaved cell (diffuse)
+C83.2, Mixed small and large cell (diffuse)
+C83.3, Large cell (diffuse)
+C83.4, Immunoblastic (diffuse)
+C83.5, Lymphoblastic (diffuse)
+C83.6, Undifferentiated (diffuse)
+C83.7, Burkitt's tumour
+C83.8, Other types of diffuse non-Hodgkin's lymphoma
+C83.9, Diffuse non-Hodgkin's lymphoma - unspecified
+C84.0, Mycosis fungoides
+C84.1, Sézary's disease
+C84.2, T-zone lymphoma
+C84.3, Lymphoepithelioid lymphoma
+C84.4, Peripheral T-cell lymphoma
+C84.5, Other and unspecified T-cell lymphomas
+C85.0, Lymphosarcoma
+C85.1, B-cell lymphoma - unspecified
+C85.7, Other specified types of non-Hodgkin's lymphoma
+C85.9, Non-Hodgkin's lymphoma - unspecified type
+C88.0, Waldenström's macroglobulinaemia
+C88.1, Alpha heavy chain disease
+C88.2, Gamma heavy chain disease
+C88.3, Immunoproliferative small intestinal disease
+C88.7, Other malignant immunoproliferative diseases
+C88.9, Malignant immunoproliferative disease - unspecified
+C90.0, Multiple myeloma
+C90.1, Plasma cell leukaemia
+C90.2, Plasmacytoma - extramedullary
+C91.0, Acute lymphoblastic leukaemia
+C91.1, Chronic lymphocytic leukaemia
+C91.2, Subacute lymphocytic leukaemia
+C91.3, Prolymphocytic leukaemia
+C91.4, Hairy-cell leukaemia
+C91.5, Adult T-cell leukaemia
+C91.7, Other lymphoid leukaemia
+C91.9, Lymphoid leukaemia - unspecified
+C92.0, Acute myeloid leukaemia
+C92.1, Chronic myeloid leukaemia
+C92.2, Subacute myeloid leukaemia
+C92.3, Myeloid sarcoma
+C92.4, Acute promyelocytic leukaemia
+C92.5, Acute myelomonocytic leukaemia
+C92.7, Other myeloid leukaemia
+C92.9, Myeloid leukaemia - unspecified
+C93.0, Acute monocytic leukaemia
+C93.1, Chronic monocytic leukaemia
+C93.2, Subacute monocytic leukaemia
+C93.7, Other monocytic leukaemia
+C93.9, Monocytic leukaemia - unspecified
+C94.0, Acute erythraemia and erythroleukaemia
+C94.1, Chronic erythraemia
+C94.2, Acute megakaryoblastic leukaemia
+C94.3, Mast cell leukaemia
+C94.4, Acute panmyelosis
+C94.5, Acute myelofibrosis
+C94.7, Other specified leukaemias
+C95.0, Acute leukaemia of unspecified cell type
+C95.1, Chronic leukaemia of unspecified cell type
+C95.2, Subacute leukaemia of unspecified cell type
+C95.7, Other leukaemia of unspecified cell type
+C95.9, Leukaemia - unspecified
+C96.0, Letterer-Siwe disease
+C96.1, Malignant histiocytosis
+C96.2, Malignant mast cell tumour
+C96.3, True histiocytic lymphoma
+C96.7, Other specified malignant neoplasms of lymphoid - haematopoietic and related tissue
+C96.9, Malignant neoplasms of lymphoid - haematopoietic and related tissue - unspecified

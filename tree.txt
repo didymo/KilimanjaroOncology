@@ -1,0 +1,68 @@
+.
+├── .flake8
+├── .gitignore
+├── .idea
+│   ├── AfricaOncologyDataCollectionDemo.iml
+│   ├── .gitignore
+│   ├── inspectionProfiles
+│   │   └── profiles_settings.xml
+│   ├── misc.xml
+│   ├── modules.xml
+│   └── vcs.xml
+├── LICENSE
+├── poetry.lock
+├── .pre-commit-config.yaml
+├── pyproject.toml
+├── pytest.ini
+├── README.md
+├── requirements.tx
+├── setup.py
+├── src
+│   ├── app
+│   │   ├── classes
+│   │   │   └── oncology_patient_data.py
+│   │   ├── csv_files
+│   │   │   ├── CarePlan.CSV
+│   │   │   ├── Cause_of_Death.CSV
+│   │   │   ├── Diagnosis.ICD10.csv
+│   │   │   ├── Histopathology.CSV
+│   │   │   ├── M_stage.CSV
+│   │   │   ├── N_stage.CSV
+│   │   │   ├── Therapy.CSV
+│   │   │   └── T_stage.CSV
+│   │   ├── database
+│   │   │   ├── database_service.py
+│   │   │   └── schema.sql
+│   │   ├── gui
+│   │   │   ├── app.py
+│   │   │   ├── common_widgets.py
+│   │   │   ├── config_screen.py
+│   │   │   ├── death_screen.py
+│   │   │   ├── follow_up_screen.py
+│   │   │   ├── __init__.py
+│   │   │   ├── main_app.py
+│   │   │   ├── new_diagnosis_screen.py
+│   │   │   ├── settings_creator.py
+│   │   │   └── test_autocomplete.py
+│   │   ├── __init__.py
+│   │   ├── main.py
+│   │   └── utils
+│   │       ├── config.py
+│   │       ├── exceptions.py
+│   │       ├── logger.py
+│   │       └── setup.py
+│   ├── __init__.py
+│   └── KilimanjaroOncology.egg-info
+│       ├── dependency_links.txt
+│       ├── PKG-INFO
+│       ├── requires.txt
+│       ├── SOURCES.txt
+│       └── top_level.txt
+├── tests
+│   ├── __init__.py
+│   ├── test_app.py
+│   └── test_database.py
+├── tox.ini
+└── tree.txt
+
+12 directories, 54 files
