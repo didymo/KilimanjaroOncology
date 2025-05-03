@@ -1,7 +1,7 @@
 [tool.poetry]
-name = "africaoncologydatacollectiondemo"
+name = "KilimanjaroOncologyDataCollectionDemo"
 version = "0.1.0"
-description = "Data collection demonstration application for African Oncology Unit."
+description = "Data collection demonstration application for Kilimanjaro Oncology Unit."
 authors = ["Ashley Maher <ashley.maher@didymodesigns.com.au>"]
 license = "GPL V3"
 readme = "README.md"
