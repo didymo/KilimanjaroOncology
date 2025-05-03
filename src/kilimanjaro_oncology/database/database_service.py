@@ -1,3 +1,4 @@
+# database_service.py
 import datetime
 import sqlite3
 import threading
@@ -5,7 +6,6 @@ from contextlib import contextmanager
 from dataclasses import asdict, is_dataclass
 from pathlib import Path
 from typing import Dict, Optional
-
 
 
 class DatabaseService:

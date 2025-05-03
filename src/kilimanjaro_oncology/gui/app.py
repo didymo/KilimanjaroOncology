@@ -28,7 +28,7 @@
 import tkinter as tk
 from tkinter import ttk
 
-from src.app.utils.config import ConfigManager
+from src.kilimanjaro_oncology.utils.config import ConfigManager
 
 
 class Application(tk.Tk):

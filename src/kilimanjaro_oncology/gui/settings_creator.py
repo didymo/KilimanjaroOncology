@@ -1,4 +1,4 @@
-from src.app.utils.config import ConfigManager
+from src.kilimanjaro_oncology.utils.config import ConfigManager
 
 
 class SettingsController:

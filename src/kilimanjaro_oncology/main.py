@@ -1,8 +1,8 @@
 # main.py
 import sys
 
-from app.gui.main_app import MainApp
-from app.utils.logger import setup_logger
+from kilimanjaro_oncology.gui.main_app import MainApp
+from kilimanjaro_oncology.utils.logger import setup_logger
 
 logger = setup_logger()
 

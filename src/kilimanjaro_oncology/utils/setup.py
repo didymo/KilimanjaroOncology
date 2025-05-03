@@ -1,5 +1,5 @@
 # setup.py
-from app.utils.config import DATABASE_FILE, ConfigManager
+from kilimanjaro_oncology.utils.config import DATABASE_FILE, ConfigManager
 
 
 def check_initialization():

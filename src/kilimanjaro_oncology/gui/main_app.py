@@ -2,14 +2,14 @@
 import sys
 import tkinter as tk
 
-from app.gui.config_screen import ConfigScreen  # Assuming you have a config screen
-from app.gui.death_screen import DeathScreen
-from app.gui.follow_up_screen import FollowUpScreen  # Make sure this import is correct
-from app.gui.new_diagnosis_screen import NewDiagnosisScreen
-from app.utils.config import ConfigManager
-from app.utils.exceptions import ConfigurationError, DatabaseError
-from app.utils.logger import setup_logger
-from app.utils.setup import check_initialization
+from kilimanjaro_oncology.gui.config_screen import ConfigScreen  # Assuming you have a config screen
+from kilimanjaro_oncology.gui.death_screen import DeathScreen
+from kilimanjaro_oncology.gui.follow_up_screen import FollowUpScreen  # Make sure this import is correct
+from kilimanjaro_oncology.gui.new_diagnosis_screen import NewDiagnosisScreen
+from kilimanjaro_oncology.utils.config import ConfigManager
+from kilimanjaro_oncology.utils.exceptions import ConfigurationError, DatabaseError
+from kilimanjaro_oncology.utils.logger import setup_logger
+from kilimanjaro_oncology.utils.setup import check_initialization
 
 logger = setup_logger()
 

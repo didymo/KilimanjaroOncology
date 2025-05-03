@@ -3,7 +3,7 @@ import json
 import sqlite3
 from pathlib import Path
 
-from app.utils.exceptions import ConfigurationError, DatabaseError
+from kilimanjaro_oncology.utils.exceptions import ConfigurationError, DatabaseError
 
 # Define the application directory in the user's home directory
 APP_DIR = Path.home() / "africa_oncology_settings"

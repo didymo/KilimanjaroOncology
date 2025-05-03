@@ -1,7 +1,7 @@
 # src/app/gui/test_autocomplete.py
 import tkinter as tk
 
-from app.gui.common_widgets import AutoCompleteCombobox
+from kilimanjaro_oncology.gui.common_widgets import AutoCompleteCombobox
 
 # from gui.custom_widgets import AutoCompleteCombobox
 
