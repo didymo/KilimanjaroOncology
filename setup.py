@@ -20,7 +20,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'KilimanjaroOncology=app.main:main',  # Assumes there's a main() function in app/main.py
+            'KilimanjaroOncology=kilimanjaro_oncology.main:main',  # Assumes there's a main() function in app/main.py
         ],
     },
     python_requires='>=3.6',
