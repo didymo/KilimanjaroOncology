@@ -10,6 +10,7 @@ from kilimanjaro_oncology.utils.config import ConfigManager
 from kilimanjaro_oncology.utils.exceptions import ConfigurationError, DatabaseError
 from kilimanjaro_oncology.utils.logger import setup_logger
 from kilimanjaro_oncology.utils.setup import check_initialization
+from kilimanjaro_oncology.database.database_service import DatabaseService
 
 logger = setup_logger()
 
@@ -17,9 +18,12 @@ logger = setup_logger()
 class MainApp(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title("Africa Oncology Data Collection")
+        self.title("Kilimanjaro Christian Medical Centre Oncology Data Collection")
         self.geometry("1200x800")
         self.config_manager = ConfigManager()
+
+        # create exactly one DatabaseService to pass into all screens
+        self.db_service = DatabaseService(self.config_manager.settings["db_path"])
 
         # Placeholder for the current screen (each screen is a Frame)
         self.current_screen = None
@@ -47,20 +51,32 @@ class MainApp(tk.Tk):
         """Display the New Diagnosis screen."""
         self.clear_screen()
         # Pass 'controller=self' so the NewDiagnosisScreen can call navigation methods.
-        self.current_screen = NewDiagnosisScreen(self, controller=self)
+        self.current_screen = NewDiagnosisScreen(
+            self,
+            controller=self,
+            db_service=self.db_service,
+        )
         self.current_screen.pack(expand=True, fill="both")
 
     def show_followup_screen(self):
         """Display the Follow-Up screen."""
         self.clear_screen()
         # Pass 'controller=self' so the FollowUpScreen can call navigation methods.
-        self.current_screen = FollowUpScreen(self, controller=self)
+        self.current_screen = FollowUpScreen(
+            self,
+            controller=self,
+            db_service=self.db_service,
+        )
         self.current_screen.pack(expand=True, fill="both")
 
     def show_death_screen(self):
         """Display the Death screen."""
         self.clear_screen()
-        self.current_screen = DeathScreen(self, controller=self)
+        self.current_screen = DeathScreen(
+            self,
+            controller=self,
+            db_service=self.db_service,
+        )
         self.current_screen.pack(expand=True, fill="both")
 
     def clear_screen(self):

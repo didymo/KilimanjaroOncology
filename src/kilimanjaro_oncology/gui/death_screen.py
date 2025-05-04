@@ -3,7 +3,6 @@ import tkinter as tk
 from tkinter import messagebox, ttk
 
 from kilimanjaro_oncology.classes.oncology_patient_data import OncologyPatientData
-from kilimanjaro_oncology.database.database_service import DatabaseService
 from kilimanjaro_oncology.gui.common_widgets import (
     AutoCompleteCombobox,
     create_common_header,
@@ -21,9 +20,12 @@ class DeathScreen(
     NotesMixin,
     tk.Frame,
 ):
-    def __init__(self, parent, controller):
+    def __init__(self, parent, controller, db_service):
         super().__init__(parent)
         self.controller = controller
+
+        # use passed‐in service (or default singleton)
+        self.db_service = db_service
 
         self.record = OncologyPatientData(
             record_creation_datetime=datetime.datetime.now(),
@@ -130,8 +132,8 @@ class DeathScreen(
         self.clipboard_clear()
         self.clipboard_append(out)
         try:
-            db = DatabaseService()
-            rid = db.save_diagnosis_record(self.record.to_dict())
+            # db = DatabaseService()
+            rid = self.db_service.save_diagnosis_record(self.record.to_dict())
             messagebox.showinfo("Success", f"Record saved successfully (ID: {rid})")
         except Exception as e:
             messagebox.showerror("Error", str(e))

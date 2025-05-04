@@ -3,7 +3,6 @@ import tkinter as tk
 from tkinter import messagebox, ttk
 
 from kilimanjaro_oncology.classes.oncology_patient_data import OncologyPatientData
-from kilimanjaro_oncology.database.database_service import DatabaseService
 from kilimanjaro_oncology.gui.common_widgets import (
     AutoCompleteCombobox,
     create_common_header,
@@ -19,12 +18,14 @@ class NewDiagnosisScreen(
     NotesMixin,
     tk.Frame,
 ):
-    def __init__(self, parent, controller):
+    def __init__(self, parent, controller, db_service):
         super().__init__(parent)
         self.controller = controller
 
-        db = DatabaseService()
-        with db.get_connection() as conn:
+        # use passed‐in service (or default singleton)
+        self.db_service = db_service
+
+        with self.db_service.get_connection() as conn:
             cur = conn.cursor()
             cur.execute("SELECT key,value FROM settings WHERE key IN ('hospital_name','department_name')")
             settings = dict(cur.fetchall())
@@ -171,8 +172,7 @@ class NewDiagnosisScreen(
         self.clipboard_clear()
         self.clipboard_append(output)
         try:
-            db = DatabaseService()
-            rid = db.save_diagnosis_record(self.record.to_dict())
+            rid = self.db_service.save_diagnosis_record(self.record.to_dict())
             messagebox.showinfo("Success", f"Record saved successfully (ID: {rid})")
         except Exception as e:
             messagebox.showerror("Error", str(e))
