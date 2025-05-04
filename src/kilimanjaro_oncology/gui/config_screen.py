@@ -27,6 +27,16 @@ class ConfigScreen(tk.Frame):
             pady=10
         )
 
+        ttk.Label(self, text="Hospital Name:").pack(pady=(20, 5))
+        self.hospital_var = tk.StringVar(value=self.config_manager.settings.get("hospital_name", ""))
+        self.hospital_entry = ttk.Entry(self, textvariable=self.hospital_var, width=50)
+        self.hospital_entry.pack(pady=5)
+
+        ttk.Label(self, text="Department Name:").pack(pady=(10, 5))
+        self.department_var = tk.StringVar(value=self.config_manager.settings.get("department_name", ""))
+        self.department_entry = ttk.Entry(self, textvariable=self.department_var, width=50)
+        self.department_entry.pack(pady=5)
+
     def browse_db_path(self):
         """Open a file dialog to select the database file."""
         db_path = filedialog.askopenfilename(
@@ -48,6 +58,21 @@ class ConfigScreen(tk.Frame):
             # Initialize the database so that the file is created if it doesn't
             # exist.
             self.config_manager.initialize_database()
+            from kilimanjaro_oncology.database.database_service import DatabaseService
+
+            db = DatabaseService(self.config_manager.settings["db_path"])
+            with db.get_connection() as conn:
+                cur = conn.cursor()
+                # insert hospital_name
+                cur.execute(
+                    "INSERT OR REPLACE INTO settings(key,value) VALUES (?,?)",
+                    ("hospital_name", self.hospital_var.get().strip()),
+                )
+                # insert department_name
+                cur.execute(
+                    "INSERT OR REPLACE INTO settings(key,value) VALUES (?,?)",
+                    ("department_name", self.department_var.get().strip()),
+                )
             self.parent.show_new_diagnosis_screen()  # Transition to the main screen
         else:
             ttk.Label(

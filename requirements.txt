@@ -1,7 +1,2 @@
-dataclasses==0.6
-DateTime==5.5
-pathlib==1.0.1
-pytz==2025.2
+pytest==8.3.5
 setuptools==78.1.0
-typing==3.7.4.3
-zope.interface==7.2

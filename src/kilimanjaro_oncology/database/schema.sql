@@ -14,3 +14,10 @@ CREATE TABLE IF NOT EXISTS oncology_data (
     Death_Cause TEXT,
     Note TEXT
 );
+
+
+CREATE TABLE IF NOT EXISTS settings (
+  AutoincrementID INTEGER PRIMARY KEY AUTOINCREMENT,
+  key             TEXT    UNIQUE NOT NULL,
+  value           TEXT    NOT NULL
+);
