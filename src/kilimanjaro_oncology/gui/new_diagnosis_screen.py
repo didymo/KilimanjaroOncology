@@ -23,6 +23,14 @@ class NewDiagnosisScreen(
         super().__init__(parent)
         self.controller = controller
 
+        db = DatabaseService()
+        with db.get_connection() as conn:
+            cur = conn.cursor()
+            cur.execute("SELECT key,value FROM settings WHERE key IN ('hospital_name','department_name')")
+            settings = dict(cur.fetchall())
+        self._hospital = settings.get("hospital_name", "")
+        self._department = settings.get("department_name", "")
+
         # Initialize the data model
         self.record = OncologyPatientData(
             record_creation_datetime=datetime.datetime.now(),
@@ -111,8 +119,22 @@ class NewDiagnosisScreen(
 
         info.grid_columnconfigure(1, weight=1)
 
+    # def update_patient_id(self, *args):
+    #     self.record.patient_id = self.patient_id_var.get()
+
     def update_patient_id(self, *args):
-        self.record.patient_id = self.patient_id_var.get()
+        # raw user‐entered ID (e.g. "0001")
+        raw = self.patient_id_var.get().lstrip(".")
+
+        # build the full ID: "Hospital.Dept.raw"
+        if self._hospital and self._department:
+            full = f"{self._hospital}.{self._department}.{raw}"
+        else:
+            full = raw
+
+        # store only in the record—not in the entry widget
+        self.record.patient_id = full
+
 
     def update_event_date(self, *args):
         try:
@@ -127,8 +149,6 @@ class NewDiagnosisScreen(
         if val in self.diagnosis_display:
             idx = self.diagnosis_display.index(val)
             self.record.diagnosis = self.diagnosis_codes[idx]
-            # Optionally append diagnosis code to Patient ID
-            self.record.patient_id = f"{self.patient_id_var.get()}.{self.record.diagnosis}"
 
     def create_footer(self):
         footer = ttk.Frame(self.scrollable_frame)
