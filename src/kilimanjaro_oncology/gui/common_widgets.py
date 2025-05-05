@@ -54,20 +54,6 @@ class PatientInfoMixin:
         self.patient_id_combo = ttk.Combobox(info, textvariable=self.patient_id_var)
         self.patient_id_combo.grid(row=0, column=1, sticky="ew", padx=5)
 
-        # def on_key(e):
-        #     q = e.widget.get()
-        #     from kilimanjaro_oncology.database.database_service import DatabaseService
-        #     db = DatabaseService()
-        #     with db.get_connection() as c:
-        #         cur = c.cursor()
-        #         cur.execute(
-        #             "SELECT DISTINCT PatientID FROM oncology_data WHERE PatientID LIKE ?",
-        #             (f"{q}%",)
-        #         )
-        #         vals = [r[0] for r in cur.fetchall()]
-        #     e.widget["values"] = vals
-        #     if vals:
-        #         e.widget.event_generate("<Down>")
         def on_key(e):
             prefix = e.widget.get()
             vals = self.record_ctrl.fetch_patient_ids(prefix)

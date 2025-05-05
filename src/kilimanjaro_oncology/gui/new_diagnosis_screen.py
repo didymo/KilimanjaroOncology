@@ -153,6 +153,9 @@ class NewDiagnosisScreen(
         if val in self.diagnosis_display:
             idx = self.diagnosis_display.index(val)
             self.record.diagnosis = self.diagnosis_codes[idx]
+            # append the diagnosis code to whatever ID already built
+            self.record.patient_id = f"{self.record.patient_id}.{self.record.diagnosis}"
+
 
     def create_footer(self):
         footer = ttk.Frame(self.scrollable_frame)
