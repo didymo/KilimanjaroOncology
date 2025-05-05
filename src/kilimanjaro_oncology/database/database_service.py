@@ -27,6 +27,7 @@ class DatabaseService:
                 inst._initialized = False
                 cls._instances[key] = inst
             return cls._instances[key]
+
     def __init__(self, db_path: Optional[str] = None):
         """Initialize the database service with connection pooling."""
         if self._initialized:

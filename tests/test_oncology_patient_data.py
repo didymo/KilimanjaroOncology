@@ -1,6 +1,7 @@
-import pytest
-from datetime import datetime, timedelta
+from datetime import datetime
+
 from kilimanjaro_oncology.classes.oncology_patient_data import OncologyPatientData
+
 
 def test_to_dict_and_from_dict_round_trip():
     now = datetime.now().replace(microsecond=0)
@@ -27,6 +28,7 @@ def test_to_dict_and_from_dict_round_trip():
     # round‑trip
     rec2 = OncologyPatientData.from_dict(d)
     assert rec2 == record
+
 
 def test_from_dict_invalid_dates_fallback():
     bad = {

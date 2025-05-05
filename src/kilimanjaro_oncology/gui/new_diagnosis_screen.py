@@ -5,10 +5,10 @@ from tkinter import messagebox, ttk
 from kilimanjaro_oncology.classes.oncology_patient_data import OncologyPatientData
 from kilimanjaro_oncology.gui.common_widgets import (
     AutoCompleteCombobox,
-    create_common_header,
     CancerDetailsMixin,
     CarePlanMixin,
     NotesMixin,
+    create_common_header,
 )
 
 
@@ -23,7 +23,7 @@ class NewDiagnosisScreen(
         self.controller = controller
         self.record_ctrl = record_ctrl
 
-        settings = self.record_ctrl.fetch_settings(["hospital_name","department_name"])
+        settings = self.record_ctrl.fetch_settings(["hospital_name", "department_name"])
         self._hospital = settings.get("hospital_name", "")
         self._department = settings.get("department_name", "")
 
@@ -59,7 +59,7 @@ class NewDiagnosisScreen(
 
         # Build UI
         create_common_header(self.scrollable_frame, controller)
-        self.create_patient_info()      # overridden below
+        self.create_patient_info()  # overridden below
         self.create_cancer_details()
         self.create_care_plan()
         self.create_notes()
@@ -87,14 +87,11 @@ class NewDiagnosisScreen(
         # Diagnosis Combobox w/ autocomplete
         ttk.Label(info, text="Diagnosis").grid(row=2, column=0, sticky="w")
         # Load codes/display from CSV
-        csv_path = (
-            __import__("os")
-            .path.join(
-                __import__("os").path.dirname(__file__),
-                "..",
-                "csv_files",
-                "Diagnosis.ICD10.csv",
-            )
+        csv_path = __import__("os").path.join(
+            __import__("os").path.dirname(__file__),
+            "..",
+            "csv_files",
+            "Diagnosis.ICD10.csv",
         )
         self.diagnosis_codes, self.diagnosis_display = [], []
         with open(csv_path, newline="", encoding="latin-1") as f:
@@ -115,7 +112,6 @@ class NewDiagnosisScreen(
 
         info.grid_columnconfigure(1, weight=1)
 
-
     def update_patient_id(self, *args):
         # raw user‐entered ID (e.g. "0001")
         raw = self.patient_id_var.get().lstrip(".")
@@ -128,7 +124,6 @@ class NewDiagnosisScreen(
 
         # store only in the record—not in the entry widget
         self.record.patient_id = full
-
 
     def update_event_date(self, *args):
         try:
@@ -146,11 +141,12 @@ class NewDiagnosisScreen(
             # append the diagnosis code to whatever ID already built
             self.record.patient_id = f"{self.record.patient_id}.{self.record.diagnosis}"
 
-
     def create_footer(self):
         footer = ttk.Frame(self.scrollable_frame)
         footer.pack(fill="x", padx=5, pady=5)
-        ttk.Button(footer, text="COPY", command=self.copy_to_clipboard).pack(side="right")
+        ttk.Button(footer, text="COPY", command=self.copy_to_clipboard).pack(
+            side="right"
+        )
 
     def copy_to_clipboard(self):
         output = (

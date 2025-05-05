@@ -62,7 +62,9 @@ class OncologyPatientData:
 
         death_date_str = data.get("death_date", "")
         try:
-            death_date = datetime.fromisoformat(death_date_str) if death_date_str else None
+            death_date = (
+                datetime.fromisoformat(death_date_str) if death_date_str else None
+            )
         except Exception:
             death_date = None
 

@@ -4,12 +4,11 @@ from tkinter import messagebox, ttk
 
 from kilimanjaro_oncology.classes.oncology_patient_data import OncologyPatientData
 from kilimanjaro_oncology.gui.common_widgets import (
-    AutoCompleteCombobox,
-    create_common_header,
-    PatientInfoMixin,
     CancerDetailsMixin,
     CarePlanMixin,
     NotesMixin,
+    PatientInfoMixin,
+    create_common_header,
 )
 
 

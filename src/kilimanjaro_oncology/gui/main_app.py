@@ -3,15 +3,19 @@ import sys
 import tkinter as tk
 
 from kilimanjaro_oncology.controllers.record_controller import RecordController
-from kilimanjaro_oncology.gui.config_screen import ConfigScreen  # Assuming you have a config screen
+from kilimanjaro_oncology.database.database_service import DatabaseService
+from kilimanjaro_oncology.gui.config_screen import (
+    ConfigScreen,  # Assuming you have; a config screen
+)
 from kilimanjaro_oncology.gui.death_screen import DeathScreen
-from kilimanjaro_oncology.gui.follow_up_screen import FollowUpScreen  # Make sure this import is correct
+from kilimanjaro_oncology.gui.follow_up_screen import (
+    FollowUpScreen,  # Make sure this; import is correct
+)
 from kilimanjaro_oncology.gui.new_diagnosis_screen import NewDiagnosisScreen
 from kilimanjaro_oncology.utils.config import ConfigManager
 from kilimanjaro_oncology.utils.exceptions import ConfigurationError, DatabaseError
 from kilimanjaro_oncology.utils.logger import setup_logger
 from kilimanjaro_oncology.utils.setup import check_initialization
-from kilimanjaro_oncology.database.database_service import DatabaseService
 
 logger = setup_logger()
 

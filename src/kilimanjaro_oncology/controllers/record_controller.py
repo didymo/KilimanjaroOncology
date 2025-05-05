@@ -1,11 +1,11 @@
 # kilimanjaro_oncology/controllers/record_controller.py
 
-from typing     import List, Dict, Any
+from typing import Any, Dict, List
 
 from kilimanjaro_oncology.database.database_service import DatabaseService
 
-
 # from .database_service import DatabaseService
+
 
 class RecordController:
     def __init__(self, db: DatabaseService):

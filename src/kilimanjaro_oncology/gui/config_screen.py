@@ -28,13 +28,19 @@ class ConfigScreen(tk.Frame):
         )
 
         ttk.Label(self, text="Hospital Name:").pack(pady=(20, 5))
-        self.hospital_var = tk.StringVar(value=self.config_manager.settings.get("hospital_name", ""))
+        self.hospital_var = tk.StringVar(
+            value=self.config_manager.settings.get("hospital_name", "")
+        )
         self.hospital_entry = ttk.Entry(self, textvariable=self.hospital_var, width=50)
         self.hospital_entry.pack(pady=5)
 
         ttk.Label(self, text="Department Name:").pack(pady=(10, 5))
-        self.department_var = tk.StringVar(value=self.config_manager.settings.get("department_name", ""))
-        self.department_entry = ttk.Entry(self, textvariable=self.department_var, width=50)
+        self.department_var = tk.StringVar(
+            value=self.config_manager.settings.get("department_name", "")
+        )
+        self.department_entry = ttk.Entry(
+            self, textvariable=self.department_var, width=50
+        )
         self.department_entry.pack(pady=5)
 
     def browse_db_path(self):

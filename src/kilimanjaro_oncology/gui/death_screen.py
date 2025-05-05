@@ -4,12 +4,11 @@ from tkinter import messagebox, ttk
 
 from kilimanjaro_oncology.classes.oncology_patient_data import OncologyPatientData
 from kilimanjaro_oncology.gui.common_widgets import (
-    AutoCompleteCombobox,
-    create_common_header,
-    PatientInfoMixin,
     CancerDetailsMixin,
     CarePlanMixin,
     NotesMixin,
+    PatientInfoMixin,
+    create_common_header,
 )
 
 
@@ -28,7 +27,6 @@ class DeathScreen(
         # self.db_service = db_service
         # use the controller/service layer
         self.record_ctrl = record_ctrl
-
 
         self.record = OncologyPatientData(
             record_creation_datetime=datetime.datetime.now(),
@@ -61,7 +59,7 @@ class DeathScreen(
 
         # Build UI
         create_common_header(self.scrollable_frame, controller)
-        self.date_label_text = None    # no date row on the death screen
+        self.date_label_text = None  # no date row on the death screen
         self.create_patient_info()
         self.create_cancer_details()
         self.death_date_cause()
@@ -99,7 +97,9 @@ class DeathScreen(
         self.cause_of_death_entry.grid(row=1, column=1, sticky="ew", padx=5, pady=2)
         self.cause_of_death_var.trace_add(
             "write",
-            lambda *a: setattr(self.record, "death_cause", self.cause_of_death_var.get()),
+            lambda *a: setattr(
+                self.record, "death_cause", self.cause_of_death_var.get()
+            ),
         )
 
         frm.columnconfigure(0, weight=0)
@@ -116,7 +116,9 @@ class DeathScreen(
     def create_footer(self):
         footer = ttk.Frame(self.scrollable_frame)
         footer.pack(fill="x", padx=5, pady=5)
-        ttk.Button(footer, text="COPY", command=self.copy_to_clipboard).pack(side="right")
+        ttk.Button(footer, text="COPY", command=self.copy_to_clipboard).pack(
+            side="right"
+        )
 
     def copy_to_clipboard(self):
         out = (
