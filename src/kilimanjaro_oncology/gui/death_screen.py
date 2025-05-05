@@ -20,12 +20,15 @@ class DeathScreen(
     NotesMixin,
     tk.Frame,
 ):
-    def __init__(self, parent, controller, db_service):
+    def __init__(self, parent, controller, record_ctrl):
         super().__init__(parent)
         self.controller = controller
 
         # use passed‐in service (or default singleton)
-        self.db_service = db_service
+        # self.db_service = db_service
+        # use the controller/service layer
+        self.record_ctrl = record_ctrl
+
 
         self.record = OncologyPatientData(
             record_creation_datetime=datetime.datetime.now(),
@@ -133,7 +136,7 @@ class DeathScreen(
         self.clipboard_append(out)
         try:
             # db = DatabaseService()
-            rid = self.db_service.save_diagnosis_record(self.record.to_dict())
+            rid = self.record_ctrl.save_record(self.record.to_dict())
             messagebox.showinfo("Success", f"Record saved successfully (ID: {rid})")
         except Exception as e:
             messagebox.showerror("Error", str(e))
