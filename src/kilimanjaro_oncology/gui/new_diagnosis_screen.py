@@ -18,17 +18,20 @@ class NewDiagnosisScreen(
     NotesMixin,
     tk.Frame,
 ):
-    def __init__(self, parent, controller, db_service):
+    def __init__(self, parent, controller, record_ctrl):
         super().__init__(parent)
         self.controller = controller
+        self.record_ctrl = record_ctrl
 
         # use passed‐in service (or default singleton)
-        self.db_service = db_service
+        # self.db_service = db_service
 
-        with self.db_service.get_connection() as conn:
-            cur = conn.cursor()
-            cur.execute("SELECT key,value FROM settings WHERE key IN ('hospital_name','department_name')")
-            settings = dict(cur.fetchall())
+        # with self.db_service.get_connection() as conn:
+        #     cur = conn.cursor()
+        #     cur.execute("SELECT key,value FROM settings WHERE key IN ('hospital_name','department_name')")
+        #     settings = dict(cur.fetchall())
+        #    def fetch_settings(self, keys: List[str]) -> Dict[str,str]
+        settings = self.record_ctrl.fetch_settings(["hospital_name","department_name"])
         self._hospital = settings.get("hospital_name", "")
         self._department = settings.get("department_name", "")
 
@@ -172,7 +175,8 @@ class NewDiagnosisScreen(
         self.clipboard_clear()
         self.clipboard_append(output)
         try:
-            rid = self.db_service.save_diagnosis_record(self.record.to_dict())
+            # rid = self.db_service.save_diagnosis_record(self.record.to_dict())
+            rid = self.record_ctrl.save_record(self.record.to_dict())
             messagebox.showinfo("Success", f"Record saved successfully (ID: {rid})")
         except Exception as e:
             messagebox.showerror("Error", str(e))

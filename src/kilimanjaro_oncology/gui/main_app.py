@@ -2,6 +2,7 @@
 import sys
 import tkinter as tk
 
+from kilimanjaro_oncology.controllers.record_controller import RecordController
 from kilimanjaro_oncology.gui.config_screen import ConfigScreen  # Assuming you have a config screen
 from kilimanjaro_oncology.gui.death_screen import DeathScreen
 from kilimanjaro_oncology.gui.follow_up_screen import FollowUpScreen  # Make sure this import is correct
@@ -24,6 +25,7 @@ class MainApp(tk.Tk):
 
         # create exactly one DatabaseService to pass into all screens
         self.db_service = DatabaseService(self.config_manager.settings["db_path"])
+        self.record_ctrl = RecordController(self.db_service)
 
         # Placeholder for the current screen (each screen is a Frame)
         self.current_screen = None
@@ -54,7 +56,7 @@ class MainApp(tk.Tk):
         self.current_screen = NewDiagnosisScreen(
             self,
             controller=self,
-            db_service=self.db_service,
+            record_ctrl=self.record_ctrl,
         )
         self.current_screen.pack(expand=True, fill="both")
 
@@ -65,7 +67,7 @@ class MainApp(tk.Tk):
         self.current_screen = FollowUpScreen(
             self,
             controller=self,
-            db_service=self.db_service,
+            record_ctrl=self.record_ctrl,
         )
         self.current_screen.pack(expand=True, fill="both")
 
@@ -75,7 +77,7 @@ class MainApp(tk.Tk):
         self.current_screen = DeathScreen(
             self,
             controller=self,
-            db_service=self.db_service,
+            record_ctrl=self.record_ctrl,
         )
         self.current_screen.pack(expand=True, fill="both")
 

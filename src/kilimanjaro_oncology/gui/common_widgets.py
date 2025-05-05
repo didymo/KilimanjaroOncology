@@ -54,29 +54,40 @@ class PatientInfoMixin:
         self.patient_id_combo = ttk.Combobox(info, textvariable=self.patient_id_var)
         self.patient_id_combo.grid(row=0, column=1, sticky="ew", padx=5)
 
+        # def on_key(e):
+        #     q = e.widget.get()
+        #     from kilimanjaro_oncology.database.database_service import DatabaseService
+        #     db = DatabaseService()
+        #     with db.get_connection() as c:
+        #         cur = c.cursor()
+        #         cur.execute(
+        #             "SELECT DISTINCT PatientID FROM oncology_data WHERE PatientID LIKE ?",
+        #             (f"{q}%",)
+        #         )
+        #         vals = [r[0] for r in cur.fetchall()]
+        #     e.widget["values"] = vals
+        #     if vals:
+        #         e.widget.event_generate("<Down>")
         def on_key(e):
-            q = e.widget.get()
-            from kilimanjaro_oncology.database.database_service import DatabaseService
-            db = DatabaseService()
-            with db.get_connection() as c:
-                cur = c.cursor()
-                cur.execute(
-                    "SELECT DISTINCT PatientID FROM oncology_data WHERE PatientID LIKE ?",
-                    (f"{q}%",)
-                )
-                vals = [r[0] for r in cur.fetchall()]
+            prefix = e.widget.get()
+            vals = self.record_ctrl.fetch_patient_ids(prefix)
             e.widget["values"] = vals
             if vals:
                 e.widget.event_generate("<Down>")
 
         def on_select(e):
             pid = self.patient_id_var.get()
-            from kilimanjaro_oncology.database.database_service import DatabaseService
-            db = DatabaseService()
-            recs = db.get_patient_records(pid)
-            if not recs:
+            # from kilimanjaro_oncology.database.database_service import DatabaseService
+            # db = DatabaseService()
+            # recs = db.get_patient_records(pid)
+            # if not recs:
+            #     return
+            # data = recs[0]
+            # pull full patient record via controller
+            data = self.record_ctrl.fetch_patient_data(pid)
+            if not data:
                 return
-            data = recs[0]
+
             # Diagnosis
             code = data.get("Diagnosis", "")
             if code in self.diagnosis_codes:
