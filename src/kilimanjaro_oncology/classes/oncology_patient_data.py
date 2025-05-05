@@ -59,8 +59,12 @@ class OncologyPatientData:
             )
         except Exception:
             event_date = datetime.now()
+
         death_date_str = data.get("death_date", "")
-        death_date = datetime.fromisoformat(death_date_str) if death_date_str else None
+        try:
+            death_date = datetime.fromisoformat(death_date_str) if death_date_str else None
+        except Exception:
+            death_date = None
 
         return cls(
             autoincrement_id=data.get("autoincrement_id"),

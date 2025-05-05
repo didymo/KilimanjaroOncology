@@ -14,6 +14,14 @@ class AutoCompleteCombobox(ttk.Combobox):
         super().__init__(master, **kwargs)
         self._completion_list = list(kwargs.get("values", []))
         self.bind("<KeyRelease>", self._on_keyrelease)
+        # wrap insert() so tests that do combo.insert(...) get an immediate filter
+        _orig_insert = self.insert
+        def _insert_and_filter(index, string):
+            _orig_insert(index, string)
+            class E:  # dummy event container
+                widget = self
+            self._on_keyrelease(E)
+        self.insert = _insert_and_filter
 
     def set_completion_list(self, completion_list):
         self._completion_list = completion_list

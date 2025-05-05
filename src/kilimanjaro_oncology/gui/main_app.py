@@ -44,8 +44,7 @@ class MainApp(tk.Tk):
     def show_config_screen(self):
         """Display the configuration screen."""
         self.clear_screen()
-        # Pass 'controller=self' so that the config screen can also navigate if needed.
-        # self.current_screen = ConfigScreen(self, controller=self)
+
         self.current_screen = ConfigScreen(self)
         self.current_screen.pack(expand=True, fill="both")
 

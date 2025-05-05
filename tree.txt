@@ -19,44 +19,49 @@
 ├── setup.py
 ├── src
 │   ├── __init__.py
-│   └── kilimanjaro_oncology
-│       ├── classes
-│       │   ├── oncology_patient_data.py
-│       │   └── __pycache__
-│       ├── csv_files
-│       │   ├── CarePlan.CSV
-│       │   ├── Cause_of_Death.CSV
-│       │   ├── Diagnosis.ICD10.csv
-│       │   ├── Histopathology.CSV
-│       │   ├── M_stage.CSV
-│       │   ├── N_stage.CSV
-│       │   ├── Therapy.CSV
-│       │   └── T_stage.CSV
-│       ├── database
-│       │   ├── database_service.py
-│       │   ├── __pycache__
-│       │   └── schema.sql
-│       ├── gui
-│       │   ├── app.py
-│       │   ├── common_widgets.py
-│       │   ├── config_screen.py
-│       │   ├── death_screen.py
-│       │   ├── follow_up_screen.py
-│       │   ├── __init__.py
-│       │   ├── main_app.py
-│       │   ├── new_diagnosis_screen.py
-│       │   ├── __pycache__
-│       │   ├── settings_creator.py
-│       │   └── test_autocomplete.py
-│       ├── __init__.py
-│       ├── main.py
-│       ├── __pycache__
-│       └── utils
-│           ├── config.py
-│           ├── exceptions.py
-│           ├── logger.py
-│           ├── __pycache__
-│           └── setup.py
+│   ├── kilimanjaro_oncology
+│   │   ├── classes
+│   │   │   ├── oncology_patient_data.py
+│   │   │   └── __pycache__
+│   │   ├── controllers
+│   │   │   ├── __init__.py
+│   │   │   ├── __pycache__
+│   │   │   └── record_controller.py
+│   │   ├── csv_files
+│   │   │   ├── CarePlan.CSV
+│   │   │   ├── Cause_of_Death.CSV
+│   │   │   ├── Diagnosis.ICD10.csv
+│   │   │   ├── Histopathology.CSV
+│   │   │   ├── M_stage.CSV
+│   │   │   ├── N_stage.CSV
+│   │   │   ├── Therapy.CSV
+│   │   │   └── T_stage.CSV
+│   │   ├── database
+│   │   │   ├── database_service.py
+│   │   │   ├── __pycache__
+│   │   │   └── schema.sql
+│   │   ├── gui
+│   │   │   ├── app.py
+│   │   │   ├── common_widgets.py
+│   │   │   ├── config_screen.py
+│   │   │   ├── death_screen.py
+│   │   │   ├── follow_up_screen.py
+│   │   │   ├── __init__.py
+│   │   │   ├── main_app.py
+│   │   │   ├── new_diagnosis_screen.py
+│   │   │   ├── __pycache__
+│   │   │   ├── settings_creator.py
+│   │   │   └── test_autocomplete.py
+│   │   ├── __init__.py
+│   │   ├── main.py
+│   │   ├── __pycache__
+│   │   └── utils
+│   │       ├── config.py
+│   │       ├── exceptions.py
+│   │       ├── logger.py
+│   │       ├── __pycache__
+│   │       └── setup.py
+│   └── __pycache__
 ├── tests
 │   ├── __init__.py
 │   ├── test_app.py
@@ -64,4 +69,4 @@
 ├── tox.ini
 └── tree.txt
 
-16 directories, 49 files
+19 directories, 51 files

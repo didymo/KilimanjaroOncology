@@ -15,15 +15,18 @@ class DatabaseService:
     """
 
     _instance = None
+    # map db_path → instance
+    _instances: dict[str, "DatabaseService"] = {}
     _lock = threading.Lock()
 
     def __new__(cls, db_path: Optional[str] = None):
+        key = db_path or ""
         with cls._lock:
-            if cls._instance is None:
-                cls._instance = super(DatabaseService, cls).__new__(cls)
-                cls._instance._initialized = False
-            return cls._instance
-
+            if key not in cls._instances:
+                inst = super(DatabaseService, cls).__new__(cls)
+                inst._initialized = False
+                cls._instances[key] = inst
+            return cls._instances[key]
     def __init__(self, db_path: Optional[str] = None):
         """Initialize the database service with connection pooling."""
         if self._initialized:
