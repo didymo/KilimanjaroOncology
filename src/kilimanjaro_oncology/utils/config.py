@@ -28,7 +28,7 @@ class ConfigManager:
         Check if both settings and database files exist and are valid.
         Returns True only if both exist and settings file contains valid JSON.
         """
-        if not (SETTINGS_FILE.exists() and DATABASE_FILE.exists()):
+        if not SETTINGS_FILE.exists():
             return False
 
         try:
@@ -36,7 +36,9 @@ class ConfigManager:
             with open(SETTINGS_FILE, "r") as file:
                 settings = json.load(file)
                 # Verify required settings exist
-                if not settings.get("db_path"):
+                dbp = settings.get("db_path")
+                # must have a path _and_ that file must exist on disk
+                if not dbp or not Path(dbp).exists():
                     return False
                 return True
         except (json.JSONDecodeError, IOError):
@@ -72,18 +74,19 @@ class ConfigManager:
             raise ConfigurationError("Database path is missing in configuration.")
 
     def initialize_database(self):
-        """Ensure the database file exists and is initialized."""
-        try:
-            if not DATABASE_FILE.exists():
-                # Ensure parent directory exists
-                DATABASE_FILE.parent.mkdir(parents=True, exist_ok=True)
-                self._create_database()
-            # Verify database is accessible and has correct schema
-            self._verify_database()
-        except sqlite3.Error as e:
-            raise DatabaseError(f"Database initialization failed: {e}")
+        """Create or verify whatever path the user saved in settings['db_path']."""
+        db_path = Path(self.settings["db_path"])
+        # ensure parent folder
+        db_path.parent.mkdir(parents=True, exist_ok=True)
 
-    def _create_database(self):
+        # create if missing
+        if not db_path.exists():
+            self._create_database(db_path)
+
+        # then verify schema
+        self._verify_database(db_path)
+
+    def _create_database(self, db_path: Path):
         """Create the database using schema.sql."""
         conn = None
         try:
@@ -95,7 +98,9 @@ class ConfigManager:
                 schema_script = f.read()
 
             # Create and initialize the database
-            conn = sqlite3.connect(str(DATABASE_FILE))
+            # conn = sqlite3.connect(str(DATABASE_FILE))
+            # Create the new .sqlite at the user’s chosen path
+            conn = sqlite3.connect(str(db_path))
             cursor = conn.cursor()
             cursor.executescript(schema_script)
             conn.commit()
@@ -108,10 +113,10 @@ class ConfigManager:
             if conn:
                 conn.close()
 
-    def _verify_database(self):
+    def _verify_database(self, db_path: Path):
         """Verify database is accessible and has the correct schema."""
         try:
-            conn = sqlite3.connect(DATABASE_FILE)
+            conn = sqlite3.connect(str(db_path))
             cursor = conn.cursor()
 
             # Get all tables from schema.sql
