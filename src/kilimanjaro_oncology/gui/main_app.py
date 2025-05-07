@@ -15,7 +15,6 @@ from kilimanjaro_oncology.gui.new_diagnosis_screen import NewDiagnosisScreen
 from kilimanjaro_oncology.utils.config import ConfigManager
 from kilimanjaro_oncology.utils.exceptions import ConfigurationError, DatabaseError
 from kilimanjaro_oncology.utils.logger import setup_logger
-from kilimanjaro_oncology.utils.setup import check_initialization
 
 logger = setup_logger()
 
@@ -35,12 +34,15 @@ class MainApp(tk.Tk):
         self.current_screen = None
 
         try:
-            if check_initialization():
-                # If initialized, show the New Diagnosis screen by default.
+            if self.config_manager.config_exists():
+                # ensure that database really *is* initialized
+                self.config_manager.initialize_database()
+                # first screen is the “real” one
                 self.show_new_diagnosis_screen()
             else:
                 logger.info("Configuration or database missing. Showing config screen.")
                 self.show_config_screen()
+
         except Exception as e:
             logger.warning(f"Initialization check failed: {e}")
             self.show_config_screen()
