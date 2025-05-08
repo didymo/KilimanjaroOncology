@@ -126,8 +126,9 @@ class PatientInfoMixin:
             self.factors_entry.delete(0, tk.END)
             self.factors_entry.insert(0, data.get("Factors", ""))
             self.record.factors = data.get("Factors", "")
-            # update id
-            self.record.patient_id = f"{pid}.{code}"
+            # preserve the full patient_id already stored
+            # (Diagnosis screen did the append)
+            self.record.patient_id = pid
 
         self.patient_id_combo.bind("<KeyRelease>", on_key)
         self.patient_id_combo.bind("<<ComboboxSelected>>", on_select)
