@@ -15,6 +15,7 @@ class AutoCompleteCombobox(ttk.Combobox):
         super().__init__(master, **kwargs)
         self._completion_list = list(kwargs.get("values", []))
         self.bind("<KeyRelease>", self._on_keyrelease)
+        self._open_after_id = None
         # wrap insert() so tests that do combo.insert(...) get an immediate filter
         _orig_insert = self.insert
 
@@ -40,7 +41,20 @@ class AutoCompleteCombobox(ttk.Combobox):
             self["values"] = [
                 i for i in self._completion_list if typed.lower() in i.lower()
             ]
-        self.event_generate("<Down>")
+        # self.event_generate("<Down>")
+        # restore focus & cursor **after** the dropdown opens
+        # self.after_idle(lambda: (self.focus_set(), self.icursor("end")))
+        # cancel any pending “open dropdown” call
+        if self._open_after_id:
+            self.after_cancel(self._open_after_id)
+        # schedule a single dropdown 300 ms after the last keystroke
+        self._open_after_id = self.after(300, self._show_dropdown)
+
+    def _show_dropdown(self):
+        self._open_after_id = None
+        if self["values"]:
+            # show the filtered list and highlight the first match
+            self.event_generate("<Down>")
 
 
 def create_common_header(parent, controller):
@@ -177,27 +191,18 @@ class CancerDetailsMixin:
             for row in csv.reader(f):
                 if row:
                     self.histo_options.append(" ".join(row).strip())
+        # new autocomplete combobox with built-in debounce/dropdown
         self.histo_var = tk.StringVar()
-        self.histo_combo = ttk.Combobox(
-            details, values=self.histo_options, textvariable=self.histo_var
+        self.histo_combo = AutoCompleteCombobox(
+            details,
+            values=self.histo_options,
+            textvariable=self.histo_var,
+            width=40,
         )
         self.histo_combo.grid(row=0, column=1, sticky="ew", padx=5)
         self.histo_combo.bind(
             "<<ComboboxSelected>>",
             lambda e: setattr(self.record, "histo", self.histo_var.get()),
-        )
-        self.histo_combo.bind(
-            "<KeyRelease>",
-            lambda e: (
-                self.histo_combo.configure(
-                    values=[
-                        o
-                        for o in self.histo_options
-                        if e.widget.get().lower() in o.lower()
-                    ]
-                ),
-                self.histo_combo.event_generate("<Down>"),
-            ),
         )
 
         # Grade
