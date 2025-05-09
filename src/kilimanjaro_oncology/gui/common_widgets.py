@@ -66,7 +66,7 @@ def create_common_header(parent, controller):
         style="Active.TButton",
         command=controller.show_new_diagnosis_screen,
     ).pack(side="left", padx=2)
-    ttk.Button(header, text="FollowUp", command=controller.show_followup_screen).pack(
+    ttk.Button(header, text="Management", command=controller.show_followup_screen).pack(
         side="left", padx=2
     )
     ttk.Button(header, text="Death", command=controller.show_death_screen).pack(
