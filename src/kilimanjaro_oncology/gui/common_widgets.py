@@ -8,52 +8,66 @@ from tkinter import ttk
 
 class AutoCompleteCombobox(ttk.Combobox):
     """
-    A ttk.Combobox with basic auto-complete functionality.
+    A ttk.Combobox that filters against both a human‐readable list *and* an
+    underlying “match_values” list (e.g. your ICD codes), with debounced dropdown.
     """
 
     def __init__(self, master=None, **kwargs):
+        # pull out the parallel match‐list if provided
+        self._match_list = kwargs.pop("match_values", None)
         super().__init__(master, **kwargs)
+
+        # display_list is what you see in the dropdown
         self._completion_list = list(kwargs.get("values", []))
-        self.bind("<KeyRelease>", self._on_keyrelease)
+        # if no explicit match_list, match against display text
+        if self._match_list is None:
+            self._match_list = self._completion_list.copy()
+
         self._open_after_id = None
-        # wrap insert() so tests that do combo.insert(...) get an immediate filter
+
+        # wrap insert() so tests (or manual .insert calls) immediately re‐filter
         _orig_insert = self.insert
 
         def _insert_and_filter(index, string):
             _orig_insert(index, string)
 
-            class E:  # dummy event container
+            class E:
                 widget = self
 
             self._on_keyrelease(E)
 
         self.insert = _insert_and_filter
 
-    def set_completion_list(self, completion_list):
+        self.bind("<KeyRelease>", self._on_keyrelease)
+
+    def set_completion_list(self, completion_list, match_list=None):
         self._completion_list = completion_list
+        if match_list:
+            self._match_list = match_list
         self["values"] = self._completion_list
 
     def _on_keyrelease(self, event):
-        typed = self.get()
+        typed = self.get().lower()
         if not typed:
-            self["values"] = self._completion_list
+            filtered = self._completion_list
         else:
-            self["values"] = [
-                i for i in self._completion_list if typed.lower() in i.lower()
+            # include entries whose display *or* raw code contains the typed text
+            filtered = [
+                disp
+                for disp, raw in zip(self._completion_list, self._match_list)
+                if typed in disp.lower() or typed in raw.lower()
             ]
-        # self.event_generate("<Down>")
-        # restore focus & cursor **after** the dropdown opens
-        # self.after_idle(lambda: (self.focus_set(), self.icursor("end")))
-        # cancel any pending “open dropdown” call
+        self["values"] = filtered
+
+        # debounce + open dropdown after typing stops
         if self._open_after_id:
             self.after_cancel(self._open_after_id)
-        # schedule a single dropdown 300 ms after the last keystroke
         self._open_after_id = self.after(300, self._show_dropdown)
 
     def _show_dropdown(self):
         self._open_after_id = None
         if self["values"]:
-            # show the filtered list and highlight the first match
+            # show dropdown and highlight first match
             self.event_generate("<Down>")
 
 
@@ -164,6 +178,7 @@ class PatientInfoMixin:
         self.diagnosis_combo = AutoCompleteCombobox(
             info,
             values=self.diagnosis_display,
+            match_values=self.diagnosis_codes,
             textvariable=self.diagnosis_var,
             width=40,
         )
