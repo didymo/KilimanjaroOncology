@@ -62,7 +62,7 @@ class AutoCompleteCombobox(ttk.Combobox):
         # debounce + open dropdown after typing stops
         if self._open_after_id:
             self.after_cancel(self._open_after_id)
-        self._open_after_id = self.after(300, self._show_dropdown)
+        self._open_after_id = self.after(500, self._show_dropdown)
 
     def _show_dropdown(self):
         self._open_after_id = None
