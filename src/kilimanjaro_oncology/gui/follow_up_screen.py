@@ -68,7 +68,7 @@ class FollowUpScreen(
         self.date_label_text = "Date of Follow‑up"
         self.create_patient_info()
         self.create_cancer_details()
-        self.create_care_plan()
+        # self.create_care_plan()
         self.create_notes()
         self.create_footer()
 

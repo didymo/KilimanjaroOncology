@@ -69,7 +69,7 @@ class DeathScreen(
         self.create_patient_info()
         self.create_cancer_details()
         self.death_date_cause()
-        self.create_care_plan()
+        # self.create_care_plan()
         self.create_notes()
         self.create_footer()
 
