@@ -230,8 +230,10 @@ class CancerDetailsMixin:
         self.grade_combo.grid(row=1, column=1, sticky="ew", padx=5)
         self.grade_combo.bind(
             "<<ComboboxSelected>>",
-            lambda e: setattr(self.record, "grade", self.grade_var.get()),
+            lambda e: setattr(self.record, "grade", int(self.grade_var.get())),
         )
+        # if typed in manually and matches a valid integer option:
+        self.grade_var.trace_add("write", self._on_grade_typed)
 
         # Factors
         ttk.Label(details, text="Factors").grid(row=2, column=0, sticky="w")
@@ -307,6 +309,20 @@ class CancerDetailsMixin:
         self.m_stage_combo.bind("<<ComboboxSelected>>", lambda e: self.update_stage())
 
         details.grid_columnconfigure(1, weight=1)
+
+    def _on_grade_typed(self, *args):
+        """
+        Allow typing a number matching [1,2,3,4,9] into the Grade field
+        and have it accepted even if the dropdown wasn’t used.
+        """
+        val = self.grade_var.get()
+        try:
+            num = int(val)
+            if num in [1, 2, 3, 4, 9]:
+                self.record.grade = num
+        except ValueError:
+            # ignore non-numeric or partial input
+            pass
 
     def update_stage(self, *args):
         parts = [
