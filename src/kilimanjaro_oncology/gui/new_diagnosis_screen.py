@@ -163,8 +163,20 @@ class NewDiagnosisScreen(
         )
         self.clipboard_clear()
         self.clipboard_append(output)
+
+        # Andrew only wants the Patient ID and Diagnosis Key used in
+        # the database
+        # Prepare a dict for DB with only raw_id + diagnosis
+        data = self.record.to_dict()
+        # split the full ID on '.', keep last two segments e.g. ["0009009","C20"]
+        # strip off the known "Hospital.Department." prefix,
+        # leaving exactly "<rawID>.<diagnosisCode...>"
+        prefix = f"{self._hospital}.{self._department}."
+        full = self.record.patient_id
+        data["patient_id"] = full[len(prefix) :] if full.startswith(prefix) else full
         try:
-            rid = self.record_ctrl.save_record(self.record.to_dict())
+            # rid = self.record_ctrl.save_record(self.record.to_dict())
+            rid = self.record_ctrl.save_record(data)
             messagebox.showinfo("Success", f"Record saved successfully (ID: {rid})")
         except Exception as e:
             messagebox.showerror("Error", str(e))

@@ -31,7 +31,7 @@ class FollowUpScreen(
         self.record = OncologyPatientData(
             record_creation_datetime=datetime.datetime.now(),
             patient_id="",
-            event="Follow Up",
+            event="Management",
             event_date=datetime.datetime.now(),
             diagnosis="",
             histo="",
