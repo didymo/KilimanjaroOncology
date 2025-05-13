@@ -28,6 +28,12 @@ class DeathScreen(
         # use the controller/service layer
         self.record_ctrl = record_ctrl
 
+        # pull hospital/department so we can prepend later
+        settings = self.record_ctrl.fetch_settings(["hospital_name", "department_name"])
+        self._hospital = settings.get("hospital_name", "")
+        self._department = settings.get("department_name", "")
+        self._prefix = f"{self._hospital}.{self._department}."
+
         self.record = OncologyPatientData(
             record_creation_datetime=datetime.datetime.now(),
             patient_id="",
@@ -121,8 +127,10 @@ class DeathScreen(
         )
 
     def copy_to_clipboard(self):
+        # build a full‐prefix display ID
+        full_id = f"{self._prefix}{self.record.patient_id}"
         out = (
-            f"PatientID: {self.record.patient_id}\n"
+            f"PatientID: {full_id}\n"
             f"Event: {self.record.event}\n"
             f"Event_Date: {self.record.event_date.strftime('%Y-%m-%d')}\n"
             f"Diagnosis: {self.record.diagnosis}\n"
