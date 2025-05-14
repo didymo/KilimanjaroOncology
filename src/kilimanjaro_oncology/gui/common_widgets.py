@@ -71,6 +71,43 @@ class AutoCompleteCombobox(ttk.Combobox):
             self.event_generate("<Down>")
 
 
+class DiagnosisCombobox(AutoCompleteCombobox):
+    """
+    A Combobox pre-wired to load ICD-10 codes/display and invoke a callback
+    with the raw code when the user selects an entry.
+    """
+
+    def __init__(self, master, on_select_code, **kwargs):
+        # load codes + display from the CSV once here
+        path = os.path.join(
+            os.path.dirname(__file__), "..", "csv_files", "Diagnosis.ICD10.csv"
+        )
+        codes, displays = [], []
+        with open(path, newline="", encoding="latin-1") as f:
+            for row in csv.reader(f):
+                if not row:
+                    continue
+                codes.append(row[0].strip())
+                displays.append(" ".join(row).strip())
+
+        super().__init__(master, values=displays, match_values=codes, **kwargs)
+        self._codes = codes
+        self._on_select_code = on_select_code
+        self.bind("<<ComboboxSelected>>", self._handle_selection)
+
+    def _handle_selection(self, _evt):
+        disp = self.get()
+        idx = self["values"].index(disp)
+        code = self._codes[idx]
+        self._on_select_code(code)
+
+    def _on_keyrelease(self, event):
+        # ignore Tab in diagnosis field so tabbing in doesn’t open the list
+        if event.keysym == "Tab":
+            return
+        super()._on_keyrelease(event)
+
+
 def create_common_header(parent, controller):
     header = ttk.Frame(parent)
     header.pack(fill="x", padx=5, pady=5)

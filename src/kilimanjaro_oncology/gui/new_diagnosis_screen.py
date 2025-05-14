@@ -4,9 +4,9 @@ from tkinter import messagebox, ttk
 
 from kilimanjaro_oncology.classes.oncology_patient_data import OncologyPatientData
 from kilimanjaro_oncology.gui.common_widgets import (
-    AutoCompleteCombobox,
     CancerDetailsMixin,
     CarePlanMixin,
+    DiagnosisCombobox,
     NotesMixin,
     create_common_header,
 )
@@ -85,30 +85,43 @@ class NewDiagnosisScreen(
         self.date_var.trace_add("write", self.update_event_date)
 
         # Diagnosis Combobox w/ autocomplete
+        # ttk.Label(info, text="Diagnosis").grid(row=2, column=0, sticky="w")
+        # # Load codes/display from CSV
+        # csv_path = __import__("os").path.join(
+        #     __import__("os").path.dirname(__file__),
+        #     "..",
+        #     "csv_files",
+        #     "Diagnosis.ICD10.csv",
+        # )
+        # self.diagnosis_codes, self.diagnosis_display = [], []
+        # with open(csv_path, newline="", encoding="latin-1") as f:
+        #     for row in __import__("csv").reader(f):
+        #         if row:
+        #             self.diagnosis_codes.append(row[0].strip())
+        #             self.diagnosis_display.append(" ".join(row).strip())
+        #
+        # self.diagnosis_var = tk.StringVar()
+        # combo = AutoCompleteCombobox(
+        #     info,
+        #     values=self.diagnosis_display,
+        #     textvariable=self.diagnosis_var,
+        #     width=40,
+        # )
+        # combo.grid(row=2, column=1, sticky="ew", padx=5)
+        # combo.bind("<<ComboboxSelected>>", self.update_diagnosis)
+        """
+        Updated here
+        """
+        # Diagnosis Combobox w/ autocomplete
         ttk.Label(info, text="Diagnosis").grid(row=2, column=0, sticky="w")
-        # Load codes/display from CSV
-        csv_path = __import__("os").path.join(
-            __import__("os").path.dirname(__file__),
-            "..",
-            "csv_files",
-            "Diagnosis.ICD10.csv",
-        )
-        self.diagnosis_codes, self.diagnosis_display = [], []
-        with open(csv_path, newline="", encoding="latin-1") as f:
-            for row in __import__("csv").reader(f):
-                if row:
-                    self.diagnosis_codes.append(row[0].strip())
-                    self.diagnosis_display.append(" ".join(row).strip())
-
         self.diagnosis_var = tk.StringVar()
-        combo = AutoCompleteCombobox(
+        self.diagnosis_combo = DiagnosisCombobox(
             info,
-            values=self.diagnosis_display,
+            on_select_code=self._on_new_dx_chosen,
             textvariable=self.diagnosis_var,
             width=40,
         )
-        combo.grid(row=2, column=1, sticky="ew", padx=5)
-        combo.bind("<<ComboboxSelected>>", self.update_diagnosis)
+        self.diagnosis_combo.grid(row=2, column=1, sticky="ew", padx=5)
 
         info.grid_columnconfigure(1, weight=1)
 
@@ -133,13 +146,22 @@ class NewDiagnosisScreen(
         except ValueError:
             pass
 
-    def update_diagnosis(self, event):
-        val = self.diagnosis_var.get()
-        if val in self.diagnosis_display:
-            idx = self.diagnosis_display.index(val)
-            self.record.diagnosis = self.diagnosis_codes[idx]
-            # append the diagnosis code to whatever ID already built
-            self.record.patient_id = f"{self.record.patient_id}.{self.record.diagnosis}"
+    # def update_diagnosis(self, event):
+    #     val = self.diagnosis_var.get()
+    #     if val in self.diagnosis_display:
+    #         idx = self.diagnosis_display.index(val)
+    #         self.record.diagnosis = self.diagnosis_codes[idx]
+    #         # append the diagnosis code to whatever ID already built
+    #         self.record.patient_id =
+    #           f"{self.record.patient_id}.{self.record.diagnosis}"
+    def _on_new_dx_chosen(self, code: str):
+        """
+        Called when the user selects a diagnosis from the dropdown.
+        Stores the raw ICD code and appends it to patient_id.
+        """
+        self.record.diagnosis = code
+        # append to whatever patient_id you’ve already built
+        self.record.patient_id = f"{self.record.patient_id}.{code}"
 
     def create_footer(self):
         footer = ttk.Frame(self.scrollable_frame)
