@@ -61,7 +61,7 @@ class NewDiagnosisScreen(
         create_common_header(self.scrollable_frame, controller)
         self.create_patient_info()  # overridden below
         self.create_cancer_details()
-        self.create_care_plan()
+        # self.create_care_plan()
         self.create_notes()
         self.create_footer()
 
