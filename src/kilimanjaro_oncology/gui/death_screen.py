@@ -1,4 +1,6 @@
+import csv
 import datetime
+import os
 import tkinter as tk
 from tkinter import messagebox, ttk
 
@@ -95,15 +97,44 @@ class DeathScreen(
         self.death_date_entry.grid(row=0, column=1, sticky="ew", padx=5, pady=2)
         self.death_date_var.trace_add("write", lambda *a: self._update_death_date())
 
+        # ttk.Label(frm, text="Cause of Death").grid(
+        #     row=1, column=0, sticky="w", padx=5, pady=2
+        # )
+        # self.cause_of_death_var = tk.StringVar()
+        # self.cause_of_death_entry =
+        #           ttk.Entry(frm, textvariable=self.cause_of_death_var)
+        # self.cause_of_death_entry.grid(row=1, column=1, sticky="ew", padx=5, pady=2)
+        # self.cause_of_death_var.trace_add(
+        #     "write",
+        #     lambda *a: setattr(
+        #         self.record, "death_cause", self.cause_of_death_var.get()
+        #     ),
+        # )
+        # --- load all causes from the CSV ---
+        path = os.path.join(
+            os.path.dirname(__file__), "..", "csv_files", "Cause_of_Death.CSV"
+        )
+        causes = []
+        with open(path, newline="", encoding="latin-1") as f:
+            for row in csv.reader(f):
+                if row and row[0].strip():
+                    causes.append(row[0].strip())
+
         ttk.Label(frm, text="Cause of Death").grid(
             row=1, column=0, sticky="w", padx=5, pady=2
         )
         self.cause_of_death_var = tk.StringVar()
-        self.cause_of_death_entry = ttk.Entry(frm, textvariable=self.cause_of_death_var)
-        self.cause_of_death_entry.grid(row=1, column=1, sticky="ew", padx=5, pady=2)
-        self.cause_of_death_var.trace_add(
-            "write",
-            lambda *a: setattr(
+        self.cause_of_death_combo = ttk.Combobox(
+            frm,
+            values=causes,
+            textvariable=self.cause_of_death_var,
+            state="readonly",  # optional: force selection from list
+            width=30,
+        )
+        self.cause_of_death_combo.grid(row=1, column=1, sticky="ew", padx=5, pady=2)
+        self.cause_of_death_combo.bind(
+            "<<ComboboxSelected>>",
+            lambda e: setattr(
                 self.record, "death_cause", self.cause_of_death_var.get()
             ),
         )

@@ -62,7 +62,7 @@ class AutoCompleteCombobox(ttk.Combobox):
         # debounce + open dropdown after typing stops
         if self._open_after_id:
             self.after_cancel(self._open_after_id)
-        self._open_after_id = self.after(500, self._show_dropdown)
+        self._open_after_id = self.after(1500, self._show_dropdown)
 
     def _show_dropdown(self):
         self._open_after_id = None
@@ -97,7 +97,9 @@ class DiagnosisCombobox(AutoCompleteCombobox):
 
     def _handle_selection(self, _evt):
         disp = self.get()
-        idx = self["values"].index(disp)
+        # idx = self["values"].index(disp)
+        # look it up in the full (unfiltered) list, not the current dropdown
+        idx = self._completion_list.index(disp)
         code = self._codes[idx]
         self._on_select_code(code)
 
