@@ -9,6 +9,9 @@ packages = [
     { include = "kilimanjaro_oncology", from = "src" }
 ]
 
+[tool.poetry.scripts]
+KilimanjaroOncology = "kilimanjaro_oncology.main:main"
+
 [tool.poetry.dependencies]
 python = "^3.12"
 SQLAlchemy = "^2.0.36"

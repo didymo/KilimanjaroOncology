@@ -49,9 +49,7 @@
 │   │   │   ├── __init__.py
 │   │   │   ├── main_app.py
 │   │   │   ├── new_diagnosis_screen.py
-│   │   │   ├── __pycache__
-│   │   │   ├── settings_creator.py
-│   │   │   └── test_autocomplete.py
+│   │   │   └── __pycache__
 │   │   ├── __init__.py
 │   │   ├── main.py
 │   │   ├── __pycache__
@@ -64,9 +62,13 @@
 │   └── __pycache__
 ├── tests
 │   ├── __init__.py
-│   ├── test_app.py
-│   └── test_database.py
+│   ├── __pycache__
+│   ├── test_common_widgets.py
+│   ├── test_config_manager.py
+│   ├── test_database_service.py
+│   ├── test_oncology_patient_data.py
+│   └── test_record_controller.py
 ├── tox.ini
 └── tree.txt
 
-19 directories, 51 files
+20 directories, 52 files
