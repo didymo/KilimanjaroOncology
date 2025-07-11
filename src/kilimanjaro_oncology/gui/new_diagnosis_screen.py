@@ -52,8 +52,17 @@ class NewDiagnosisScreen(
             "<Configure>",
             lambda e: self.canvas.configure(scrollregion=self.canvas.bbox("all")),
         )
-        self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
-        self.canvas.configure(yscrollcommand=scrollbar.set)
+        # self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
+        # keep a handle on the window, so we can resize it on-the-fly
+        self._scrollwin = self.canvas.create_window(
+            (0, 0), window=self.scrollable_frame, anchor="nw"
+        )
+        # whenever the canvas itself resizes, force the inner frame to match its width
+        self.canvas.bind(
+            "<Configure>",
+            lambda e: self.canvas.itemconfig(self._scrollwin, width=e.width),
+        )
+        # self.canvas.configure(yscrollcommand=scrollbar.set)
         scrollbar.pack(side="right", fill="y")
         self.canvas.pack(side="left", fill="both", expand=True)
 
