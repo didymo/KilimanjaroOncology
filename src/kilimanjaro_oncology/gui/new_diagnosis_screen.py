@@ -73,8 +73,12 @@ class NewDiagnosisScreen(
         # Patient ID Entry
         ttk.Label(info, text="Patient ID").grid(row=0, column=0, sticky="w")
         self.patient_id_var = tk.StringVar()
-        entry = ttk.Entry(info, textvariable=self.patient_id_var, width=40)
-        entry.grid(row=0, column=1, sticky="ew", padx=5)
+        # entry = ttk.Entry(info, textvariable=self.patient_id_var, width=40)
+        # entry.grid(row=0, column=1, sticky="ew", padx=5)
+        self.patient_id_entry = ttk.Entry(
+            info, textvariable=self.patient_id_var, width=40
+        )
+        self.patient_id_entry.grid(row=0, column=1, sticky="ew", padx=5)
         self.patient_id_var.trace_add("write", self.update_patient_id)
 
         # Date of Diagnosis

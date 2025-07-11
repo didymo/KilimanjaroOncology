@@ -64,6 +64,8 @@ class MainApp(tk.Tk):
             record_ctrl=self.record_ctrl,
         )
         self.current_screen.pack(expand=True, fill="both")
+        # put the cursor in the patient-ID entry automatically
+        self.current_screen.patient_id_entry.focus_set()
 
     def show_followup_screen(self):
         """Display the Follow-Up screen."""
@@ -75,6 +77,8 @@ class MainApp(tk.Tk):
             record_ctrl=self.record_ctrl,
         )
         self.current_screen.pack(expand=True, fill="both")
+        # put the cursor in the patient-ID entry automatically
+        self.current_screen.patient_id_combo.focus_set()
 
     def show_death_screen(self):
         """Display the Death screen."""
@@ -85,6 +89,8 @@ class MainApp(tk.Tk):
             record_ctrl=self.record_ctrl,
         )
         self.current_screen.pack(expand=True, fill="both")
+        # put the cursor in the patient-ID entry automatically
+        self.current_screen.patient_id_combo.focus_set()
 
     def clear_screen(self):
         """Destroy the current screen to transition to another."""
