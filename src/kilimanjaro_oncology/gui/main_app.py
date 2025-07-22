@@ -24,6 +24,15 @@ class MainApp(tk.Tk):
         super().__init__()
         self.title("Kilimanjaro Christian Medical Centre Oncology Data Collection")
         self.geometry("1200x800")
+        # ——— NEW: Add a Settings menu so you can re-open the config
+        # screen at runtime ———
+        menubar = tk.Menu(self)
+        settings_menu = tk.Menu(menubar, tearoff=0)
+        settings_menu.add_command(
+            label="Configuration...", command=self.show_config_screen
+        )
+        menubar.add_cascade(label="Settings", menu=settings_menu)
+        self.config(menu=menubar)
         self.config_manager = ConfigManager()
 
         # create exactly one DatabaseService to pass into all screens
@@ -46,6 +55,18 @@ class MainApp(tk.Tk):
         except Exception as e:
             logger.warning(f"Initialization check failed: {e}")
             self.show_config_screen()
+
+    def apply_font_size(self):
+        """Reconfigure Tk’s named fonts from the current config."""
+        import tkinter.font as tkfont
+
+        fs = int(self.config_manager.settings.get("font_size", 10))
+        # adjust the two main named fonts
+        default = tkfont.nametofont("TkDefaultFont")
+        default.configure(size=fs)
+        tkfont.nametofont("TkTextFont").configure(size=fs)
+        # (optional) tweak other named fonts, e.g.:
+        # tkfont.nametofont("TkHeadingFont").configure(size=fs)
 
     def show_config_screen(self):
         """Display the configuration screen."""

@@ -61,6 +61,15 @@ class ConfigScreen(tk.Frame):
             self, textvariable=self.department_var, width=50
         )
         self.department_entry.pack(pady=5)
+        # ——— NEW: Font Size setting ———
+        ttk.Label(self, text="Font Size:").pack(pady=(10, 5))
+        self.font_size_var = tk.StringVar(
+            value=str(self.config_manager.settings.get("font_size", 10))
+        )
+        self.font_size_entry = ttk.Entry(
+            self, textvariable=self.font_size_var, width=10
+        )
+        self.font_size_entry.pack(pady=5)
 
     def browse_db_path(self):
         """Open a file dialog to select the database file."""
@@ -101,7 +110,21 @@ class ConfigScreen(tk.Frame):
         db_path = self.db_path_var.get()
         if db_path:
             self.config_manager.settings["db_path"] = db_path
+            self.config_manager.settings["hospital_name"] = (
+                self.hospital_var.get().strip()
+            )
+            self.config_manager.settings["department_name"] = (
+                self.department_var.get().strip()
+            )
+            # ——— NEW: store font size ———
+            try:
+                fs = int(self.font_size_var.get())
+            except ValueError:
+                fs = 10
+            self.config_manager.settings["font_size"] = fs
             self.config_manager.save_settings()
+            # ← apply it immediately for the running app
+            self.parent.apply_font_size()
             # Initialize the database so that the file is created if it doesn't
             # exist.
             self.config_manager.initialize_database()

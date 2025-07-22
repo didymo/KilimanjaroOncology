@@ -7,7 +7,17 @@ from src.kilimanjaro_oncology.utils.config import ConfigManager
 class Application(tk.Tk):
     def __init__(self):
         super().__init__()
+        # ——— NEW: apply font_size globally ———
+        # import tkinter.font as tkfont
         self.config_manager = ConfigManager()
+        # apply the saved font size (now extracted)
+        self.apply_font_size()
+        # fs = int(self.config_manager.settings.get("font_size", 10))
+        # # reconfigure the default named fonts
+        # default = tkfont.nametofont("TkDefaultFont")
+        # default.configure(size=fs)
+        # tkfont.nametofont("TkTextFont").configure(size=fs)
+        # self.config_manager = ConfigManager()
 
         self.title("My Tkinter App")
         self.geometry("800x600")
@@ -18,6 +28,16 @@ class Application(tk.Tk):
             self.show_config_screen()
         else:
             self.show_main_screen()
+
+    def apply_font_size(self):
+        """Reconfigure Tk’s named fonts from the current config."""
+        import tkinter.font as tkfont
+
+        fs = int(self.config_manager.settings.get("font_size", 10))
+        default = tkfont.nametofont("TkDefaultFont")
+        default.configure(size=fs)
+        tkfont.nametofont("TkTextFont").configure(size=fs)
+        # (Optionally tweak TkHeadingFont, TkMenuFont, etc.)
 
     def show_config_screen(self):
         """Display the configuration screen."""

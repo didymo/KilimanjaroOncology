@@ -63,7 +63,10 @@ class ConfigManager:
 
     def create_default_settings(self):
         """Create and return default settings."""
-        default_settings = {"db_path": str(DATABASE_FILE)}
+        default_settings = {
+            "db_path": str(DATABASE_FILE),
+            "font_size": 10,
+        }
         self.settings = default_settings  # Ensure self.settings is initialized
         self.save_settings()  # Save default settings to file
         return default_settings
