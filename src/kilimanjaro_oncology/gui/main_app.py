@@ -13,7 +13,10 @@ from kilimanjaro_oncology.gui.follow_up_screen import (
 )
 from kilimanjaro_oncology.gui.new_diagnosis_screen import NewDiagnosisScreen
 from kilimanjaro_oncology.utils.config import ConfigManager
-from kilimanjaro_oncology.utils.exceptions import ConfigurationError, DatabaseError
+from kilimanjaro_oncology.utils.exceptions import (
+    ConfigurationError,
+    DatabaseError,
+)
 from kilimanjaro_oncology.utils.logger import setup_logger
 
 logger = setup_logger()

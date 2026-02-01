@@ -3,7 +3,10 @@ import json
 import sqlite3
 from pathlib import Path
 
-from kilimanjaro_oncology.utils.exceptions import ConfigurationError, DatabaseError
+from kilimanjaro_oncology.utils.exceptions import (
+    ConfigurationError,
+    DatabaseError,
+)
 
 # Define the application directory in the user's home directory
 APP_DIR = Path.home() / "africa_oncology_settings"
@@ -33,7 +36,7 @@ class ConfigManager:
 
         try:
             # Verify settings file contains valid JSON
-            with open(SETTINGS_FILE, "r") as file:
+            with open(SETTINGS_FILE) as file:
                 settings = json.load(file)
                 # Verify required settings exist
                 dbp = settings.get("db_path")
@@ -41,16 +44,16 @@ class ConfigManager:
                 if not dbp or not Path(dbp).exists():
                     return False
                 return True
-        except (json.JSONDecodeError, IOError):
+        except (OSError, json.JSONDecodeError):
             return False
 
     def load_settings(self):
         """Load the settings from the settings file."""
         if SETTINGS_FILE.exists():
             try:
-                with open(SETTINGS_FILE, "r") as file:
+                with open(SETTINGS_FILE) as file:
                     return json.load(file)
-            except (json.JSONDecodeError, IOError):
+            except (OSError, json.JSONDecodeError):
                 # If file is invalid or corrupt, fall back to default settings
                 return self.create_default_settings()
         else:
@@ -97,7 +100,7 @@ class ConfigManager:
             if not SCHEMA_FILE.exists():
                 raise DatabaseError(f"Schema file not found: {SCHEMA_FILE}")
 
-            with open(SCHEMA_FILE, "r") as f:
+            with open(SCHEMA_FILE) as f:
                 schema_script = f.read()
 
             # Create and initialize the database
@@ -108,7 +111,7 @@ class ConfigManager:
             cursor.executescript(schema_script)
             conn.commit()
 
-        except (sqlite3.Error, IOError) as e:
+        except (OSError, sqlite3.Error) as e:
             if DATABASE_FILE.exists():
                 DATABASE_FILE.unlink()  # Delete failed database file
             raise DatabaseError(f"Failed to create database: {e}")
@@ -123,7 +126,7 @@ class ConfigManager:
             cursor = conn.cursor()
 
             # Get all tables from schema.sql
-            with open(SCHEMA_FILE, "r") as f:
+            with open(SCHEMA_FILE) as f:
                 schema_content = f.read().lower()
                 table_names = []
                 # Iterate over each line in the schema file
@@ -157,7 +160,7 @@ class ConfigManager:
 
         except sqlite3.Error as e:
             raise DatabaseError(f"Database verification failed: {e}")
-        except IOError as e:
+        except OSError as e:
             raise DatabaseError(f"Failed to read schema file: {e}")
         finally:
             if conn:

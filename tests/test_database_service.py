@@ -2,7 +2,9 @@ from pathlib import Path
 
 import pytest
 
-from kilimanjaro_oncology.classes.oncology_patient_data import OncologyPatientData
+from kilimanjaro_oncology.classes.oncology_patient_data import (
+    OncologyPatientData,
+)
 from kilimanjaro_oncology.database.database_service import DatabaseService
 
 

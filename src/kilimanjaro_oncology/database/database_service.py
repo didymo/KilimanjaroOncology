@@ -5,7 +5,6 @@ import threading
 from contextlib import contextmanager
 from dataclasses import asdict, is_dataclass
 from pathlib import Path
-from typing import Dict, Optional
 
 
 class DatabaseService:
@@ -19,7 +18,7 @@ class DatabaseService:
     _instances: dict[str, "DatabaseService"] = {}
     _lock = threading.Lock()
 
-    def __new__(cls, db_path: Optional[str] = None):
+    def __new__(cls, db_path: str | None = None):
         key = db_path or ""
         with cls._lock:
             if key not in cls._instances:
@@ -28,7 +27,7 @@ class DatabaseService:
                 cls._instances[key] = inst
             return cls._instances[key]
 
-    def __init__(self, db_path: Optional[str] = None):
+    def __init__(self, db_path: str | None = None):
         """Initialize the database service with connection pooling."""
         if self._initialized:
             return
@@ -119,7 +118,7 @@ class DatabaseService:
                 cursor.execute(sql, values)
                 return cursor.lastrowid
 
-    def get_diagnosis_record(self, record_id: int) -> Dict:
+    def get_diagnosis_record(self, record_id: int) -> dict:
         """Retrieve a specific diagnosis record by ID."""
         with self.get_connection() as conn:
             cursor = conn.cursor()
@@ -153,7 +152,7 @@ class DatabaseService:
             columns = [description[0] for description in cursor.description]
             return [dict(zip(columns, row)) for row in cursor.fetchall()]
 
-    def update_diagnosis_record(self, record_id: int, record_data: Dict) -> bool:
+    def update_diagnosis_record(self, record_id: int, record_data: dict) -> bool:
         """Update an existing diagnosis record."""
         with self._lock:  # Ensure thread-safe write operation
             with self.get_connection() as conn:

@@ -1,6 +1,8 @@
 from datetime import datetime
 
-from kilimanjaro_oncology.classes.oncology_patient_data import OncologyPatientData
+from kilimanjaro_oncology.classes.oncology_patient_data import (
+    OncologyPatientData,
+)
 
 
 def test_to_dict_and_from_dict_round_trip():

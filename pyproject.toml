@@ -1,3 +1,11 @@
+[project]
+name = "KilimanjaroOncologyDataCollectionDemo"
+version = "0.1.0"
+description = "Data collection demonstration application for Kilimanjaro Oncology Unit."
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = []
+
 [tool.poetry]
 name = "KilimanjaroOncologyDataCollectionDemo"
 version = "0.1.0"
@@ -38,8 +46,20 @@ cyclonedx-python-lib = "<8"
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
+[dependency-groups]
+dev = [
+    "bandit>=1.9.3",
+    "coverage[toml]>=7.13.2",
+    "mypy>=1.19.1",
+    "pip-audit>=2.10.0",
+    "pytest>=9.0.2",
+    "pytest-cov>=7.0.0",
+    "ruff>=0.14.14",
+    "types-setuptools>=80.10.0.20260124",
+]
+
 [tool.black]
-line-length = 88
+line-length = 80
 target-version = ["py312"]
 
 [tool.isort]
@@ -47,3 +67,53 @@ profile = "black"
 
 [tool.pytest]
 pythonpath = "."
+
+[tool.ruff]
+line-length = 80
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
+  "E", "F", "W",        # pycodestyle/pyflakes
+  "I",                  # import sorting (isort-style)
+  "B",                  # flake8-bugbear
+  "UP",                 # pyupgrade
+  "SIM",                # flake8-simplify
+  "C4",                 # flake8-comprehensions
+  "S",                  # flake8-bandit (lightweight security)
+]
+ignore = [
+  "E501",               # line length handled by formatter policy; adjust as preferred
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101"]   # allow assert in tests
+
+# Bandit reads config from pyproject.toml only when passed -c pyproject.toml. :contentReference[oaicite:9]{index=9}
+[tool.bandit]
+exclude_dirs = [".venv", "venv", "build", "dist"]
+
+[tool.pytest.ini_options]
+addopts = "-ra"
+testpaths = ["tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["."]
+omit = [
+  ".venv/*",
+  "venv/*",
+  "build/*",
+  "dist/*",
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
+
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+ignore_missing_imports = true

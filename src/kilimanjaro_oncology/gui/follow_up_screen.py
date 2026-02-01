@@ -2,7 +2,9 @@ import datetime
 import tkinter as tk
 from tkinter import messagebox, ttk
 
-from kilimanjaro_oncology.classes.oncology_patient_data import OncologyPatientData
+from kilimanjaro_oncology.classes.oncology_patient_data import (
+    OncologyPatientData,
+)
 from kilimanjaro_oncology.gui.common_widgets import (
     CancerDetailsMixin,
     CarePlanMixin,

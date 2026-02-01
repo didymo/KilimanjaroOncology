@@ -1,13 +1,12 @@
 # oncology_patient_data.py
 from dataclasses import asdict, dataclass, field
 from datetime import datetime
-from typing import Optional
 
 
 @dataclass
 class OncologyPatientData:
     # Primary key, used for persistence (Optional)
-    autoincrement_id: Optional[int] = None
+    autoincrement_id: int | None = None
 
     # Core data fields
     patient_id: str = ""
@@ -25,7 +24,7 @@ class OncologyPatientData:
     event_date: datetime = field(default_factory=datetime.now)
 
     # Optional fields for death events.
-    death_date: Optional[datetime] = None
+    death_date: datetime | None = None
     death_cause: str = ""
 
     def to_dict(self) -> dict:
