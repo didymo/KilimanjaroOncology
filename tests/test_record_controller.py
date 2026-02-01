@@ -11,15 +11,13 @@ def ctrl(tmp_path):
     ds = DatabaseService(str(db_file))
     # init schema & settings table
     with ds.get_connection() as c:
-        c.executescript(
-            """
+        c.executescript("""
             CREATE TABLE settings(key TEXT PRIMARY KEY, value TEXT);
             CREATE TABLE oncology_data(
                 AutoincrementID INTEGER PRIMARY KEY,
                 PatientID TEXT, Event TEXT, Event_Date TEXT
             );
-        """
-        )
+        """)
         c.execute("INSERT INTO settings VALUES(?,?)", ("k", "v"))
         c.execute(
             "INSERT INTO oncology_data(PatientID,Event,Event_Date) VALUES(?,?,?)",

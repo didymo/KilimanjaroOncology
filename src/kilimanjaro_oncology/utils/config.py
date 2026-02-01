@@ -77,7 +77,9 @@ class ConfigManager:
     def initialize_settings(self):
         """Ensure the settings file and directory exist."""
         if not self.settings.get("db_path"):
-            raise ConfigurationError("Database path is missing in configuration.")
+            raise ConfigurationError(
+                "Database path is missing in configuration."
+            )
 
     def initialize_database(self):
         """Create or verify whatever path the user saved in settings['db_path']."""
@@ -135,20 +137,22 @@ class ConfigManager:
                     # Only process lines that start with "create table"
                     if line.startswith("create table"):
                         # Extract the portion after "table"
-                        name_part = line.split("table", 1)[1].split("(")[0].strip()
+                        name_part = (
+                            line.split("table", 1)[1].split("(")[0].strip()
+                        )
                         # NEW: If the extracted name starts with "if not exists",
                         # remove that prefix
                         if name_part.startswith("if not exists"):
-                            name_part = name_part[len("if not exists") :].strip()
+                            name_part = name_part[
+                                len("if not exists") :
+                            ].strip()
                         # Append the cleaned table name
                         table_names.append(name_part)
 
             # Check if required tables exist
-            cursor.execute(
-                """
+            cursor.execute("""
                 SELECT name FROM sqlite_master WHERE type='table'
-            """
-            )
+            """)
             existing_tables = {row[0].lower() for row in cursor.fetchall()}
             required_tables = set(table_names)
 

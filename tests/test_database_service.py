@@ -12,7 +12,8 @@ from kilimanjaro_oncology.database.database_service import DatabaseService
 def db(tmp_path):
     # copy your schema.sql into tmp_path
     schema = (
-        Path(__file__).parent.parent / "src/kilimanjaro_oncology/database/schema.sql"
+        Path(__file__).parent.parent
+        / "src/kilimanjaro_oncology/database/schema.sql"
     )
     db_file = tmp_path / "test.sqlite"
     ds = DatabaseService(str(db_file))

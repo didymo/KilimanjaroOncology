@@ -25,7 +25,9 @@ logger = setup_logger()
 class MainApp(tk.Tk):
     def __init__(self):
         super().__init__()
-        self.title("Kilimanjaro Christian Medical Centre Oncology Data Collection")
+        self.title(
+            "Kilimanjaro Christian Medical Centre Oncology Data Collection"
+        )
         self.geometry("1200x800")
         # ——— NEW: Add a Settings menu so you can re-open the config
         # screen at runtime ———
@@ -39,7 +41,9 @@ class MainApp(tk.Tk):
         self.config_manager = ConfigManager()
 
         # create exactly one DatabaseService to pass into all screens
-        self.db_service = DatabaseService(self.config_manager.settings["db_path"])
+        self.db_service = DatabaseService(
+            self.config_manager.settings["db_path"]
+        )
         self.record_ctrl = RecordController(self.db_service)
 
         # Placeholder for the current screen (each screen is a Frame)
@@ -52,7 +56,9 @@ class MainApp(tk.Tk):
                 # first screen is the “real” one
                 self.show_new_diagnosis_screen()
             else:
-                logger.info("Configuration or database missing. Showing config screen.")
+                logger.info(
+                    "Configuration or database missing. Showing config screen."
+                )
                 self.show_config_screen()
 
         except Exception as e:
@@ -125,7 +131,9 @@ class MainApp(tk.Tk):
         try:
             self.mainloop()
         except ConfigurationError:
-            logger.error("Configuration failed. Relaunching configuration screen.")
+            logger.error(
+                "Configuration failed. Relaunching configuration screen."
+            )
             self.show_config_screen()
         except DatabaseError:
             logger.error("Database initialization failed.")

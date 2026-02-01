@@ -119,9 +119,9 @@ def create_common_header(parent, controller):
         style="Active.TButton",
         command=controller.show_new_diagnosis_screen,
     ).pack(side="left", padx=2)
-    ttk.Button(header, text="Management", command=controller.show_followup_screen).pack(
-        side="left", padx=2
-    )
+    ttk.Button(
+        header, text="Management", command=controller.show_followup_screen
+    ).pack(side="left", padx=2)
     ttk.Button(header, text="Death", command=controller.show_death_screen).pack(
         side="left", padx=2
     )
@@ -140,7 +140,9 @@ class PatientInfoMixin:
         # Patient ID
         ttk.Label(info, text="Patient ID").grid(row=0, column=0, sticky="w")
         self.patient_id_var = tk.StringVar()
-        self.patient_id_combo = ttk.Combobox(info, textvariable=self.patient_id_var)
+        self.patient_id_combo = ttk.Combobox(
+            info, textvariable=self.patient_id_var
+        )
         self.patient_id_combo.grid(row=0, column=1, sticky="ew", padx=5)
 
         def on_key(e):
@@ -194,11 +196,15 @@ class PatientInfoMixin:
         # self.date_var.trace_add("write", self.update_event_date)
         # Date (optional)
         if getattr(self, "date_label_text", None):
-            ttk.Label(info, text=self.date_label_text).grid(row=1, column=0, sticky="w")
+            ttk.Label(info, text=self.date_label_text).grid(
+                row=1, column=0, sticky="w"
+            )
             self.date_var = tk.StringVar(
                 value=datetime.date.today().strftime("%Y-%m-%d")
             )
-            self.date_entry = ttk.Entry(info, textvariable=self.date_var, width=40)
+            self.date_entry = ttk.Entry(
+                info, textvariable=self.date_var, width=40
+            )
             self.date_entry.grid(row=1, column=1, sticky="ew", padx=5)
             self.date_var.trace_add("write", self.update_event_date)
 
@@ -284,9 +290,12 @@ class CancerDetailsMixin:
 
         self.factors_var = tk.StringVar(value=default)
         self.factors_entry = ttk.Entry(details, textvariable=self.factors_var)
-        self.factors_entry.grid(row=2, column=1, columnspan=3, sticky="ew", padx=5)
+        self.factors_entry.grid(
+            row=2, column=1, columnspan=3, sticky="ew", padx=5
+        )
         self.factors_var.trace_add(
-            "write", lambda *a: setattr(self.record, "factors", self.factors_var.get())
+            "write",
+            lambda *a: setattr(self.record, "factors", self.factors_var.get()),
         )
 
         # Stage T/N/M
@@ -297,13 +306,17 @@ class CancerDetailsMixin:
             frm, values=["T0", "T1", "T2", "T3", "T4", "Tx"], width=4
         )
         self.t_stage_combo.pack(side="left", padx=5)
-        self.t_stage_combo.bind("<<ComboboxSelected>>", lambda e: self.update_stage())
+        self.t_stage_combo.bind(
+            "<<ComboboxSelected>>", lambda e: self.update_stage()
+        )
 
         self.n_stage_combo = ttk.Combobox(
             frm, values=["N0", "N1", "N2", "N3", "Nx"], width=4
         )
         self.n_stage_combo.pack(side="left", padx=5)
-        self.n_stage_combo.bind("<<ComboboxSelected>>", lambda e: self.update_stage())
+        self.n_stage_combo.bind(
+            "<<ComboboxSelected>>", lambda e: self.update_stage()
+        )
 
         m_vals = [
             "M0",
@@ -345,7 +358,9 @@ class CancerDetailsMixin:
             frm, values=m_vals, width=max(len(s) for s in m_vals)
         )
         self.m_stage_combo.pack(side="left", padx=5)
-        self.m_stage_combo.bind("<<ComboboxSelected>>", lambda e: self.update_stage())
+        self.m_stage_combo.bind(
+            "<<ComboboxSelected>>", lambda e: self.update_stage()
+        )
 
         details.grid_columnconfigure(1, weight=1)
 
@@ -380,9 +395,9 @@ class CarePlanMixin:
     def create_care_plan(self):
         care = ttk.LabelFrame(self.scrollable_frame, padding=5)
         care.pack(fill="x", padx=5, pady=2, anchor="e")
-        ttk.Label(care, text="Care Planned First", font=("Arial", 10, "bold")).pack(
-            anchor="center", pady=(0, 5)
-        )
+        ttk.Label(
+            care, text="Care Planned First", font=("Arial", 10, "bold")
+        ).pack(anchor="center", pady=(0, 5))
         grid = ttk.Frame(care)
         grid.pack(anchor="w")
         grid.columnconfigure((0, 1), weight=1)
@@ -408,7 +423,9 @@ class CarePlanMixin:
                     b.grid(row=r, column=c, padx=5, pady=2, sticky="ew")
                     self.care_buttons.append(b)
                 else:
-                    ttk.Label(grid, text="").grid(row=r, column=c, padx=5, pady=2)
+                    ttk.Label(grid, text="").grid(
+                        row=r, column=c, padx=5, pady=2
+                    )
 
     def toggle_button(self, btn):
         text = btn.cget("text")

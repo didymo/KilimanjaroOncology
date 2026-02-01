@@ -33,10 +33,14 @@ class OncologyPatientData:
         Datetime fields are converted to ISO format strings.
         """
         result = asdict(self)
-        result["record_creation_datetime"] = self.record_creation_datetime.isoformat()
+        result["record_creation_datetime"] = (
+            self.record_creation_datetime.isoformat()
+        )
         result["event_date"] = self.event_date.isoformat()
         # If death_date is provided, convert it as well.
-        result["death_date"] = self.death_date.isoformat() if self.death_date else ""
+        result["death_date"] = (
+            self.death_date.isoformat() if self.death_date else ""
+        )
         return result
 
     @classmethod
@@ -62,7 +66,9 @@ class OncologyPatientData:
         death_date_str = data.get("death_date", "")
         try:
             death_date = (
-                datetime.fromisoformat(death_date_str) if death_date_str else None
+                datetime.fromisoformat(death_date_str)
+                if death_date_str
+                else None
             )
         except Exception:
             death_date = None

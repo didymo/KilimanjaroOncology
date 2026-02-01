@@ -13,14 +13,18 @@ class ConfigScreen(tk.Frame):
         self.parent = parent
         self.config_manager = parent.config_manager
 
-        ttk.Label(self, text="Configuration Screen", font=("Arial", 16)).pack(pady=10)
+        ttk.Label(self, text="Configuration Screen", font=("Arial", 16)).pack(
+            pady=10
+        )
 
         # Database Path Entry
         self.db_path_var = tk.StringVar(
             value=self.config_manager.settings.get("db_path", "")
         )
         ttk.Label(self, text="Database Path:").pack(pady=5)
-        self.db_path_entry = ttk.Entry(self, textvariable=self.db_path_var, width=50)
+        self.db_path_entry = ttk.Entry(
+            self, textvariable=self.db_path_var, width=50
+        )
         self.db_path_entry.pack(pady=5)
 
         # Browse Button
@@ -42,15 +46,17 @@ class ConfigScreen(tk.Frame):
         ).pack(side="left", padx=5)
 
         # Save Button
-        ttk.Button(self, text="Save and Continue", command=self.save_and_continue).pack(
-            pady=10
-        )
+        ttk.Button(
+            self, text="Save and Continue", command=self.save_and_continue
+        ).pack(pady=10)
 
         ttk.Label(self, text="Hospital Name:").pack(pady=(20, 5))
         self.hospital_var = tk.StringVar(
             value=self.config_manager.settings.get("hospital_name", "")
         )
-        self.hospital_entry = ttk.Entry(self, textvariable=self.hospital_var, width=50)
+        self.hospital_entry = ttk.Entry(
+            self, textvariable=self.hospital_var, width=50
+        )
         self.hospital_entry.pack(pady=5)
 
         ttk.Label(self, text="Department Name:").pack(pady=(10, 5))

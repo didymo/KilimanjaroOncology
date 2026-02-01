@@ -75,7 +75,9 @@ class DatabaseService:
                 cursor = conn.cursor()
 
                 # Always record the creation time.
-                data = {"record_creation_datetime": datetime.datetime.now().isoformat()}
+                data = {
+                    "record_creation_datetime": datetime.datetime.now().isoformat()
+                }
 
                 # Mapping: canonical database column -> possible keys in record_data.
                 mapping = {
@@ -152,7 +154,9 @@ class DatabaseService:
             columns = [description[0] for description in cursor.description]
             return [dict(zip(columns, row)) for row in cursor.fetchall()]
 
-    def update_diagnosis_record(self, record_id: int, record_data: dict) -> bool:
+    def update_diagnosis_record(
+        self, record_id: int, record_data: dict
+    ) -> bool:
         """Update an existing diagnosis record."""
         with self._lock:  # Ensure thread-safe write operation
             with self.get_connection() as conn:

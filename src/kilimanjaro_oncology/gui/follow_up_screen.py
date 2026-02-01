@@ -31,7 +31,9 @@ class FollowUpScreen(
         self.record_ctrl = record_ctrl
 
         # pull hospital/department so we can prepend later
-        settings = self.record_ctrl.fetch_settings(["hospital_name", "department_name"])
+        settings = self.record_ctrl.fetch_settings(
+            ["hospital_name", "department_name"]
+        )
         self._hospital = settings.get("hospital_name", "")
         self._department = settings.get("department_name", "")
         self._prefix = f"{self._hospital}.{self._department}."
@@ -54,11 +56,15 @@ class FollowUpScreen(
 
         # Scrollable area
         self.canvas = tk.Canvas(self)
-        scrollbar = ttk.Scrollbar(self, orient="vertical", command=self.canvas.yview)
+        scrollbar = ttk.Scrollbar(
+            self, orient="vertical", command=self.canvas.yview
+        )
         self.scrollable_frame = ttk.Frame(self.canvas)
         self.scrollable_frame.bind(
             "<Configure>",
-            lambda e: self.canvas.configure(scrollregion=self.canvas.bbox("all")),
+            lambda e: self.canvas.configure(
+                scrollregion=self.canvas.bbox("all")
+            ),
         )
         # self.canvas.create_window((0, 0), window=self.scrollable_frame, anchor="nw")
         # keep a handle on the window, so we can resize it on-the-fly
@@ -117,6 +123,8 @@ class FollowUpScreen(
         self.clipboard_append(out)
         try:
             rid = self.record_ctrl.save_record(self.record.to_dict())
-            messagebox.showinfo("Success", f"Record saved successfully (ID: {rid})")
+            messagebox.showinfo(
+                "Success", f"Record saved successfully (ID: {rid})"
+            )
         except Exception as e:
             messagebox.showerror("Error", str(e))
