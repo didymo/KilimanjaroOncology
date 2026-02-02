@@ -1,55 +1,90 @@
 # database_service.py
+from __future__ import annotations
+
 import datetime
 import sqlite3
 import threading
 from contextlib import contextmanager
 from dataclasses import asdict, is_dataclass
 from pathlib import Path
+from typing import Any
 
 
 class DatabaseService:
     """
     Thread-safe service class for handling database operations.
-    Uses connection pooling and context managers to ensure safe concurrent access.
+    Uses per-thread connections + a lock for writes.
     """
 
-    _instance = None
     # map db_path → instance
     _instances: dict[str, "DatabaseService"] = {}
-    _lock = threading.Lock()
+    _instances_lock = threading.Lock()
+
+    # ---- schema allowlists (medical-friendly: explicit is safer) ----
+    TABLE_ONCOLOGY = "oncology_data"
+
+    # These are the only columns this service is allowed to write/update.
+    # Keep this list in sync with your schema.
+    ALLOWED_COLUMNS: set[str] = {
+        "record_creation_datetime",
+        "PatientID",
+        "Event",
+        "Event_Date",
+        "Diagnosis",
+        "Histo",
+        "Grade",
+        "Factors",
+        "Stage",
+        "Careplan",
+        "Note",
+        "Death_Date",
+        "Death_Cause",
+    }
 
     def __new__(cls, db_path: str | None = None):
         key = db_path or ""
-        with cls._lock:
+        with cls._instances_lock:
             if key not in cls._instances:
-                inst = super(DatabaseService, cls).__new__(cls)
+                inst = super().__new__(cls)
                 inst._initialized = False
                 cls._instances[key] = inst
             return cls._instances[key]
 
     def __init__(self, db_path: str | None = None):
-        """Initialize the database service with connection pooling."""
-        if self._initialized:
+        if getattr(self, "_initialized", False):
             return
 
         self.db_path = db_path or str(
             Path.home() / "africa_oncology_settings" / "database.sqlite"
         )
         self._local = threading.local()
-        self._lock = threading.Lock()
+        self._write_lock = threading.Lock()
         self._initialized = True
 
     @contextmanager
     def get_connection(self):
-        """Thread-safe context manager for database connections."""
+        """
+        Thread-safe context manager for database connections.
+        Each thread gets its own sqlite connection (stored in threading.local()).
+        """
         if not hasattr(self._local, "connection"):
-            self._local.connection = sqlite3.connect(self.db_path)
+            # check_same_thread=False is required because we manage per-thread storage ourselves.
+            conn = sqlite3.connect(self.db_path, check_same_thread=False)
+            conn.row_factory = None  # keep default tuples
+            # Safer defaults for sqlite in a multi-thread desktop app
+            conn.execute("PRAGMA foreign_keys = ON;")
+            conn.execute("PRAGMA journal_mode = WAL;")
+            conn.execute("PRAGMA synchronous = NORMAL;")
+            self._local.connection = conn
 
         try:
             yield self._local.connection
         except Exception as e:
-            self._local.connection.rollback()
-            raise e
+            try:
+                self._local.connection.rollback()
+            finally:
+                # Preserve the original traceback and make rollback failures non-masking.
+                raise
         else:
             self._local.connection.commit()
 
@@ -59,86 +94,90 @@ class DatabaseService:
             self._local.connection.close()
             del self._local.connection
 
-    def save_diagnosis_record(self, record_data) -> int:
+    # ---- helpers ----
+
+    @staticmethod
+    def _row_to_dict(cursor: sqlite3.Cursor, row: tuple[Any, ...]) -> dict[str, Any]:
+        cols = [d[0] for d in cursor.description]
+        # strict=False: sqlite returns tuples that match description length, but be explicit
+        return dict(zip(cols, row, strict=False))
+
+    # ---- CRUD ----
+
+    def save_diagnosis_record(self, record_data: Any) -> int:
         """
         Save a new record to the database.
         Supports data from Diagnosis, Follow Up, and Death screens.
         Returns the autoincrement ID of the inserted record.
         """
 
-        # If record_data is a dataclass instance, convert it to a dictionary.
         if is_dataclass(record_data):
             record_data = asdict(record_data)
 
-        with self._lock:
-            with self.get_connection() as conn:
-                cursor = conn.cursor()
+        if not isinstance(record_data, dict):
+            raise TypeError("record_data must be a dict or dataclass instance")
 
-                # Always record the creation time.
-                data = {
-                    "record_creation_datetime": datetime.datetime.now().isoformat()
-                }
+        # Always record the creation time.
+        data: dict[str, Any] = {"record_creation_datetime": datetime.datetime.now().isoformat()}
 
-                # Mapping: canonical database column -> possible keys in record_data.
-                mapping = {
-                    "PatientID": ["patient_id"],
-                    "Event": ["event"],
-                    "Event_Date": ["event_date"],
-                    "Diagnosis": ["diagnosis"],
-                    "Histo": ["histo"],
-                    "Grade": ["grade"],
-                    "Factors": ["factors"],
-                    "Stage": ["stage"],
-                    "Careplan": ["careplan"],
-                    "Note": ["note"],
-                    "Death_Date": ["death_date"],  # if applicable
-                    "Death_Cause": ["death_cause"],  # if applicable
-                }
+        # Mapping: canonical database column -> possible keys in record_data.
+        # This mapping is an allowlist by design.
+        mapping: dict[str, list[str]] = {
+            "PatientID": ["patient_id"],
+            "Event": ["event"],
+            "Event_Date": ["event_date"],
+            "Diagnosis": ["diagnosis"],
+            "Histo": ["histo"],
+            "Grade": ["grade"],
+            "Factors": ["factors"],
+            "Stage": ["stage"],
+            "Careplan": ["careplan"],
+            "Note": ["note"],
+            "Death_Date": ["death_date"],
+            "Death_Cause": ["death_cause"],
+        }
 
-                # For each canonical column, pick the first matching key from
-                # record_data.
-                for col, keys in mapping.items():
-                    for key in keys:
-                        if key in record_data:
-                            data[col] = record_data[key]
-                            break
-                    else:
-                        # If none of the expected keys are found,
-                        # default to empty string.
-                        data[col] = ""
+        for col, keys in mapping.items():
+            for key in keys:
+                if key in record_data:
+                    data[col] = record_data[key]
+                    break
+            else:
+                data[col] = ""
 
-                # Build the INSERT statement dynamically.
-                columns = list(data.keys())
-                placeholders = ", ".join("?" for _ in columns)
-                sql = (
-                    f"INSERT INTO oncology_data ({', '.join(columns)}) "
-                    f"VALUES ({placeholders})"
-                )
+        # Defensive: only allow known schema columns
+        columns = [c for c in data.keys() if c in self.ALLOWED_COLUMNS]
+        if not columns:
+            raise ValueError("No valid columns to insert")
 
-                values = tuple(data[col] for col in columns)
+        placeholders = ", ".join("?" for _ in columns)
+        col_list = ", ".join(columns)
 
-                cursor.execute(sql, values)
-                return cursor.lastrowid
+        sql = f"INSERT INTO {self.TABLE_ONCOLOGY} ({col_list}) VALUES ({placeholders})"
+        values = tuple(data[c] for c in columns)
 
-    def get_diagnosis_record(self, record_id: int) -> dict:
+        with self._write_lock, self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(sql, values)
+            rid = cursor.lastrowid
+            if rid is None:
+                raise RuntimeError("Insert succeeded but lastrowid is None")
+            return int(rid)
+
+    def get_diagnosis_record(self, record_id: int) -> dict[str, Any]:
         """Retrieve a specific diagnosis record by ID."""
         with self.get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute(
-                """
-                SELECT * FROM oncology_data WHERE AutoincrementID = ?
-            """,
+                "SELECT * FROM oncology_data WHERE AutoincrementID = ?",
                 (record_id,),
             )
-
-            record = cursor.fetchone()
-            if record:
-                # Convert tuple to dictionary using column names
-                columns = [description[0] for description in cursor.description]
-                return dict(zip(columns, record))
+            row = cursor.fetchone()
+            if row:
+                return self._row_to_dict(cursor, row)
             return {}
 
-    def get_patient_records(self, patient_id: str) -> list:
+    def get_patient_records(self, patient_id: str) -> list[dict[str, Any]]:
         """Retrieve all records for a specific patient."""
         with self.get_connection() as conn:
             cursor = conn.cursor()
@@ -147,41 +186,48 @@ class DatabaseService:
                 SELECT * FROM oncology_data
                 WHERE PatientID = ?
                 ORDER BY Event_Date DESC
-            """,
+                """,
                 (patient_id,),
             )
+            rows = cursor.fetchall()
+            if not rows:
+                return []
+            cols = [d[0] for d in cursor.description]
+            # strict=False to be explicit
+            return [dict(zip(cols, row, strict=False)) for row in rows]
 
-            columns = [description[0] for description in cursor.description]
-            return [dict(zip(columns, row)) for row in cursor.fetchall()]
+    def update_diagnosis_record(self, record_id: int, record_data: dict[str, Any]) -> bool:
+        """
+        Update an existing diagnosis record.
 
-    def update_diagnosis_record(
-        self, record_id: int, record_data: dict
-    ) -> bool:
-        """Update an existing diagnosis record."""
-        with self._lock:  # Ensure thread-safe write operation
-            with self.get_connection() as conn:
-                cursor = conn.cursor()
+        SECURITY: Only allow updates to explicitly allowlisted columns.
+        This prevents SQL injection via attacker-controlled field names.
+        """
+        if not isinstance(record_data, dict):
+            raise TypeError("record_data must be a dict")
 
-                update_fields = []
-                values = []
+        # Filter to allowed, non-PK fields only
+        updates: list[str] = []
+        values: list[Any] = []
 
-                # Build dynamic update statement based on provided fields
-                for field, value in record_data.items():
-                    if field != "AutoincrementID":  # Skip the primary key
-                        update_fields.append(f"{field} = ?")
-                        values.append(value)
+        for field, value in record_data.items():
+            if field == "AutoincrementID":
+                continue
+            if field not in self.ALLOWED_COLUMNS:
+                # In a medical/PII context, fail closed rather than silently ignore.
+                raise ValueError(f"Refusing to update unknown column: {field!r}")
+            updates.append(f"{field} = ?")
+            values.append(value)
 
-                if not update_fields:
-                    return False
+        if not updates:
+            return False
 
-                # Add record_id to values
-                values.append(record_id)
+        values.append(record_id)
+        set_clause = ", ".join(updates)
 
-                sql = f"""
-                UPDATE oncology_data
-                SET {', '.join(update_fields)}
-                WHERE AutoincrementID = ?
-                """
+        sql = f"UPDATE {self.TABLE_ONCOLOGY} SET {set_clause} WHERE AutoincrementID = ?"
 
-                cursor.execute(sql, values)
-                return cursor.rowcount > 0
+        with self._write_lock, self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(sql, values)
+            return cursor.rowcount > 0
