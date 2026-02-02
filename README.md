@@ -36,6 +36,23 @@ python -m kilimanjaro_oncology.main
 
 At first launch, the app opens the Configuration screen to select or create a database and to set hospital/department names and font size.
 
+## Backup and restore
+Use the Configuration screen to manage backups:
+- **Backup Database…** saves a timestamped copy of the current SQLite file.
+- **Restore Database…** replaces the current database with a selected backup (confirmation required).
+
+## Security and deployment
+See `SECURITY_DEPLOYMENT.md` for recommended filesystem encryption and share permissions.
+
+## Testing complete (technical) and acceptance notes
+Automated tests are complete for the current scope (unit, integration, system-flow, non-functional, and backup/restore). Clinical feedback has been incorporated.
+
+Out of technical scope (requires acceptance acknowledgement):
+- Clinical policy decisions (required fields, validation rules, data governance).
+- Local operational practices (backup frequency, storage location, permissions).
+- Regulatory documentation (formal risk analysis, SOPs, compliance artifacts).
+- Environment reliability (power stability, network share uptime, device maintenance).
+
 ## Data sources (selection lists)
 - ICD-10 Diagnosis: `src/kilimanjaro_oncology/csv_files/Diagnosis.ICD10.csv`
 - Histopathology: `src/kilimanjaro_oncology/csv_files/Histopathology.CSV`

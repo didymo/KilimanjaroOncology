@@ -1,7 +1,10 @@
 # config_screen.py
+import shutil
+import sqlite3
 import tkinter as tk
+from datetime import datetime
 from pathlib import Path
-from tkinter import filedialog, ttk
+from tkinter import filedialog, messagebox, ttk
 
 from kilimanjaro_oncology.controllers.record_controller import RecordController
 from kilimanjaro_oncology.database.database_service import DatabaseService
@@ -49,6 +52,15 @@ class ConfigScreen(tk.Frame):
         ttk.Button(
             self, text="Save and Continue", command=self.save_and_continue
         ).pack(pady=10)
+
+        backup_frame = ttk.LabelFrame(self, text="Backup / Restore")
+        backup_frame.pack(pady=(10, 5), padx=5, fill="x")
+        ttk.Button(
+            backup_frame, text="Backup Database…", command=self.backup_database
+        ).pack(side="left", padx=5, pady=5)
+        ttk.Button(
+            backup_frame, text="Restore Database…", command=self.restore_database
+        ).pack(side="left", padx=5, pady=5)
 
         ttk.Label(self, text="Hospital Name:").pack(pady=(20, 5))
         self.hospital_var = tk.StringVar(
@@ -157,3 +169,85 @@ class ConfigScreen(tk.Frame):
             ttk.Label(
                 self, text="Database path cannot be empty!", foreground="red"
             ).pack(pady=5)
+
+    def backup_database(self):
+        db_path = self.db_path_var.get()
+        if not db_path:
+            messagebox.showerror(
+                "Backup Error", "Database path is not set."
+            )
+            return
+        if not Path(db_path).exists():
+            messagebox.showerror(
+                "Backup Error", f"Database not found: {db_path}"
+            )
+            return
+
+        dest_dir = filedialog.askdirectory(
+            title="Select folder for backup"
+        )
+        if not dest_dir:
+            return
+
+        timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+        dest_path = Path(dest_dir) / f"database_{timestamp}.sqlite"
+
+        try:
+            # Use sqlite backup API to capture WAL content safely.
+            src = sqlite3.connect(db_path)
+            try:
+                dest = sqlite3.connect(dest_path)
+                try:
+                    src.backup(dest)
+                finally:
+                    dest.close()
+            finally:
+                src.close()
+        except sqlite3.Error:
+            # Fallback to file copy if backup API fails.
+            try:
+                shutil.copy2(db_path, dest_path)
+            except OSError as e:
+                messagebox.showerror("Backup Error", str(e))
+                return
+        except OSError as e:
+            messagebox.showerror("Backup Error", str(e))
+            return
+
+        messagebox.showinfo(
+            "Backup Complete", f"Backup saved to:\n{dest_path}"
+        )
+
+    def restore_database(self):
+        db_path = self.db_path_var.get()
+        if not db_path:
+            messagebox.showerror(
+                "Restore Error", "Database path is not set."
+            )
+            return
+
+        source = filedialog.askopenfilename(
+            title="Select a backup database",
+            filetypes=[("SQLite", "*.sqlite;*.db"), ("All files", "*.*")],
+        )
+        if not source:
+            return
+
+        if not messagebox.askyesno(
+            "Restore Database",
+            f"This will overwrite:\n{db_path}\nContinue?",
+        ):
+            return
+
+        try:
+            if getattr(self.parent, "db_service", None):
+                self.parent.db_service.close_connections()
+            Path(db_path).parent.mkdir(parents=True, exist_ok=True)
+            shutil.copy2(source, db_path)
+        except OSError as e:
+            messagebox.showerror("Restore Error", str(e))
+            return
+
+        messagebox.showinfo(
+            "Restore Complete", "Database restored successfully."
+        )
