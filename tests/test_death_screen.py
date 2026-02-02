@@ -56,9 +56,11 @@ def test_death_screen_copy_to_clipboard(tk_root, monkeypatch):
     rc = _RecordCtrl({"hospital_name": "HOSP", "department_name": "DEPT"})
     screen = DeathScreen(tk_root, _Controller(), rc)
     screen.record.patient_id = "1234.C18"
+    screen.record.diagnosis = "C18"
     screen.record.event_date = datetime.datetime(2025, 1, 3)
     screen.death_date_var.set("2025-01-04")
     screen.cause_of_death_var.set("Cause A")
+    screen.record.death_cause = "Cause A"
     screen._update_death_date()
 
     clipboard = {}

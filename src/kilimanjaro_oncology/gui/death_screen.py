@@ -179,6 +179,19 @@ class DeathScreen(
         )
 
     def copy_to_clipboard(self):
+        if not self.record.patient_id.strip():
+            messagebox.showerror("Error", "Patient ID is required.")
+            return
+        if not self.record.diagnosis:
+            messagebox.showerror("Error", "Diagnosis is required.")
+            return
+        if not self.death_date_var.get().strip():
+            messagebox.showerror("Error", "Date of death is required.")
+            return
+        if not self.cause_of_death_var.get().strip():
+            messagebox.showerror("Error", "Cause of death is required.")
+            return
+
         # build a full‐prefix display ID
         full_id = f"{self._prefix}{self.record.patient_id}"
         out = (

@@ -79,7 +79,13 @@ class DatabaseService:
 
             # Safer defaults for sqlite in a multi-thread desktop app
             conn.execute("PRAGMA foreign_keys = ON;")
-            conn.execute("PRAGMA journal_mode = WAL;")
+            # Network shares are often unreliable with WAL; fall back to DELETE.
+            if str(self.db_path).startswith(("\\\\", "//")):
+                conn.execute("PRAGMA journal_mode = DELETE;")
+            else:
+                conn.execute("PRAGMA journal_mode = WAL;")
+            # Reduce transient "database is locked" errors on slower storage.
+            conn.execute("PRAGMA busy_timeout = 5000;")
             conn.execute("PRAGMA synchronous = NORMAL;")
 
             self._local.connection = conn

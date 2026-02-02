@@ -244,6 +244,11 @@ class ConfigScreen(tk.Frame):
                 self.parent.db_service.close_connections()
             Path(db_path).parent.mkdir(parents=True, exist_ok=True)
             shutil.copy2(source, db_path)
+            self.config_manager.settings["db_path"] = db_path
+            self.config_manager.save_settings()
+            self.config_manager.initialize_database()
+            self.parent.db_service = DatabaseService(db_path)
+            self.parent.record_ctrl = RecordController(self.parent.db_service)
         except OSError as e:
             messagebox.showerror("Restore Error", str(e))
             return

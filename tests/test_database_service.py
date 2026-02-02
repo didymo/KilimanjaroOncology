@@ -250,6 +250,8 @@ def test_connection_pragmas_set(db_with_schema):
         fk = conn.execute("PRAGMA foreign_keys;").fetchone()[0]
         mode = conn.execute("PRAGMA journal_mode;").fetchone()[0]
         sync = conn.execute("PRAGMA synchronous;").fetchone()[0]
+        timeout = conn.execute("PRAGMA busy_timeout;").fetchone()[0]
     assert fk == 1
     assert str(mode).lower() == "wal"
     assert sync in (1, 2)
+    assert timeout == 5000

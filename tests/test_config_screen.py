@@ -232,6 +232,14 @@ def test_restore_database_overwrites_file(monkeypatch, tmp_path):
             "kilimanjaro_oncology.gui.config_screen.messagebox.showinfo",
             lambda *_a, **_k: None,
         )
+        monkeypatch.setattr(
+            "kilimanjaro_oncology.gui.config_screen.DatabaseService",
+            _DummyDB,
+        )
+        monkeypatch.setattr(
+            "kilimanjaro_oncology.gui.config_screen.RecordController",
+            _DummyRecordCtrl,
+        )
 
         def fake_copy(src, dst):
             assert src == str(backup_path)

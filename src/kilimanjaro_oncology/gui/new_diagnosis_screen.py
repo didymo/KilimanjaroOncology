@@ -185,8 +185,13 @@ class NewDiagnosisScreen(
         Stores the raw ICD code and appends it to patient_id.
         """
         self.record.diagnosis = code
-        # append to whatever patient_id you’ve already built
-        self.record.patient_id = f"{self.record.patient_id}.{code}"
+        # rebuild from raw entry to avoid double-appending
+        raw = self.patient_id_var.get().lstrip(".")
+        if self._hospital and self._department:
+            base = f"{self._hospital}.{self._department}.{raw}"
+        else:
+            base = raw
+        self.record.patient_id = f"{base}.{code}"
 
     def create_footer(self):
         footer = ttk.Frame(self.scrollable_frame)
@@ -196,6 +201,18 @@ class NewDiagnosisScreen(
         )
 
     def copy_to_clipboard(self):
+        if not self.patient_id_var.get().strip():
+            messagebox.showerror("Error", "Patient ID is required.")
+            return
+        if not self.record.diagnosis:
+            messagebox.showerror("Error", "Diagnosis is required.")
+            return
+        try:
+            datetime.datetime.strptime(self.date_var.get(), "%Y-%m-%d")
+        except ValueError:
+            messagebox.showerror("Error", "Invalid date of diagnosis.")
+            return
+
         output = (
             f"Patient_ID: {self.record.patient_id}\n"
             f"Event: {self.record.event}\n"

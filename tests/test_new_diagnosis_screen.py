@@ -60,9 +60,10 @@ def test_update_event_date_invalid_no_crash(tk_root):
 def test_copy_to_clipboard_strips_prefix_and_saves(tk_root, monkeypatch):
     rc = _RecordCtrl({"hospital_name": "HOSP", "department_name": "DEPT"})
     screen = NewDiagnosisScreen(tk_root, _Controller(), rc)
-    screen.record.patient_id = "HOSP.DEPT.1234.C34"
-    screen.record.diagnosis = "C34"
+    screen.patient_id_var.set("1234")
+    screen._on_new_dx_chosen("C34")
     screen.record.event_date = datetime.datetime(2025, 1, 1)
+    screen.date_var.set("2025-01-01")
 
     clipboard = {}
 

@@ -48,7 +48,9 @@ def test_followup_copy_to_clipboard_includes_prefix(tk_root, monkeypatch):
     rc = _RecordCtrl({"hospital_name": "HOSP", "department_name": "DEPT"})
     screen = FollowUpScreen(tk_root, _Controller(), rc)
     screen.record.patient_id = "1234.C18"
+    screen.record.diagnosis = "C18"
     screen.record.event_date = datetime.datetime(2025, 1, 2)
+    screen.date_var.set("2025-01-02")
 
     clipboard = {}
 
