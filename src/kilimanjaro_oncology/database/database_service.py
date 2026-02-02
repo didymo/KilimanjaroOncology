@@ -13,14 +13,19 @@ from typing import Any
 class DatabaseService:
     """
     Thread-safe service class for handling database operations.
-    Uses per-thread connections + a lock for writes.
+    Uses per-thread sqlite connections + a lock for writes.
+
+    SECURITY (medical/PII posture):
+    - Parameterize all *values* with sqlite placeholders.
+    - Only allow SQL identifier interpolation (table/column names) from allowlists.
+    - Fail closed if unknown columns are requested for update/insert.
     """
 
     # map db_path → instance
-    _instances: dict[str, "DatabaseService"] = {}
+    _instances: dict[str, DatabaseService] = {}
     _instances_lock = threading.Lock()
 
-    # ---- schema allowlists (medical-friendly: explicit is safer) ----
+    # ---- schema allowlists (explicit is safer) ----
     TABLE_ONCOLOGY = "oncology_data"
 
     # These are the only columns this service is allowed to write/update.
@@ -68,22 +73,24 @@ class DatabaseService:
         Each thread gets its own sqlite connection (stored in threading.local()).
         """
         if not hasattr(self._local, "connection"):
-            # check_same_thread=False is required because we manage per-thread storage ourselves.
+            # Each thread gets its own connection; check_same_thread=False is safe in this pattern.
             conn = sqlite3.connect(self.db_path, check_same_thread=False)
             conn.row_factory = None  # keep default tuples
+
             # Safer defaults for sqlite in a multi-thread desktop app
             conn.execute("PRAGMA foreign_keys = ON;")
             conn.execute("PRAGMA journal_mode = WAL;")
             conn.execute("PRAGMA synchronous = NORMAL;")
+
             self._local.connection = conn
 
         try:
             yield self._local.connection
-        except Exception as e:
+        except Exception:
+            # Roll back but do not mask the original exception.
             try:
                 self._local.connection.rollback()
             finally:
-                # Preserve the original traceback and make rollback failures non-masking.
                 raise
         else:
             self._local.connection.commit()
@@ -99,7 +106,6 @@ class DatabaseService:
     @staticmethod
     def _row_to_dict(cursor: sqlite3.Cursor, row: tuple[Any, ...]) -> dict[str, Any]:
         cols = [d[0] for d in cursor.description]
-        # strict=False: sqlite returns tuples that match description length, but be explicit
         return dict(zip(cols, row, strict=False))
 
     # ---- CRUD ----
@@ -110,7 +116,6 @@ class DatabaseService:
         Supports data from Diagnosis, Follow Up, and Death screens.
         Returns the autoincrement ID of the inserted record.
         """
-
         if is_dataclass(record_data):
             record_data = asdict(record_data)
 
@@ -118,7 +123,9 @@ class DatabaseService:
             raise TypeError("record_data must be a dict or dataclass instance")
 
         # Always record the creation time.
-        data: dict[str, Any] = {"record_creation_datetime": datetime.datetime.now().isoformat()}
+        data: dict[str, Any] = {
+            "record_creation_datetime": datetime.datetime.now().isoformat()
+        }
 
         # Mapping: canonical database column -> possible keys in record_data.
         # This mapping is an allowlist by design.
@@ -146,14 +153,15 @@ class DatabaseService:
                 data[col] = ""
 
         # Defensive: only allow known schema columns
-        columns = [c for c in data.keys() if c in self.ALLOWED_COLUMNS]
+        columns = [c for c in data if c in self.ALLOWED_COLUMNS]
         if not columns:
             raise ValueError("No valid columns to insert")
 
         placeholders = ", ".join("?" for _ in columns)
         col_list = ", ".join(columns)
 
-        sql = f"INSERT INTO {self.TABLE_ONCOLOGY} ({col_list}) VALUES ({placeholders})"
+        # Safe because TABLE_ONCOLOGY and columns are allowlisted identifiers only.
+        sql = f"INSERT INTO {self.TABLE_ONCOLOGY} ({col_list}) VALUES ({placeholders})"  # nosec B608
         values = tuple(data[c] for c in columns)
 
         with self._write_lock, self.get_connection() as conn:
@@ -192,21 +200,21 @@ class DatabaseService:
             rows = cursor.fetchall()
             if not rows:
                 return []
+
             cols = [d[0] for d in cursor.description]
-            # strict=False to be explicit
             return [dict(zip(cols, row, strict=False)) for row in rows]
 
     def update_diagnosis_record(self, record_id: int, record_data: dict[str, Any]) -> bool:
         """
         Update an existing diagnosis record.
 
-        SECURITY: Only allow updates to explicitly allowlisted columns.
-        This prevents SQL injection via attacker-controlled field names.
+        SECURITY:
+        - Only allow updates to explicitly allowlisted columns (prevents injection via field names).
+        - Values remain parameterized.
         """
         if not isinstance(record_data, dict):
             raise TypeError("record_data must be a dict")
 
-        # Filter to allowed, non-PK fields only
         updates: list[str] = []
         values: list[Any] = []
 
@@ -214,8 +222,9 @@ class DatabaseService:
             if field == "AutoincrementID":
                 continue
             if field not in self.ALLOWED_COLUMNS:
-                # In a medical/PII context, fail closed rather than silently ignore.
+                # Fail closed rather than silently ignoring unknown columns.
                 raise ValueError(f"Refusing to update unknown column: {field!r}")
+
             updates.append(f"{field} = ?")
             values.append(value)
 
@@ -225,7 +234,8 @@ class DatabaseService:
         values.append(record_id)
         set_clause = ", ".join(updates)
 
-        sql = f"UPDATE {self.TABLE_ONCOLOGY} SET {set_clause} WHERE AutoincrementID = ?"
+        # Safe because set_clause is built only from allowlisted identifiers.
+        sql = f"UPDATE {self.TABLE_ONCOLOGY} SET {set_clause} WHERE AutoincrementID = ?"  # nosec B608
 
         with self._write_lock, self.get_connection() as conn:
             cursor = conn.cursor()
