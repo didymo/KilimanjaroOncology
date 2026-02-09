@@ -1,0 +1,102 @@
+[project]
+name = "kilimanjarooncologydatacollectiondemo"
+version = "0.1.0"
+description = "Data collection demonstration application for Kilimanjaro Oncology Unit."
+readme = "README.md"
+requires-python = ">=3.12"
+authors = [{ name = "Ashley Maher", email = "ashley.maher@didymodesigns.com.au" }]
+license = { text = "GPL-3.0-or-later" }
+
+# Runtime deps (what the app needs to run)
+dependencies = [
+  "SQLAlchemy>=2.0.36",
+  "python-dotenv>=1.0.0",
+  "cryptography>=44.0.1",
+]
+
+# Replace Poetry scripts with PEP 621 scripts
+[project.scripts]
+KilimanjaroOncology = "kilimanjaro_oncology.main:main"
+
+[build-system]
+requires = ["setuptools>=78.1.1"]
+build-backend = "setuptools.build_meta"
+
+# uv dev tooling group (single source of truth)
+[dependency-groups]
+dev = [
+  # tooling
+  "ruff>=0.14.14",
+  "pip-audit>=2.10.0",
+  "bandit>=1.9.3",
+
+  # test + coverage
+  "pytest>=9.0.2",
+  "pytest-cov>=7.0.0",
+  "coverage[toml]>=7.13.2",
+  "pytest-mock>=3.14.0",
+
+  # typing
+  "mypy>=1.19.1",
+  "types-setuptools>=80.10.0.20260124",
+
+  # optional: keep Black if you want it available
+  "black>=26.1.0",
+]
+
+# --- Formatting / linting ---
+[tool.black]
+line-length = 80
+target-version = ["py312"]
+
+[tool.ruff]
+line-length = 80
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
+  "E", "F", "W",        # pycodestyle/pyflakes
+  "I",                  # import sorting (isort-style)
+  "B",                  # flake8-bugbear
+  "UP",                 # pyupgrade
+  "SIM",                # flake8-simplify
+  "C4",                 # flake8-comprehensions
+  "S",                  # security (bandit rules)
+]
+ignore = [
+  "E501",               # formatter handles wrapping; keep as policy preference
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/**" = ["S101"]   # allow assert in tests
+
+# --- Security ---
+[tool.bandit]
+exclude_dirs = [".venv", "venv", "build", "dist", "tests"]
+
+# --- Testing ---
+[tool.pytest.ini_options]
+addopts = "-ra"
+testpaths = ["tests"]
+
+[tool.coverage.run]
+branch = true
+source = ["."]
+omit = [
+  ".venv/*",
+  "venv/*",
+  "build/*",
+  "dist/*",
+]
+
+[tool.coverage.report]
+show_missing = true
+skip_covered = false
+
+# --- Typing ---
+[tool.mypy]
+python_version = "3.12"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+ignore_missing_imports = true

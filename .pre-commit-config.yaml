@@ -1,0 +1,33 @@
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v5.0.0
+    hooks:
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: check-ast                 # Ensure Python files are syntactically correct
+      - id: detect-private-key        # Prevent committing private keys
+      - id: check-added-large-files   # Detect large files in the commit
+        args: [ "--maxkb=500" ]       # Set maximum file size in KB
+  - repo: https://github.com/psf/black
+    rev: 25.1.0
+    hooks:
+      - id: black
+  - repo: https://github.com/PyCQA/isort
+    rev: 6.0.0
+    hooks:
+      - id: isort
+  - repo: https://github.com/pycqa/flake8
+    rev: 7.1.1
+    hooks:
+      - id: flake8
+  - repo: https://github.com/markdownlint/markdownlint
+    rev: v0.12.0
+    hooks:
+      - id: markdownlint  # Lint Markdown files like README.md
+
+  - repo: https://github.com/pypa/pip-audit
+    rev: v2.7.3  # Latest version at the time of writing; check for updates
+    hooks:
+      - id: pip-audit
+        args: ["--path", "."]  # Change to "poetry.lock" if needed

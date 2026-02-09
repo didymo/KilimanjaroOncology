@@ -1,0 +1,6 @@
+# MANIFEST.in
+recursive-include src/kilimanjaro_oncology/csv_files *.CSV *.csv
+recursive-include src/kilimanjaro_oncology/database *.sql
+recursive-include src/kilimanjaro_oncology/gui *.ui    # if you have Qt .ui files, etc.
+include README.md
+include LICENSE
