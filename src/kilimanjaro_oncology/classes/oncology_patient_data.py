@@ -17,6 +17,7 @@ class OncologyPatientData:
     factors: str = ""
     stage: str = ""
     careplan: str = ""
+    summary: str = ""
     note: str = ""
 
     # Timestamps stored as datetime objects
@@ -83,6 +84,7 @@ class OncologyPatientData:
             factors=data.get("factors", ""),
             stage=data.get("stage", ""),
             careplan=data.get("careplan", ""),
+            summary=data.get("summary", ""),
             note=data.get("note", ""),
             record_creation_datetime=record_creation_datetime,
             event_date=event_date,

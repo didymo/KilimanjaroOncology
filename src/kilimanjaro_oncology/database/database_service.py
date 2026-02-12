@@ -41,6 +41,7 @@ class DatabaseService:
         "Factors",
         "Stage",
         "Careplan",
+        "Summary",
         "Note",
         "Death_Date",
         "Death_Cause",
@@ -158,6 +159,11 @@ class DatabaseService:
             else:
                 data[col] = ""
 
+        patient_id = str(data.get("PatientID", "")).strip()
+        data["Summary"] = (
+            self._compose_patient_summary(patient_id, data) if patient_id else ""
+        )
+
         # Defensive: only allow known schema columns
         columns = [c for c in data if c in self.ALLOWED_COLUMNS]
         if not columns:
@@ -247,3 +253,107 @@ class DatabaseService:
             cursor = conn.cursor()
             cursor.execute(sql, values)
             return int(cursor.rowcount) > 0
+
+    def get_patient_summary(self, patient_id: str) -> str:
+        """Return latest cumulative summary for a patient."""
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                """
+                SELECT Summary
+                FROM oncology_data
+                WHERE PatientID = ?
+                ORDER BY Event_Date DESC, AutoincrementID DESC
+                LIMIT 1
+                """,
+                (patient_id,),
+            )
+            row = cursor.fetchone()
+            if not row:
+                return ""
+            return str(row[0] or "")
+
+    @staticmethod
+    def _display_date(value: Any) -> str:
+        text = str(value or "").strip()
+        if not text:
+            return ""
+        return text.split("T", 1)[0]
+
+    @staticmethod
+    def _sort_key(item: dict[str, Any]) -> tuple[str, int]:
+        date = str(item.get("Event_Date", ""))
+        ident = int(item.get("AutoincrementID", 0) or 0)
+        return date, ident
+
+    @staticmethod
+    def _summary_block(item: dict[str, Any]) -> str:
+        date_txt = DatabaseService._display_date(item.get("Event_Date")) or "unknown-date"
+        pieces: list[str] = []
+
+        diagnosis = str(item.get("Diagnosis", "") or "").strip()
+        histo = str(item.get("Histo", "") or "").strip()
+        grade = str(item.get("Grade", "") or "").strip()
+        factors = str(item.get("Factors", "") or "").strip()
+        stage = str(item.get("Stage", "") or "").strip()
+        careplan = str(item.get("Careplan", "") or "").strip()
+        death_cause = str(item.get("Death_Cause", "") or "").strip()
+
+        if diagnosis:
+            pieces.append(diagnosis)
+        if histo:
+            pieces.append(histo)
+        if grade:
+            pieces.append(f"G{grade}")
+        if factors:
+            pieces.append(factors)
+        if stage:
+            pieces.append(stage)
+
+        line = f"{date_txt}: {', '.join(pieces)}" if pieces else f"{date_txt}:"
+        extras: list[str] = []
+        if careplan:
+            extras.append(f"  Treatment - {careplan}")
+        if death_cause:
+            extras.append(f"  Death - {death_cause}")
+        if extras:
+            return f"{line}\n" + "\n".join(extras)
+        return line
+
+    def _compose_patient_summary(
+        self, patient_id: str, pending_row: dict[str, Any]
+    ) -> str:
+        with self.get_connection() as conn:
+            cursor = conn.cursor()
+            cursor.execute(
+                """
+                SELECT
+                    AutoincrementID, Event_Date, Diagnosis, Histo, Grade,
+                    Factors, Stage, Careplan, Death_Cause
+                FROM oncology_data
+                WHERE PatientID = ?
+                ORDER BY Event_Date ASC, AutoincrementID ASC
+                """,
+                (patient_id,),
+            )
+            rows = cursor.fetchall()
+            cols = [d[0] for d in cursor.description]
+
+        history = [dict(zip(cols, row, strict=False)) for row in rows]
+        history.append(
+            {
+                "AutoincrementID": 0,
+                "Event_Date": pending_row.get("Event_Date", ""),
+                "Diagnosis": pending_row.get("Diagnosis", ""),
+                "Histo": pending_row.get("Histo", ""),
+                "Grade": pending_row.get("Grade", ""),
+                "Factors": pending_row.get("Factors", ""),
+                "Stage": pending_row.get("Stage", ""),
+                "Careplan": pending_row.get("Careplan", ""),
+                "Death_Cause": pending_row.get("Death_Cause", ""),
+            }
+        )
+
+        history.sort(key=self._sort_key)
+        blocks = [self._summary_block(item) for item in history]
+        return "\n".join(blocks)

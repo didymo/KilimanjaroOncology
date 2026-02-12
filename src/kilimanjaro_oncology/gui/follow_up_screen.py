@@ -87,8 +87,14 @@ class FollowUpScreen(
         self.create_patient_info()
         self.create_cancer_details()
         self.create_care_plan()
+        self.create_summary_panel()
         self.create_notes()
         self.create_footer()
+        self.patient_id_combo.bind(
+            "<<ComboboxSelected>>",
+            lambda _e: self.refresh_summary(),
+            add="+",
+        )
 
     def update_event_date(self, *args):
         with suppress(ValueError):
@@ -102,6 +108,24 @@ class FollowUpScreen(
         ttk.Button(footer, text="COPY", command=self.copy_to_clipboard).pack(
             side="right"
         )
+
+    def create_summary_panel(self):
+        panel = ttk.LabelFrame(self.scrollable_frame, text="Summary", padding=5)
+        panel.pack(fill="both", expand=True, padx=5, pady=2, side="right")
+        self.summary_text = tk.Text(panel, height=10, width=48)
+        self.summary_text.pack(fill="both", expand=True)
+        self.summary_text.configure(state="disabled")
+
+    def refresh_summary(self):
+        patient_id = self.patient_id_var.get().strip()
+        summary = ""
+        if patient_id:
+            summary = self.record_ctrl.fetch_patient_summary(patient_id)
+
+        self.summary_text.configure(state="normal")
+        self.summary_text.delete("1.0", "end")
+        self.summary_text.insert("1.0", summary)
+        self.summary_text.configure(state="disabled")
 
     def copy_to_clipboard(self):
         if not self.record.patient_id.strip():

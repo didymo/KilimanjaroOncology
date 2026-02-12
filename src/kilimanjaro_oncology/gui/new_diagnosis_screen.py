@@ -1,4 +1,5 @@
 import datetime
+import re
 import tkinter as tk
 from contextlib import suppress
 from tkinter import messagebox, ttk
@@ -21,6 +22,24 @@ class NewDiagnosisScreen(
     NotesMixin,
     tk.Frame,
 ):
+    FACTOR_BUTTON_MAP: dict[str, str] = {
+        "ER+": "ER+",
+        "PR+": "PR+",
+        "HER2+": "HER2+",
+        "ER-": "ER-",
+        "PR-": "PR-",
+        "HER2-": "HER2-",
+        "BRCA1": "BRCA1+",
+        "BRCA2": "BRCA2+",
+        "ALK": "ALK+",
+        "ROS": "ROS+",
+        "p16+": "p16+",
+        "p16-": "p16-",
+        "ENE": "ENE+",
+        "EGFR": "EGFR+",
+        "BRAF": "BRAF+",
+    }
+
     def __init__(self, parent, controller, record_ctrl):
         super().__init__(parent)
         self.controller = controller
@@ -163,6 +182,261 @@ class NewDiagnosisScreen(
 
         # store only in the record—not in the entry widget
         self.record.patient_id = full
+
+    def create_cancer_details(self):
+        details = ttk.LabelFrame(self.scrollable_frame, padding=5)
+        details.pack(fill="x", padx=5, pady=2)
+
+        # Histo
+        ttk.Label(details, text="Histo").grid(row=0, column=0, sticky="w")
+        self.histo_var = tk.StringVar()
+        self.histo_combo = ttk.Entry(
+            details, textvariable=self.histo_var, width=40
+        )
+        self.histo_combo.grid(row=0, column=1, sticky="ew", padx=5)
+        self.histo_var.trace_add(
+            "write", lambda *_a: setattr(self.record, "histo", self.histo_var.get())
+        )
+
+        # Grade
+        ttk.Label(details, text="Grade").grid(row=1, column=0, sticky="w")
+        self.grade_var = tk.StringVar()
+        self.grade_combo = ttk.Combobox(
+            details, values=[1, 2, 3, 4, 9], textvariable=self.grade_var
+        )
+        self.grade_combo.grid(row=1, column=1, sticky="ew", padx=5)
+        self.grade_combo.bind(
+            "<<ComboboxSelected>>",
+            lambda _e: self._on_grade_typed(),
+        )
+        self.grade_var.trace_add("write", lambda *_a: self._on_grade_typed())
+
+        # Structured factor buttons
+        marker_frame = ttk.LabelFrame(details, text="Markers", padding=5)
+        marker_frame.grid(row=2, column=0, columnspan=3, sticky="ew", pady=5)
+        self._selected_markers: set[str] = set()
+        self._marker_buttons: dict[str, tk.Button] = {}
+        for idx, marker in enumerate(self.FACTOR_BUTTON_MAP):
+            btn = tk.Button(
+                marker_frame,
+                text=marker,
+                command=lambda m=marker: self.toggle_factor_button(m),
+            )
+            btn.grid(row=idx // 5, column=idx % 5, padx=3, pady=2, sticky="ew")
+            self._marker_buttons[marker] = btn
+
+        # Numeric/structured fields
+        reg_digits = self.register(self._validate_digits)
+        reg_decimal = self.register(self._validate_decimal)
+
+        numeric = ttk.Frame(details)
+        numeric.grid(row=3, column=0, columnspan=3, sticky="ew", pady=5)
+
+        ttk.Label(numeric, text="GS").grid(row=0, column=0, sticky="w")
+        self.gs_left_var = tk.StringVar()
+        self.gs_right_var = tk.StringVar()
+        ttk.Entry(
+            numeric,
+            width=4,
+            textvariable=self.gs_left_var,
+            validate="key",
+            validatecommand=(reg_digits, "%P"),
+        ).grid(row=0, column=1, padx=2)
+        ttk.Label(numeric, text="+").grid(row=0, column=2)
+        ttk.Entry(
+            numeric,
+            width=4,
+            textvariable=self.gs_right_var,
+            validate="key",
+            validatecommand=(reg_digits, "%P"),
+        ).grid(row=0, column=3, padx=2)
+
+        ttk.Label(numeric, text="PSA").grid(row=0, column=4, sticky="w", padx=(10, 0))
+        self.psa_var = tk.StringVar()
+        ttk.Entry(
+            numeric,
+            width=8,
+            textvariable=self.psa_var,
+            validate="key",
+            validatecommand=(reg_decimal, "%P"),
+        ).grid(row=0, column=5, padx=2)
+
+        ttk.Label(numeric, text="PDL1%").grid(
+            row=0, column=6, sticky="w", padx=(10, 0)
+        )
+        self.pdl1_var = tk.StringVar()
+        ttk.Entry(
+            numeric,
+            width=6,
+            textvariable=self.pdl1_var,
+            validate="key",
+            validatecommand=(reg_digits, "%P"),
+        ).grid(row=0, column=7, padx=2)
+
+        ttk.Label(numeric, text="Cores").grid(
+            row=1, column=0, sticky="w", pady=(6, 0)
+        )
+        self.cores_num_var = tk.StringVar()
+        self.cores_den_var = tk.StringVar()
+        ttk.Entry(
+            numeric,
+            width=4,
+            textvariable=self.cores_num_var,
+            validate="key",
+            validatecommand=(reg_digits, "%P"),
+        ).grid(row=1, column=1, padx=2, pady=(6, 0))
+        ttk.Label(numeric, text="/").grid(row=1, column=2, pady=(6, 0))
+        ttk.Entry(
+            numeric,
+            width=4,
+            textvariable=self.cores_den_var,
+            validate="key",
+            validatecommand=(reg_digits, "%P"),
+        ).grid(row=1, column=3, padx=2, pady=(6, 0))
+
+        ttk.Label(numeric, text="Nodes").grid(
+            row=1, column=4, sticky="w", padx=(10, 0), pady=(6, 0)
+        )
+        self.nodes_num_var = tk.StringVar()
+        self.nodes_den_var = tk.StringVar()
+        ttk.Entry(
+            numeric,
+            width=4,
+            textvariable=self.nodes_num_var,
+            validate="key",
+            validatecommand=(reg_digits, "%P"),
+        ).grid(row=1, column=5, padx=2, pady=(6, 0))
+        ttk.Label(numeric, text="/").grid(row=1, column=6, pady=(6, 0))
+        ttk.Entry(
+            numeric,
+            width=4,
+            textvariable=self.nodes_den_var,
+            validate="key",
+            validatecommand=(reg_digits, "%P"),
+        ).grid(row=1, column=7, padx=2, pady=(6, 0))
+
+        # Single-select resection
+        resection = ttk.LabelFrame(details, text="Resection", padding=5)
+        resection.grid(row=4, column=0, columnspan=3, sticky="ew", pady=5)
+        self.resection_var = tk.StringVar()
+        self.resection_mm_var = tk.StringVar()
+        for idx, val in enumerate(["Rx", "R0", "R1", "R2"]):
+            ttk.Radiobutton(
+                resection,
+                text=val,
+                value=val,
+                variable=self.resection_var,
+                command=self.update_factors,
+            ).grid(row=0, column=idx, padx=4, pady=2, sticky="w")
+        ttk.Label(resection, text="mm").grid(row=0, column=4, padx=(10, 2))
+        ttk.Entry(
+            resection,
+            width=6,
+            textvariable=self.resection_mm_var,
+            validate="key",
+            validatecommand=(reg_digits, "%P"),
+        ).grid(row=0, column=5, padx=2)
+
+        # Stage T/N/M
+        frm = ttk.Frame(details)
+        frm.grid(row=5, column=1, columnspan=2, sticky="w")
+        ttk.Label(frm, text="Stage").pack(side="left")
+        self.t_stage_combo = ttk.Combobox(
+            frm, values=["T0", "T1", "T2", "T3", "T4", "Tx"], width=4
+        )
+        self.t_stage_combo.pack(side="left", padx=5)
+        self.t_stage_combo.bind(
+            "<<ComboboxSelected>>", lambda _e: self.update_stage()
+        )
+        self.n_stage_combo = ttk.Combobox(
+            frm, values=["N0", "N1", "N2", "N3", "Nx"], width=4
+        )
+        self.n_stage_combo.pack(side="left", padx=5)
+        self.n_stage_combo.bind(
+            "<<ComboboxSelected>>", lambda _e: self.update_stage()
+        )
+        m_vals = ["M0", "M1", "M1-liver", "M1-lung", "M1-bone", "M1-cerebellum"]
+        self.m_stage_combo = ttk.Combobox(
+            frm, values=m_vals, width=max(len(s) for s in m_vals)
+        )
+        self.m_stage_combo.pack(side="left", padx=5)
+        self.m_stage_combo.bind(
+            "<<ComboboxSelected>>", lambda _e: self.update_stage()
+        )
+
+        # Keep factors updated from text inputs.
+        for var in (
+            self.gs_left_var,
+            self.gs_right_var,
+            self.psa_var,
+            self.pdl1_var,
+            self.cores_num_var,
+            self.cores_den_var,
+            self.nodes_num_var,
+            self.nodes_den_var,
+            self.resection_mm_var,
+            self.resection_var,
+        ):
+            var.trace_add("write", lambda *_a: self.update_factors())
+
+        details.grid_columnconfigure(1, weight=1)
+
+    @staticmethod
+    def _validate_digits(value: str) -> bool:
+        return value == "" or value.isdigit()
+
+    @staticmethod
+    def _validate_decimal(value: str) -> bool:
+        return value == "" or bool(re.fullmatch(r"\d+(\.\d+)?", value))
+
+    def _on_grade_typed(self):
+        val = self.grade_var.get()
+        try:
+            num = int(val)
+        except ValueError:
+            return
+        if num in [1, 2, 3, 4, 9]:
+            self.record.grade = num
+
+    def toggle_factor_button(self, label: str):
+        btn = self._marker_buttons[label]
+        if label in self._selected_markers:
+            self._selected_markers.remove(label)
+            btn.config(bg=btn.cget("activebackground"))
+        else:
+            self._selected_markers.add(label)
+            btn.config(bg="green")
+        self.update_factors()
+
+    def update_stage(self, *_args):
+        parts = [
+            self.t_stage_combo.get(),
+            self.n_stage_combo.get(),
+            self.m_stage_combo.get(),
+        ]
+        self.record.stage = " ".join(p for p in parts if p)
+
+    def update_factors(self):
+        tokens = [
+            self.FACTOR_BUTTON_MAP[k]
+            for k in self.FACTOR_BUTTON_MAP
+            if k in self._selected_markers
+        ]
+
+        if self.gs_left_var.get() and self.gs_right_var.get():
+            tokens.append(f"GS{self.gs_left_var.get()}+{self.gs_right_var.get()}")
+        if self.psa_var.get():
+            tokens.append(f"PSA{self.psa_var.get()}")
+        if self.pdl1_var.get():
+            tokens.append(f"PDL1%{self.pdl1_var.get()}")
+        if self.cores_num_var.get() and self.cores_den_var.get():
+            tokens.append(f"{self.cores_num_var.get()}/{self.cores_den_var.get()}")
+        if self.nodes_num_var.get() and self.nodes_den_var.get():
+            tokens.append(f"{self.nodes_num_var.get()}/{self.nodes_den_var.get()}")
+        if self.resection_var.get() and self.resection_mm_var.get():
+            tokens.append(f"{self.resection_var.get()}-{self.resection_mm_var.get()}mm")
+
+        self.record.factors = ", ".join(tokens)
 
     def update_event_date(self, *args):
         with suppress(ValueError):

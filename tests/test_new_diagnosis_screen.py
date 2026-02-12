@@ -90,3 +90,50 @@ def test_copy_to_clipboard_strips_prefix_and_saves(tk_root, monkeypatch):
     assert rc.saved
     assert rc.saved[0]["patient_id"] == "1234.C34"
     assert "Record saved successfully" in shown["message"]
+
+
+def test_new_dx_hides_legacy_factors_line(tk_root):
+    rc = _RecordCtrl({"hospital_name": "HOSP", "department_name": "DEPT"})
+    screen = NewDiagnosisScreen(tk_root, _Controller(), rc)
+    labels = [
+        w.cget("text")
+        for w in screen.winfo_children()[0].winfo_children()
+        if isinstance(w, tk.Label) or w.winfo_class() == "TLabel"
+    ]
+    assert "Factors" not in labels
+
+
+def test_new_dx_factor_tokens_and_resection_formatting(tk_root):
+    rc = _RecordCtrl({"hospital_name": "HOSP", "department_name": "DEPT"})
+    screen = NewDiagnosisScreen(tk_root, _Controller(), rc)
+
+    # Buttons
+    screen.toggle_factor_button("ER+")
+    screen.toggle_factor_button("BRCA1")
+    screen.toggle_factor_button("ALK")
+
+    # Numeric-only entries
+    screen.gs_left_var.set("9")
+    screen.gs_right_var.set("9")
+    screen.psa_var.set("123.4")
+    screen.pdl1_var.set("80")
+    screen.cores_num_var.set("3")
+    screen.cores_den_var.set("8")
+    screen.nodes_num_var.set("1")
+    screen.nodes_den_var.set("4")
+
+    # Single-select resection with measurement
+    screen.resection_var.set("R1")
+    screen.resection_mm_var.set("12")
+    screen.update_factors()
+
+    factors = screen.record.factors
+    assert "ER+" in factors
+    assert "BRCA1+" in factors
+    assert "ALK+" in factors
+    assert "GS9+9" in factors
+    assert "PSA123.4" in factors
+    assert "PDL1%80" in factors
+    assert "3/8" in factors
+    assert "1/4" in factors
+    assert "R1-12mm" in factors

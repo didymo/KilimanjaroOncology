@@ -142,9 +142,23 @@ def test_save_raises_when_lastrowid_missing(monkeypatch):
 
     class _Cursor:
         lastrowid = None
+        description = [
+            ("AutoincrementID",),
+            ("Event_Date",),
+            ("Diagnosis",),
+            ("Histo",),
+            ("Grade",),
+            ("Factors",),
+            ("Stage",),
+            ("Careplan",),
+            ("Death_Cause",),
+        ]
 
         def execute(self, _sql, _values):
             return None
+
+        def fetchall(self):
+            return []
 
     class _Conn:
         def cursor(self):
@@ -254,3 +268,35 @@ def test_connection_pragmas_set(db_with_schema):
     assert str(mode).lower() == "wal"
     assert sync in (1, 2)
     assert timeout == 5000
+
+
+def test_save_persists_cumulative_summary_field(db_with_schema):
+    id1 = db_with_schema.save_diagnosis_record(
+        {
+            "patient_id": "P100.C50",
+            "event": "Diagnosis",
+            "event_date": "2025-01-01",
+            "diagnosis": "C50",
+            "histo": "8500/3",
+            "grade": "2",
+            "factors": "ER+",
+            "stage": "T1 N0 M0",
+        }
+    )
+    id2 = db_with_schema.save_diagnosis_record(
+        {
+            "patient_id": "P100.C50",
+            "event": "Management",
+            "event_date": "2025-03-01",
+            "diagnosis": "C50",
+            "stage": "rT1 N0 M0",
+            "careplan": "Primary",
+        }
+    )
+
+    rec1 = db_with_schema.get_diagnosis_record(id1)
+    rec2 = db_with_schema.get_diagnosis_record(id2)
+    assert "Summary" in rec1
+    assert "Summary" in rec2
+    assert "2025-01-01" in rec2["Summary"]
+    assert "2025-03-01" in rec2["Summary"]

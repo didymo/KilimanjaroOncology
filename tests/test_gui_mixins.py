@@ -164,11 +164,11 @@ def test_care_plan_toggle_order(tk_root):
     screen.toggle_button(b2)
     assert (
         screen.record.careplan
-        == f"{b1.cget('text')}, {b2.cget('text')}"
+        == f"{b1.care_key}, {b2.care_key}"
     )
 
     screen.toggle_button(b1)
-    assert screen.record.careplan == b2.cget("text")
+    assert screen.record.careplan == b2.care_key
 
 
 def test_cancer_details_update_stage(tk_root):

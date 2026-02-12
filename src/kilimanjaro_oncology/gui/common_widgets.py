@@ -397,50 +397,47 @@ class CarePlanMixin:
     def create_care_plan(self):
         care = ttk.LabelFrame(self.scrollable_frame, padding=5)
         care.pack(fill="x", padx=5, pady=2, anchor="e")
-        ttk.Label(
-            care, text="Care Planned First", font=("Arial", 10, "bold")
-        ).pack(anchor="center", pady=(0, 5))
         grid = ttk.Frame(care)
-        grid.pack(anchor="w")
-        grid.columnconfigure((0, 1), weight=1)
+        grid.pack(fill="x", anchor="w")
 
         # ← initialize empty list to track click order
         self._care_order = []
 
         self.care_buttons = []
         rows = [
-            ["Observe"],
-            ["Surgery", "Radiation"],
-            ["Chemo", "Brachy"],
-            ["Immuno", "Hormones"],
-            ["Small mol."],
+            ("OBSERVE", ["Observe"]),
+            ("SURGERY", ["Primary"]),
+            ("RADIOTHERAPY", ["Neoadjuvant", "Primary", "Adjuvant", "Palliative"]),
+            ("CHEMOTHERAPY", ["Neoadjuvant", "Primary", "Adjuvant", "Palliative"]),
+            ("IMMUNOTHERAPY", ["Neoadjuvant", "Primary", "Adjuvant", "Palliative"]),
+            ("HORMONE THERAPY", ["Neoadjuvant", "Primary", "Adjuvant", "Palliative"]),
+            ("PALLIATIVE CARE", ["PalliativeCare"]),
         ]
-        for r, opts in enumerate(rows):
-            for c in range(2):
-                if c < len(opts):
-                    b = tk.Button(grid, text=opts[c])
-                    b.selected = False
-                    b.default_bg = b.cget("bg")
-                    b.config(command=lambda btn=b: self.toggle_button(btn))
-                    b.grid(row=r, column=c, padx=5, pady=2, sticky="ew")
-                    self.care_buttons.append(b)
-                else:
-                    ttk.Label(grid, text="").grid(
-                        row=r, column=c, padx=5, pady=2
-                    )
+        for r, (label, opts) in enumerate(rows):
+            ttk.Label(grid, text=label).grid(
+                row=r, column=0, padx=5, pady=2, sticky="w"
+            )
+            for c, option in enumerate(opts, start=1):
+                b = tk.Button(grid, text=option)
+                b.selected = False
+                b.default_bg = b.cget("bg")
+                b.care_key = f"{label} - {option}"
+                b.config(command=lambda btn=b: self.toggle_button(btn))
+                b.grid(row=r, column=c, padx=5, pady=2, sticky="ew")
+                self.care_buttons.append(b)
 
     def toggle_button(self, btn):
-        text = btn.cget("text")
+        key = str(getattr(btn, "care_key", btn.cget("text")))
         if btn.selected:
             btn.selected = False
             btn.config(bg=btn.default_bg)
-            if text in self._care_order:
-                self._care_order.remove(text)
+            if key in self._care_order:
+                self._care_order.remove(key)
         else:
             btn.selected = True
             btn.config(bg="green")
-            if text not in self._care_order:
-                self._care_order.append(text)
+            if key not in self._care_order:
+                self._care_order.append(key)
 
         self.record.careplan = ", ".join(self._care_order)
 

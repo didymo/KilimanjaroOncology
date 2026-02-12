@@ -94,3 +94,7 @@ class RecordController:
     def save_record(self, record: dict[str, Any]) -> int:
         """Persist a new record via the existing DatabaseService API."""
         return int(self._db.save_diagnosis_record(record))
+
+    def fetch_patient_summary(self, patient_id: str) -> str:
+        """Return the most recent cumulative summary for patient_id."""
+        return str(self._db.get_patient_summary(patient_id))

@@ -39,6 +39,9 @@ class _RecordCtrl:
     def fetch_patient_data(self, _pid):
         return {}
 
+    def fetch_patient_summary(self, _pid):
+        return "2025-01-01: C18, T2 N1 M0\n  Surgery - Primary"
+
     def save_record(self, data):
         self.saved.append(data)
         return 2
@@ -86,3 +89,51 @@ def test_followup_update_event_date_invalid(tk_root):
     screen.date_var.set("bad-date")
     screen.update_event_date()
     assert screen.record.event_date == before
+
+
+def test_followup_updated_therapy_buttons_and_summary_panel(tk_root):
+    rc = _RecordCtrl({"hospital_name": "H", "department_name": "D"})
+    screen = FollowUpScreen(tk_root, _Controller(), rc)
+
+    labels = [
+        child.cget("text")
+        for child in screen.winfo_children()[0].winfo_children()
+        if child.winfo_class() in {"TLabel", "Label"}
+    ]
+    assert "Care Planned First" not in labels
+
+    expected_buttons = {
+        "Observe",
+        "Primary",
+        "Neoadjuvant",
+        "Adjuvant",
+        "Palliative",
+        "PalliativeCare",
+    }
+    actual_buttons = {
+        b.cget("text")
+        for b in getattr(screen, "care_buttons", [])
+    }
+    assert expected_buttons.issubset(actual_buttons)
+
+    assert screen.summary_text.cget("state") == "disabled"
+
+
+def test_followup_copy_excludes_summary_text(tk_root, monkeypatch):
+    rc = _RecordCtrl({"hospital_name": "HOSP", "department_name": "DEPT"})
+    screen = FollowUpScreen(tk_root, _Controller(), rc)
+    screen.record.patient_id = "1234.C18"
+    screen.record.diagnosis = "C18"
+    screen.record.event_date = datetime.datetime(2025, 1, 2)
+    screen.date_var.set("2025-01-02")
+
+    clipboard = {}
+    screen.clipboard_clear = lambda: None
+    screen.clipboard_append = lambda text: clipboard.setdefault("text", text)
+    monkeypatch.setattr(
+        "kilimanjaro_oncology.gui.follow_up_screen.messagebox.showinfo",
+        lambda *_a, **_k: None,
+    )
+
+    screen.copy_to_clipboard()
+    assert "Summary" not in clipboard["text"]
