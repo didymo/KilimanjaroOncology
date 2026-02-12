@@ -1,5 +1,6 @@
 import datetime
 import tkinter as tk
+from contextlib import suppress
 from tkinter import messagebox, ttk
 
 from kilimanjaro_oncology.classes.oncology_patient_data import (
@@ -90,12 +91,10 @@ class FollowUpScreen(
         self.create_footer()
 
     def update_event_date(self, *args):
-        try:
+        with suppress(ValueError):
             self.record.event_date = datetime.datetime.strptime(
                 self.date_var.get(), "%Y-%m-%d"
             )
-        except ValueError:
-            pass
 
     def create_footer(self):
         footer = ttk.Frame(self.scrollable_frame)

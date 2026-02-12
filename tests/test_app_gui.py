@@ -1,4 +1,5 @@
 import tkinter as tk
+import tkinter.font as tkfont
 
 import pytest
 
@@ -49,7 +50,7 @@ def test_application_shows_main_when_db_present(monkeypatch):
     import kilimanjaro_oncology.gui.app as app_mod
 
     def fake_config():
-        return _DummyConfigManager("/tmp/db.sqlite")
+        return _DummyConfigManager("db.sqlite")
 
     called = {"config": False, "main": False}
 
@@ -75,11 +76,10 @@ def test_application_shows_main_when_db_present(monkeypatch):
 
 
 def test_apply_font_size_updates_named_font(monkeypatch):
-    import tkinter.font as tkfont
     import kilimanjaro_oncology.gui.app as app_mod
 
     def fake_config():
-        return _DummyConfigManager("/tmp/db.sqlite")
+        return _DummyConfigManager("db.sqlite")
 
     monkeypatch.setattr(app_mod, "ConfigManager", fake_config)
     monkeypatch.setattr(

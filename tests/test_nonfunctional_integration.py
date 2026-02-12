@@ -1,6 +1,8 @@
 import os
+import sqlite3
 import stat
 import tkinter as tk
+from pathlib import Path
 
 import pytest
 
@@ -20,7 +22,7 @@ def _schema_path():
 
 
 def test_readonly_database_rejects_writes(config_module, tmp_path):
-    config_module.SCHEMA_FILE.write_text(open(_schema_path()).read())
+    config_module.SCHEMA_FILE.write_text(Path(_schema_path()).read_text())
     db_path = tmp_path / "readonly.sqlite"
     cm = config_module.ConfigManager()
     cm.settings["db_path"] = str(db_path)
@@ -30,12 +32,12 @@ def test_readonly_database_rejects_writes(config_module, tmp_path):
     os.chmod(db_path, stat.S_IREAD)
 
     db = DatabaseService(str(db_path))
-    with pytest.raises(Exception):
+    with pytest.raises(sqlite3.Error):
         db.save_diagnosis_record({"patient_id": "RO", "event": "D"})
 
 
 def test_backup_restore_round_trip(config_module, tmp_path, monkeypatch):
-    config_module.SCHEMA_FILE.write_text(open(_schema_path()).read())
+    config_module.SCHEMA_FILE.write_text(Path(_schema_path()).read_text())
     db_path = tmp_path / "active.sqlite"
     cm = config_module.ConfigManager()
     cm.settings["db_path"] = str(db_path)

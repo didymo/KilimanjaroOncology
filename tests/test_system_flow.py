@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 from kilimanjaro_oncology.controllers.record_controller import RecordController
 from kilimanjaro_oncology.database.database_service import DatabaseService
@@ -13,7 +14,7 @@ def test_multi_patient_record_order_and_fetch(config_module, tmp_path):
         "database",
         "schema.sql",
     )
-    config_module.SCHEMA_FILE.write_text(open(schema_path).read())
+    config_module.SCHEMA_FILE.write_text(Path(schema_path).read_text())
 
     db_path = tmp_path / "system.sqlite"
     cm = config_module.ConfigManager()

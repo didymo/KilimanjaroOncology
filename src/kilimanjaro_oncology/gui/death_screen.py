@@ -2,6 +2,7 @@ import csv
 import datetime
 import os
 import tkinter as tk
+from contextlib import suppress
 from tkinter import messagebox, ttk
 
 from kilimanjaro_oncology.classes.oncology_patient_data import (
@@ -93,12 +94,10 @@ class DeathScreen(
         self.create_footer()
 
     def update_event_date(self, *args):
-        try:
+        with suppress(ValueError):
             self.record.event_date = datetime.datetime.strptime(
                 self.date_var.get(), "%Y-%m-%d"
             )
-        except ValueError:
-            pass
 
     def death_date_cause(self):
         frm = ttk.LabelFrame(self.scrollable_frame, padding=5)

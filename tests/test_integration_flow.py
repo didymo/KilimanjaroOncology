@@ -1,6 +1,7 @@
 import csv
 import os
 import tkinter as tk
+from pathlib import Path
 
 import pytest
 
@@ -69,7 +70,7 @@ def test_full_flow_config_new_dx_followup_death(
         "database",
         "schema.sql",
     )
-    config_module.SCHEMA_FILE.write_text(open(schema_path).read())
+    config_module.SCHEMA_FILE.write_text(Path(schema_path).read_text())
 
     parent = _Parent(config_module.ConfigManager())
     parent.withdraw()

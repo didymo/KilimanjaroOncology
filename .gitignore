@@ -176,9 +176,9 @@ gitaccesstoken.txt
 
 chatgptreport.txt
 notes.txt
+notes/
 
 reports/
 htmlcov/
 .coverage
 coverage.xml
-

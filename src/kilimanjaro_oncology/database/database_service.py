@@ -122,7 +122,7 @@ class DatabaseService:
         Supports data from Diagnosis, Follow Up, and Death screens.
         Returns the autoincrement ID of the inserted record.
         """
-        if is_dataclass(record_data):
+        if is_dataclass(record_data) and not isinstance(record_data, type):
             record_data = asdict(record_data)
 
         if not isinstance(record_data, dict):
@@ -167,7 +167,7 @@ class DatabaseService:
         col_list = ", ".join(columns)
 
         # Safe because TABLE_ONCOLOGY and columns are allowlisted identifiers only.
-        sql = f"INSERT INTO {self.TABLE_ONCOLOGY} ({col_list}) VALUES ({placeholders})"  # nosec B608
+        sql = f"INSERT INTO {self.TABLE_ONCOLOGY} ({col_list}) VALUES ({placeholders})"  # noqa: S608  # nosec B608
         values = tuple(data[c] for c in columns)
 
         with self._write_lock, self.get_connection() as conn:
@@ -241,9 +241,9 @@ class DatabaseService:
         set_clause = ", ".join(updates)
 
         # Safe because set_clause is built only from allowlisted identifiers.
-        sql = f"UPDATE {self.TABLE_ONCOLOGY} SET {set_clause} WHERE AutoincrementID = ?"  # nosec B608
+        sql = f"UPDATE {self.TABLE_ONCOLOGY} SET {set_clause} WHERE AutoincrementID = ?"  # noqa: S608  # nosec B608
 
         with self._write_lock, self.get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute(sql, values)
-            return cursor.rowcount > 0
+            return int(cursor.rowcount) > 0

@@ -117,13 +117,12 @@ def test_save_with_no_allowed_columns_raises(db_with_schema, monkeypatch):
 def test_get_connection_rolls_back_on_exception(db_with_schema):
     import pytest
 
-    with pytest.raises(RuntimeError):
-        with db_with_schema.get_connection() as conn:
-            conn.execute(
-                "INSERT INTO oncology_data(PatientID,Event) VALUES (?,?)",
-                ("P9", "D"),
-            )
-            raise RuntimeError("boom")
+    with pytest.raises(RuntimeError), db_with_schema.get_connection() as conn:
+        conn.execute(
+            "INSERT INTO oncology_data(PatientID,Event) VALUES (?,?)",
+            ("P9", "D"),
+        )
+        raise RuntimeError("boom")
 
     recs = db_with_schema.get_patient_records("P9")
     assert recs == []

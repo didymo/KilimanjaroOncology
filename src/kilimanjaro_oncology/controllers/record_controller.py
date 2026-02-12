@@ -93,4 +93,4 @@ class RecordController:
 
     def save_record(self, record: dict[str, Any]) -> int:
         """Persist a new record via the existing DatabaseService API."""
-        return self._db.save_diagnosis_record(record)
+        return int(self._db.save_diagnosis_record(record))

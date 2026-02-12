@@ -54,7 +54,9 @@ class AutoCompleteCombobox(ttk.Combobox):
             # include entries whose display *or* raw code contains the typed text
             filtered = [
                 disp
-                for disp, raw in zip(self._completion_list, self._match_list)
+                for disp, raw in zip(
+                    self._completion_list, self._match_list, strict=False
+                )
                 if typed in disp.lower() or typed in raw.lower()
             ]
         self["values"] = filtered

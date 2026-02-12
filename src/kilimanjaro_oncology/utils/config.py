@@ -41,9 +41,7 @@ class ConfigManager:
                 # Verify required settings exist
                 dbp = settings.get("db_path")
                 # must have a path _and_ that file must exist on disk
-                if not dbp or not Path(dbp).exists():
-                    return False
-                return True
+                return not (not dbp or not Path(dbp).exists())
         except (OSError, json.JSONDecodeError):
             return False
 
@@ -116,7 +114,7 @@ class ConfigManager:
         except (OSError, sqlite3.Error) as e:
             if DATABASE_FILE.exists():
                 DATABASE_FILE.unlink()  # Delete failed database file
-            raise DatabaseError(f"Failed to create database: {e}")
+            raise DatabaseError(f"Failed to create database: {e}") from e
         finally:
             if conn:
                 conn.close()
@@ -163,9 +161,9 @@ class ConfigManager:
                 )
 
         except sqlite3.Error as e:
-            raise DatabaseError(f"Database verification failed: {e}")
+            raise DatabaseError(f"Database verification failed: {e}") from e
         except OSError as e:
-            raise DatabaseError(f"Failed to read schema file: {e}")
+            raise DatabaseError(f"Failed to read schema file: {e}") from e
         finally:
             if conn:
                 conn.close()

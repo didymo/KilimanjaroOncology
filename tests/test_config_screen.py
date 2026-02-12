@@ -78,17 +78,18 @@ class _Parent(tk.Tk):
         self.screen_shown = True
 
 
-def test_select_existing_db_sets_path(tk_root, monkeypatch):
+def test_select_existing_db_sets_path(tk_root, monkeypatch, tmp_path):
     parent = _Parent()
     parent.withdraw()
     try:
         screen = ConfigScreen(parent)
+        selected = tmp_path / "test.sqlite"
         monkeypatch.setattr(
             "kilimanjaro_oncology.gui.config_screen.filedialog.askopenfilename",
-            lambda **_k: "/tmp/test.sqlite",
+            lambda **_k: str(selected),
         )
         screen.select_existing_db()
-        assert screen.db_path_var.get() == "/tmp/test.sqlite"
+        assert screen.db_path_var.get() == str(selected)
     finally:
         parent.destroy()
 
@@ -108,12 +109,13 @@ def test_select_db_folder_sets_database_file(tk_root, monkeypatch, tmp_path):
         parent.destroy()
 
 
-def test_save_and_continue_updates_settings(monkeypatch):
+def test_save_and_continue_updates_settings(monkeypatch, tmp_path):
     parent = _Parent()
     parent.withdraw()
     try:
+        db_path = tmp_path / "db.sqlite"
         screen = ConfigScreen(parent)
-        screen.db_path_var.set("/tmp/db.sqlite")
+        screen.db_path_var.set(str(db_path))
         screen.hospital_var.set("HOSP")
         screen.department_var.set("DEPT")
         screen.font_size_var.set("14")
@@ -133,7 +135,7 @@ def test_save_and_continue_updates_settings(monkeypatch):
         assert parent.config_manager.initialized is True
         assert parent.font_applied is True
         assert parent.screen_shown is True
-        assert parent.config_manager.settings["db_path"] == "/tmp/db.sqlite"
+        assert parent.config_manager.settings["db_path"] == str(db_path)
         assert parent.config_manager.settings["hospital_name"] == "HOSP"
         assert parent.config_manager.settings["department_name"] == "DEPT"
         assert parent.config_manager.settings["font_size"] == 14

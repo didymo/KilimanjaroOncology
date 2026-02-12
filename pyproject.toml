@@ -11,7 +11,7 @@ license = { text = "GPL-3.0-or-later" }
 dependencies = [
   "SQLAlchemy>=2.0.36",
   "python-dotenv>=1.0.0",
-  "cryptography>=44.0.1",
+  "cryptography>=46.0.5",
 ]
 
 # Replace Poetry scripts with PEP 621 scripts

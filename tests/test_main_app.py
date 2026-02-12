@@ -1,6 +1,3 @@
-import tkinter as tk
-
-
 class _DummyDB:
     def __init__(self, _path):
         pass

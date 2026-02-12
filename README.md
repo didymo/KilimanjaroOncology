@@ -43,6 +43,11 @@ Use the Configuration screen to manage backups:
 
 ## Security and deployment
 See `SECURITY_DEPLOYMENT.md` for recommended filesystem encryption and share permissions.
+See `SECURITY.md` for vulnerability reporting and repository security policy.
+
+## Supply chain security
+- Dependency and action updates are automated via Dependabot (`.github/dependabot.yml`).
+- An SBOM (CycloneDX JSON) is generated in CI (`.github/workflows/sbom.yml`) and published as a workflow artifact.
 
 ## Testing complete (technical) and acceptance notes
 Automated tests are complete for the current scope (unit, integration, system-flow, non-functional, and backup/restore). Clinical feedback has been incorporated.
