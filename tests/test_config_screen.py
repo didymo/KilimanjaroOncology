@@ -256,3 +256,95 @@ def test_restore_database_overwrites_file(monkeypatch, tmp_path):
         screen.restore_database()
     finally:
         parent.destroy()
+
+
+def test_back_to_main_disabled_without_db_path():
+    parent = _Parent()
+    parent.withdraw()
+    try:
+        screen = ConfigScreen(parent)
+        screen.db_path_var.set("")
+        screen._update_back_button_state()
+        assert screen.back_button.instate(["disabled"])
+    finally:
+        parent.destroy()
+
+
+def test_back_to_main_enabled_with_db_path_and_navigates(tmp_path):
+    parent = _Parent()
+    parent.withdraw()
+    try:
+        screen = ConfigScreen(parent)
+        screen.db_path_var.set(str(tmp_path / "db.sqlite"))
+        screen._update_back_button_state()
+        assert not screen.back_button.instate(["disabled"])
+        screen.back_to_main()
+        assert parent.screen_shown is True
+    finally:
+        parent.destroy()
+
+
+def test_back_to_main_cancel_keeps_user_on_config(monkeypatch, tmp_path):
+    parent = _Parent()
+    parent.withdraw()
+    try:
+        screen = ConfigScreen(parent)
+        screen.db_path_var.set(str(tmp_path / "db.sqlite"))
+        screen.hospital_var.set("Changed")
+        monkeypatch.setattr(
+            "kilimanjaro_oncology.gui.config_screen.messagebox.askyesnocancel",
+            lambda *_a, **_k: None,
+        )
+        screen.back_to_main()
+        assert parent.screen_shown is False
+        assert parent.config_manager.saved is False
+    finally:
+        parent.destroy()
+
+
+def test_back_to_main_discard_changes_navigates_without_save(
+    monkeypatch, tmp_path
+):
+    parent = _Parent()
+    parent.withdraw()
+    try:
+        screen = ConfigScreen(parent)
+        screen.db_path_var.set(str(tmp_path / "db.sqlite"))
+        screen.hospital_var.set("Changed")
+        monkeypatch.setattr(
+            "kilimanjaro_oncology.gui.config_screen.messagebox.askyesnocancel",
+            lambda *_a, **_k: False,
+        )
+        screen.back_to_main()
+        assert parent.screen_shown is True
+        assert parent.config_manager.saved is False
+    finally:
+        parent.destroy()
+
+
+def test_back_to_main_save_changes_then_navigates(monkeypatch, tmp_path):
+    parent = _Parent()
+    parent.withdraw()
+    try:
+        screen = ConfigScreen(parent)
+        db_path = tmp_path / "db.sqlite"
+        screen.db_path_var.set(str(db_path))
+        screen.hospital_var.set("HOSP")
+        screen.department_var.set("DEPT")
+        monkeypatch.setattr(
+            "kilimanjaro_oncology.gui.config_screen.DatabaseService",
+            _DummyDB,
+        )
+        monkeypatch.setattr(
+            "kilimanjaro_oncology.gui.config_screen.RecordController",
+            _DummyRecordCtrl,
+        )
+        monkeypatch.setattr(
+            "kilimanjaro_oncology.gui.config_screen.messagebox.askyesnocancel",
+            lambda *_a, **_k: True,
+        )
+        screen.back_to_main()
+        assert parent.config_manager.saved is True
+        assert parent.screen_shown is True
+    finally:
+        parent.destroy()

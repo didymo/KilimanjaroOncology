@@ -48,10 +48,16 @@ class ConfigScreen(tk.Frame):
             command=self.select_db_folder,
         ).pack(side="left", padx=5)
 
+        action_frame = ttk.Frame(self)
+        action_frame.pack(pady=10)
         # Save Button
         ttk.Button(
-            self, text="Save and Continue", command=self.save_and_continue
-        ).pack(pady=10)
+            action_frame, text="Save and Continue", command=self.save_and_continue
+        ).pack(side="left", padx=5)
+        self.back_button = ttk.Button(
+            action_frame, text="Back to Main", command=self.back_to_main
+        )
+        self.back_button.pack(side="left", padx=5)
 
         backup_frame = ttk.LabelFrame(self, text="Backup / Restore")
         backup_frame.pack(pady=(10, 5), padx=5, fill="x")
@@ -88,6 +94,49 @@ class ConfigScreen(tk.Frame):
             self, textvariable=self.font_size_var, width=10
         )
         self.font_size_entry.pack(pady=5)
+
+        self._initial_state: tuple[str, str, str, str] = (
+            self._capture_form_state()
+        )
+        self.db_path_var.trace_add(
+            "write", lambda *_a: self._update_back_button_state()
+        )
+        self._update_back_button_state()
+
+    def _capture_form_state(self) -> tuple[str, str, str, str]:
+        return (
+            self.db_path_var.get().strip(),
+            self.hospital_var.get().strip(),
+            self.department_var.get().strip(),
+            self.font_size_var.get().strip(),
+        )
+
+    def _is_dirty(self) -> bool:
+        return bool(self._capture_form_state() != self._initial_state)
+
+    def _update_back_button_state(self):
+        has_db_path = bool(self.db_path_var.get().strip())
+        self.back_button.state(["!disabled"] if has_db_path else ["disabled"])
+
+    def _mark_clean(self):
+        self._initial_state = self._capture_form_state()
+
+    def back_to_main(self):
+        if self.back_button.instate(["disabled"]):
+            return
+
+        if self._is_dirty():
+            choice = messagebox.askyesnocancel(
+                "Unsaved Changes",
+                "Save changes before returning to the main screen?",
+            )
+            if choice is None:
+                return
+            if choice:
+                self.save_and_continue()
+                return
+
+        self.parent.show_new_diagnosis_screen()
 
     def browse_db_path(self):
         """Open a file dialog to select the database file."""
@@ -162,6 +211,8 @@ class ConfigScreen(tk.Frame):
                     "INSERT OR REPLACE INTO settings(key,value) VALUES (?,?)",
                     ("department_name", self.department_var.get().strip()),
                 )
+            self._mark_clean()
+            self._update_back_button_state()
 
             # 5) finally switch to your main screen
             self.parent.show_new_diagnosis_screen()
