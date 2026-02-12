@@ -44,7 +44,6 @@ def schema_sql() -> str:
             Factors TEXT,
             Stage TEXT,
             Careplan TEXT,
-            Summary TEXT,
             Note TEXT,
             Death_Date TEXT,
             Death_Cause TEXT

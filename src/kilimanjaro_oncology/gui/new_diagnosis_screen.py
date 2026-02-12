@@ -24,21 +24,32 @@ class NewDiagnosisScreen(
 ):
     FACTOR_BUTTON_MAP: dict[str, str] = {
         "ER+": "ER+",
-        "PR+": "PR+",
-        "HER2+": "HER2+",
         "ER-": "ER-",
-        "PR-": "PR-",
-        "HER2-": "HER2-",
-        "BRCA1": "BRCA1+",
-        "BRCA2": "BRCA2+",
-        "ALK": "ALK+",
-        "ROS": "ROS+",
         "p16+": "p16+",
         "p16-": "p16-",
+        "PR+": "PR+",
+        "PR-": "PR-",
+        "EBV": "EBV",
         "ENE": "ENE+",
+        "HER2+": "HER2+",
+        "HER2-": "HER2-",
+        "EPE": "EPE",
         "EGFR": "EGFR+",
+        "BRCA1": "BRCA1+",
+        "BRCA2": "BRCA2+",
+        "PNI": "PNI",
         "BRAF": "BRAF+",
+        "ALK": "ALK+",
+        "ROS": "ROS+",
+        "KRAS": "KRAS",
     }
+    FACTOR_BUTTON_LAYOUT: list[list[str]] = [
+        ["ER+", "ER-", "p16+", "p16-"],
+        ["PR+", "PR-", "EBV", "ENE"],
+        ["HER2+", "HER2-", "EPE", "EGFR"],
+        ["BRCA1", "BRCA2", "PNI", "BRAF"],
+        ["ALK", "ROS", "KRAS", ""],
+    ]
 
     def __init__(self, parent, controller, record_ctrl):
         super().__init__(parent)
@@ -190,7 +201,7 @@ class NewDiagnosisScreen(
         # Histo
         ttk.Label(details, text="Histo").grid(row=0, column=0, sticky="w")
         self.histo_var = tk.StringVar()
-        self.histo_combo = ttk.Entry(
+        self.histo_combo = ttk.Combobox(
             details, textvariable=self.histo_var, width=40
         )
         self.histo_combo.grid(row=0, column=1, sticky="ew", padx=5)
@@ -211,26 +222,67 @@ class NewDiagnosisScreen(
         )
         self.grade_var.trace_add("write", lambda *_a: self._on_grade_typed())
 
-        # Structured factor buttons
-        marker_frame = ttk.LabelFrame(details, text="Markers", padding=5)
-        marker_frame.grid(row=2, column=0, columnspan=3, sticky="ew", pady=5)
+        # Stage row
+        stage_row = ttk.Frame(details)
+        stage_row.grid(row=2, column=0, columnspan=2, sticky="w", pady=(6, 2))
+        ttk.Label(stage_row, text="Stage").pack(side="left", padx=(0, 5))
+        self.t_stage_combo = ttk.Combobox(
+            stage_row, values=["T0", "T1", "T2", "T3", "T4", "Tx"], width=4
+        )
+        self.t_stage_combo.pack(side="left", padx=5)
+        self.t_stage_combo.bind(
+            "<<ComboboxSelected>>", lambda _e: self.update_stage()
+        )
+        self.n_stage_combo = ttk.Combobox(
+            stage_row, values=["N0", "N1", "N2", "N3", "Nx"], width=4
+        )
+        self.n_stage_combo.pack(side="left", padx=5)
+        self.n_stage_combo.bind(
+            "<<ComboboxSelected>>", lambda _e: self.update_stage()
+        )
+        m_vals = ["M0", "M1", "M1-liver", "M1-lung", "M1-bone", "M1-cerebellum"]
+        self.m_stage_combo = ttk.Combobox(
+            stage_row, values=m_vals, width=max(len(s) for s in m_vals)
+        )
+        self.m_stage_combo.pack(side="left", padx=5)
+        self.m_stage_combo.bind(
+            "<<ComboboxSelected>>", lambda _e: self.update_stage()
+        )
+
+        # Biological/prognostic factors section
+        self.factors_frame = ttk.LabelFrame(
+            self.scrollable_frame, text="Biological & Prognostic Factors", padding=5
+        )
+        self.factors_frame.pack(fill="x", padx=5, pady=6)
+
+        marker_frame = ttk.Frame(self.factors_frame)
+        marker_frame.grid(row=0, column=0, sticky="nw", padx=(0, 8))
         self._selected_markers: set[str] = set()
         self._marker_buttons: dict[str, tk.Button] = {}
-        for idx, marker in enumerate(self.FACTOR_BUTTON_MAP):
-            btn = tk.Button(
-                marker_frame,
-                text=marker,
-                command=lambda m=marker: self.toggle_factor_button(m),
-            )
-            btn.grid(row=idx // 5, column=idx % 5, padx=3, pady=2, sticky="ew")
-            self._marker_buttons[marker] = btn
+        self._marker_default_bg: dict[str, str] = {}
+        for r, row_vals in enumerate(self.FACTOR_BUTTON_LAYOUT):
+            for c, marker in enumerate(row_vals):
+                if not marker:
+                    ttk.Label(marker_frame, text="").grid(
+                        row=r, column=c, padx=3, pady=2
+                    )
+                    continue
+                btn = tk.Button(
+                    marker_frame,
+                    text=marker,
+                    command=lambda m=marker: self.toggle_factor_button(m),
+                    width=6,
+                )
+                btn.grid(row=r, column=c, padx=3, pady=2, sticky="ew")
+                self._marker_buttons[marker] = btn
+                self._marker_default_bg[marker] = btn.cget("bg")
 
         # Numeric/structured fields
         reg_digits = self.register(self._validate_digits)
         reg_decimal = self.register(self._validate_decimal)
 
-        numeric = ttk.Frame(details)
-        numeric.grid(row=3, column=0, columnspan=3, sticky="ew", pady=5)
+        numeric = ttk.Frame(self.factors_frame)
+        numeric.grid(row=0, column=1, sticky="nw", padx=(0, 8))
 
         ttk.Label(numeric, text="GS").grid(row=0, column=0, sticky="w")
         self.gs_left_var = tk.StringVar()
@@ -315,11 +367,30 @@ class NewDiagnosisScreen(
             validatecommand=(reg_digits, "%P"),
         ).grid(row=1, column=7, padx=2, pady=(6, 0))
 
-        # Single-select resection
-        resection = ttk.LabelFrame(details, text="Resection", padding=5)
-        resection.grid(row=4, column=0, columnspan=3, sticky="ew", pady=5)
+        # Right-side tumour size and resection
+        right = ttk.Frame(self.factors_frame)
+        right.grid(row=0, column=2, sticky="nw")
+        ttk.Label(right, text="TumourSize", font=("Arial", 10, "bold")).grid(
+            row=0, column=0, sticky="w", pady=(0, 4)
+        )
+        ttk.Label(right, text="Measure").grid(row=1, column=0, sticky="w")
+        self.tumour_size_mm_var = tk.StringVar()
+        ttk.Entry(
+            right,
+            width=8,
+            textvariable=self.tumour_size_mm_var,
+            validate="key",
+            validatecommand=(reg_digits, "%P"),
+        ).grid(row=1, column=1, padx=2)
+        ttk.Label(right, text="mm").grid(row=1, column=2, sticky="w")
+
+        ttk.Label(right, text="Resection", font=("Arial", 10, "bold")).grid(
+            row=2, column=0, sticky="w", pady=(8, 2)
+        )
         self.resection_var = tk.StringVar()
         self.resection_mm_var = tk.StringVar()
+        resection = ttk.Frame(right)
+        resection.grid(row=3, column=0, columnspan=3, sticky="w")
         for idx, val in enumerate(["Rx", "R0", "R1", "R2"]):
             ttk.Radiobutton(
                 resection,
@@ -328,41 +399,15 @@ class NewDiagnosisScreen(
                 variable=self.resection_var,
                 command=self.update_factors,
             ).grid(row=0, column=idx, padx=4, pady=2, sticky="w")
-        ttk.Label(resection, text="mm").grid(row=0, column=4, padx=(10, 2))
+        ttk.Label(right, text="Measure").grid(row=4, column=0, sticky="w")
         ttk.Entry(
-            resection,
+            right,
             width=6,
             textvariable=self.resection_mm_var,
             validate="key",
             validatecommand=(reg_digits, "%P"),
-        ).grid(row=0, column=5, padx=2)
-
-        # Stage T/N/M
-        frm = ttk.Frame(details)
-        frm.grid(row=5, column=1, columnspan=2, sticky="w")
-        ttk.Label(frm, text="Stage").pack(side="left")
-        self.t_stage_combo = ttk.Combobox(
-            frm, values=["T0", "T1", "T2", "T3", "T4", "Tx"], width=4
-        )
-        self.t_stage_combo.pack(side="left", padx=5)
-        self.t_stage_combo.bind(
-            "<<ComboboxSelected>>", lambda _e: self.update_stage()
-        )
-        self.n_stage_combo = ttk.Combobox(
-            frm, values=["N0", "N1", "N2", "N3", "Nx"], width=4
-        )
-        self.n_stage_combo.pack(side="left", padx=5)
-        self.n_stage_combo.bind(
-            "<<ComboboxSelected>>", lambda _e: self.update_stage()
-        )
-        m_vals = ["M0", "M1", "M1-liver", "M1-lung", "M1-bone", "M1-cerebellum"]
-        self.m_stage_combo = ttk.Combobox(
-            frm, values=m_vals, width=max(len(s) for s in m_vals)
-        )
-        self.m_stage_combo.pack(side="left", padx=5)
-        self.m_stage_combo.bind(
-            "<<ComboboxSelected>>", lambda _e: self.update_stage()
-        )
+        ).grid(row=4, column=1, padx=2, sticky="w")
+        ttk.Label(right, text="mm").grid(row=4, column=2, sticky="w")
 
         # Keep factors updated from text inputs.
         for var in (
@@ -376,6 +421,7 @@ class NewDiagnosisScreen(
             self.nodes_den_var,
             self.resection_mm_var,
             self.resection_var,
+            self.tumour_size_mm_var,
         ):
             var.trace_add("write", lambda *_a: self.update_factors())
 
@@ -402,7 +448,7 @@ class NewDiagnosisScreen(
         btn = self._marker_buttons[label]
         if label in self._selected_markers:
             self._selected_markers.remove(label)
-            btn.config(bg=btn.cget("activebackground"))
+            btn.config(bg=self._marker_default_bg[label])
         else:
             self._selected_markers.add(label)
             btn.config(bg="green")

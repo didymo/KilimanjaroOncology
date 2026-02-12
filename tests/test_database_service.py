@@ -296,7 +296,58 @@ def test_save_persists_cumulative_summary_field(db_with_schema):
 
     rec1 = db_with_schema.get_diagnosis_record(id1)
     rec2 = db_with_schema.get_diagnosis_record(id2)
-    assert "Summary" in rec1
-    assert "Summary" in rec2
-    assert "2025-01-01" in rec2["Summary"]
-    assert "2025-03-01" in rec2["Summary"]
+    assert "Summary" not in rec1
+    assert "Summary" not in rec2
+    summary = db_with_schema.get_patient_summary("P100.C50")
+    assert "2025-01-01" in summary
+    assert "2025-03-01" in summary
+
+
+def test_legacy_schema_without_summary_works_without_migration(tmp_path):
+    from kilimanjaro_oncology.database.database_service import DatabaseService
+
+    db_path = tmp_path / "legacy.sqlite"
+    conn = sqlite3.connect(str(db_path))
+    try:
+        conn.execute(
+            """
+            CREATE TABLE oncology_data(
+                AutoincrementID INTEGER PRIMARY KEY AUTOINCREMENT,
+                record_creation_datetime TEXT NOT NULL,
+                PatientID TEXT NOT NULL,
+                Event TEXT NOT NULL,
+                Event_Date TEXT NOT NULL,
+                Diagnosis TEXT,
+                Histo TEXT,
+                Grade TEXT,
+                Factors TEXT,
+                Stage TEXT,
+                Careplan TEXT,
+                Death_Date TEXT,
+                Death_Cause TEXT,
+                Note TEXT
+            )
+            """
+        )
+        conn.execute(
+            "CREATE TABLE settings(key TEXT PRIMARY KEY, value TEXT)"
+        )
+        conn.commit()
+    finally:
+        conn.close()
+
+    db = DatabaseService(str(db_path))
+    rid = db.save_diagnosis_record(
+        {
+            "patient_id": "P200.C18",
+            "event": "Diagnosis",
+            "event_date": "2026-02-12",
+            "diagnosis": "C18",
+            "stage": "T2 N1 M0",
+        }
+    )
+    assert isinstance(rid, int)
+    got = db.get_diagnosis_record(rid)
+    assert "Summary" not in got
+    summary = db.get_patient_summary("P200.C18")
+    assert "2026-02-12" in summary

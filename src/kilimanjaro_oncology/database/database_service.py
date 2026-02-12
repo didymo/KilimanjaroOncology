@@ -41,7 +41,6 @@ class DatabaseService:
         "Factors",
         "Stage",
         "Careplan",
-        "Summary",
         "Note",
         "Death_Date",
         "Death_Cause",
@@ -159,11 +158,6 @@ class DatabaseService:
             else:
                 data[col] = ""
 
-        patient_id = str(data.get("PatientID", "")).strip()
-        data["Summary"] = (
-            self._compose_patient_summary(patient_id, data) if patient_id else ""
-        )
-
         # Defensive: only allow known schema columns
         columns = [c for c in data if c in self.ALLOWED_COLUMNS]
         if not columns:
@@ -255,23 +249,29 @@ class DatabaseService:
             return int(cursor.rowcount) > 0
 
     def get_patient_summary(self, patient_id: str) -> str:
-        """Return latest cumulative summary for a patient."""
+        """Build and return cumulative summary at runtime for a patient."""
         with self.get_connection() as conn:
             cursor = conn.cursor()
             cursor.execute(
                 """
-                SELECT Summary
+                SELECT
+                    AutoincrementID, Event_Date, Diagnosis, Histo, Grade,
+                    Factors, Stage, Careplan, Death_Cause
                 FROM oncology_data
                 WHERE PatientID = ?
-                ORDER BY Event_Date DESC, AutoincrementID DESC
-                LIMIT 1
+                ORDER BY Event_Date ASC, AutoincrementID ASC
                 """,
                 (patient_id,),
             )
-            row = cursor.fetchone()
-            if not row:
+            rows = cursor.fetchall()
+            if not rows:
                 return ""
-            return str(row[0] or "")
+            cols = [d[0] for d in cursor.description]
+
+        history = [dict(zip(cols, row, strict=False)) for row in rows]
+        history.sort(key=self._sort_key)
+        blocks = [self._summary_block(item) for item in history]
+        return "\n".join(blocks)
 
     @staticmethod
     def _display_date(value: Any) -> str:
@@ -319,41 +319,3 @@ class DatabaseService:
         if extras:
             return f"{line}\n" + "\n".join(extras)
         return line
-
-    def _compose_patient_summary(
-        self, patient_id: str, pending_row: dict[str, Any]
-    ) -> str:
-        with self.get_connection() as conn:
-            cursor = conn.cursor()
-            cursor.execute(
-                """
-                SELECT
-                    AutoincrementID, Event_Date, Diagnosis, Histo, Grade,
-                    Factors, Stage, Careplan, Death_Cause
-                FROM oncology_data
-                WHERE PatientID = ?
-                ORDER BY Event_Date ASC, AutoincrementID ASC
-                """,
-                (patient_id,),
-            )
-            rows = cursor.fetchall()
-            cols = [d[0] for d in cursor.description]
-
-        history = [dict(zip(cols, row, strict=False)) for row in rows]
-        history.append(
-            {
-                "AutoincrementID": 0,
-                "Event_Date": pending_row.get("Event_Date", ""),
-                "Diagnosis": pending_row.get("Diagnosis", ""),
-                "Histo": pending_row.get("Histo", ""),
-                "Grade": pending_row.get("Grade", ""),
-                "Factors": pending_row.get("Factors", ""),
-                "Stage": pending_row.get("Stage", ""),
-                "Careplan": pending_row.get("Careplan", ""),
-                "Death_Cause": pending_row.get("Death_Cause", ""),
-            }
-        )
-
-        history.sort(key=self._sort_key)
-        blocks = [self._summary_block(item) for item in history]
-        return "\n".join(blocks)

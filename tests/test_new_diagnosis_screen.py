@@ -137,3 +137,40 @@ def test_new_dx_factor_tokens_and_resection_formatting(tk_root):
     assert "3/8" in factors
     assert "1/4" in factors
     assert "R1-12mm" in factors
+
+
+def test_new_dx_png_layout_sections_and_controls(tk_root):
+    rc = _RecordCtrl({"hospital_name": "HOSP", "department_name": "DEPT"})
+    screen = NewDiagnosisScreen(tk_root, _Controller(), rc)
+
+    # Section title from provided PNG layout
+    assert screen.factors_frame.cget("text") == "Biological & Prognostic Factors"
+
+    # Expected button grid labels from PNG
+    expected = {
+        "ER+",
+        "ER-",
+        "p16+",
+        "p16-",
+        "PR+",
+        "PR-",
+        "EBV",
+        "ENE",
+        "HER2+",
+        "HER2-",
+        "EPE",
+        "EGFR",
+        "BRCA1",
+        "BRCA2",
+        "PNI",
+        "BRAF",
+        "ALK",
+        "ROS",
+        "KRAS",
+    }
+    assert expected.issubset(set(screen._marker_buttons))
+
+    # Right-side controls present
+    assert hasattr(screen, "tumour_size_mm_var")
+    assert hasattr(screen, "resection_var")
+    assert hasattr(screen, "resection_mm_var")

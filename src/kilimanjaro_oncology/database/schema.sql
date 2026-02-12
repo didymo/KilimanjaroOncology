@@ -10,7 +10,6 @@ CREATE TABLE IF NOT EXISTS oncology_data (
     Factors TEXT,
     Stage TEXT,
     Careplan TEXT,
-    Summary TEXT,
     Death_Date TEXT,
     Death_Cause TEXT,
     Note TEXT
