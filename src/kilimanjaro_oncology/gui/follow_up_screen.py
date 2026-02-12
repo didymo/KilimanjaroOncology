@@ -55,10 +55,18 @@ class FollowUpScreen(
             death_cause="",
         )
 
-        # Scrollable area
-        self.canvas = tk.Canvas(self)
+        # Working-area layout: scrollable form on the left, fixed full-height
+        # summary panel on the right.
+        self.body_frame = ttk.Frame(self)
+        self.body_frame.pack(fill="both", expand=True)
+
+        self.form_frame = ttk.Frame(self.body_frame)
+        self.form_frame.pack(side="left", fill="both", expand=True)
+
+        # Scrollable area (left side)
+        self.canvas = tk.Canvas(self.form_frame)
         scrollbar = ttk.Scrollbar(
-            self, orient="vertical", command=self.canvas.yview
+            self.form_frame, orient="vertical", command=self.canvas.yview
         )
         self.scrollable_frame = ttk.Frame(self.canvas)
         self.scrollable_frame.bind(
@@ -110,9 +118,11 @@ class FollowUpScreen(
         )
 
     def create_summary_panel(self):
-        panel = ttk.LabelFrame(self.scrollable_frame, text="Summary", padding=5)
-        panel.pack(fill="both", expand=True, padx=5, pady=2, side="right")
-        self.summary_text = tk.Text(panel, height=10, width=48)
+        self.summary_panel = ttk.LabelFrame(
+            self.body_frame, text="Summary", padding=5
+        )
+        self.summary_panel.pack(side="right", fill="y", padx=5, pady=5)
+        self.summary_text = tk.Text(self.summary_panel, height=10, width=48)
         self.summary_text.pack(fill="both", expand=True)
         self.summary_text.configure(state="disabled")
 

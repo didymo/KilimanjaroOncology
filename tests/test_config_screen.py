@@ -270,7 +270,7 @@ def test_back_to_main_disabled_without_db_path():
         parent.destroy()
 
 
-def test_back_to_main_enabled_with_db_path_and_navigates(tmp_path):
+def test_back_to_main_enabled_with_db_path_and_navigates(monkeypatch, tmp_path):
     parent = _Parent()
     parent.withdraw()
     try:
@@ -278,6 +278,10 @@ def test_back_to_main_enabled_with_db_path_and_navigates(tmp_path):
         screen.db_path_var.set(str(tmp_path / "db.sqlite"))
         screen._update_back_button_state()
         assert not screen.back_button.instate(["disabled"])
+        monkeypatch.setattr(
+            "kilimanjaro_oncology.gui.config_screen.messagebox.askyesnocancel",
+            lambda *_a, **_k: False,
+        )
         screen.back_to_main()
         assert parent.screen_shown is True
     finally:

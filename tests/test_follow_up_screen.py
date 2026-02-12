@@ -119,6 +119,15 @@ def test_followup_updated_therapy_buttons_and_summary_panel(tk_root):
     assert screen.summary_text.cget("state") == "disabled"
 
 
+def test_followup_summary_panel_uses_full_height_layout(tk_root):
+    rc = _RecordCtrl({"hospital_name": "H", "department_name": "D"})
+    screen = FollowUpScreen(tk_root, _Controller(), rc)
+    assert screen.summary_panel.master == screen.body_frame
+    info = screen.summary_panel.pack_info()
+    assert info["side"] == "right"
+    assert info["fill"] == "y"
+
+
 def test_followup_copy_excludes_summary_text(tk_root, monkeypatch):
     rc = _RecordCtrl({"hospital_name": "HOSP", "department_name": "DEPT"})
     screen = FollowUpScreen(tk_root, _Controller(), rc)
