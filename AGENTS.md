@@ -1,3 +1,4 @@
+
 # AGENTS.md
 
 ## Command execution
@@ -10,31 +11,36 @@
 
 ## Environment
 - Python 3.12 per `pyproject.toml`.
-- Uses Poetry for dependency management, but editable `pip` install also works.
 
 ## Common commands
 - Run app: `python -m kilimanjaro_oncology.main`
 - Run tests: `python -m pytest`
 
-## Linting and formatting (run regularly, but must not block a commit)
-- Black: `black .`
-- isort: `isort .`
-- Flake8: `flake8`
-- Mypy: `mypy src tests`
-- Pre-commit: `pre-commit run --all-files`
-
-## Tox environments
-- Full check suite: `tox`
-- Pre-commit: `tox -e pre-commit`
-- Type-check: `tox -e type-check`
-- Safety scan: `tox -e safety`
-
 ## Notes
 - There appears to be a bug; capture a minimal reproduction and note expected vs actual behavior in any fix PR.
-- Lint/test failures should be reported, but do not block committing changes unless explicitly requested.
 
 ## TDD expectations
 - Test suite first: implement or extend tests before any production code changes for a feature or bug fix.
 - Code only after failing tests: ensure new/updated tests fail for the right reason, then implement the code to make them pass.
-- Keep tests focused: run a small, relevant subset during development, then run `python -m pytest` before finalizing.
-- For bug fixes: include a minimal reproduction test in `tests/` and note expected vs actual behavior in the PR description.
+- Keep tests focused: run a small, relevant subset during development, then run the full suite before finalizing.
+- For bug fixes: include a minimal reproduction test in `tests/` and note expected vs actual behavior.
+
+---
+
+## AI Agent Quality & Safety Requirements (Medical / PII Context)
+
+This repository contains **medical data and potentially identifiable information (PII)**.
+
+The following requirements define the **mandatory Definition of Done for any AI-generated or AI-modified code**.
+
+These rules override informal guidance when safety, correctness, or security is involved.
+
+---
+
+### 1. Mandatory Conservative Quality Gate
+
+Before considering work complete, the agent **must run and report the results of**:
+
+```bash
+./tools/quality-gate.sh
+
